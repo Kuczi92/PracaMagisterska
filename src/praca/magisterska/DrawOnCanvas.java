@@ -165,14 +165,11 @@ class NodeGestures {
             // left mouse button => dragging
             if( !event.isPrimaryButtonDown())
                 return;
-
-            nodeDragContext.mouseAnchorX = event.getSceneX();
-            nodeDragContext.mouseAnchorY = event.getSceneY();
-
-            Node node = (Node) event.getSource();
-
-            nodeDragContext.translateAnchorX = node.getTranslateX();
-            nodeDragContext.translateAnchorY = node.getTranslateY();
+                        nodeDragContext.mouseAnchorX = event.getSceneX();
+                        nodeDragContext.mouseAnchorY = event.getSceneY();
+                        Node node = (Node) event.getSource();
+                        nodeDragContext.translateAnchorX = node.getTranslateX();
+                        nodeDragContext.translateAnchorY = node.getTranslateY();
 
         }
 
@@ -336,7 +333,6 @@ class SceneGestures {
         picture.setTranslateY(-ObrazWynik.getHeight()/2);
         
        
-
         canvas.getChildren().addAll(picture);
 
         group.getChildren().add(canvas);
@@ -352,9 +348,6 @@ class SceneGestures {
         stage.setScene(scene);
         stage.show();
 
-    
-
-       
     }
      
 }

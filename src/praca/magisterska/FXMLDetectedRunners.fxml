@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="praca.magisterska.FXMLDetectedRunnersController">
+   <children>
+      <ImageView fx:id="ImageView" fitHeight="448.0" fitWidth="442.0" layoutX="-3.0" layoutY="-5.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="Label" layoutX="439.0" layoutY="14.0" text="Lista wykrytych biegaczy" />
+      <Button fx:id="ButtonPrevios" layoutX="439.0" layoutY="404.0" mnemonicParsing="false" text="Poprzedni " onAction="#handleButtonPrevious" />
+      <Button fx:id="ButtonNext" layoutX="519.0" layoutY="404.0" mnemonicParsing="false" text="Następny" onAction="#handleButtonNext"/>
+   </children>
+</AnchorPane>

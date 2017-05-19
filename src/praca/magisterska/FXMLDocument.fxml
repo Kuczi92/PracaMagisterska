@@ -5,21 +5,34 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
 
 <AnchorPane id="AnchorPane" prefHeight="339.0" prefWidth="502.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="praca.magisterska.FXMLDocumentController">
-    <children>
+   <children>
         <Button fx:id="button" layoutX="14.0" layoutY="14.0" onAction="#handleButtonAction" text="Wybierz Obraz" />
-        <Label fx:id="Sciezka" layoutX="14.0" layoutY="45.0" minHeight="16" minWidth="69" />
-        <Button fx:id="Wykrywanie" layoutX="117.0" layoutY="14.0" onAction="#handleButtonWykrywanieAction" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Wykryj Biegaczy" />
-      <TableView layoutX="15.0" layoutY="83.0" prefHeight="246.0" prefWidth="479.0">
+        <Label fx:id="Sciezka" layoutX="116.0" layoutY="18.0" minHeight="16" minWidth="69" />
+        <Button fx:id="Wykrywanie" layoutX="276.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleButtonWykrywanieAction" prefHeight="25.0" prefWidth="157.0" text="Wykryj Biegaczy" />
+      <TableView layoutY="83.0">
         <columns>
             <TableColumn fx:id="TabelaKolumnaNr" prefWidth="122.0" text="Wykryty biegacz nr: " />
-            <TableColumn fx:id="TabelaKolumnaPunkt1"  prefWidth="59.0" text="Punkt 1" />
-            <TableColumn fx:id="TabelaKolumnaPunkt2"  prefWidth="59.0" text="Punkt 2" />
-            <TableColumn fx:id="TabelaKolumnaPunkt3"  prefWidth="59.0" text="Punkt 3" />
-            <TableColumn fx:id="TabelaKolumnaPunkt4"  prefWidth="59.0" text="Punkt 4" />
-            <TableColumn fx:id="TabelaKolumnaWykrytyNumer"  prefWidth="120.0" text="Wykryty numer:" />
+            <TableColumn fx:id="TabelaKolumnaPunkt1" prefWidth="59.0" text="Punkt 1" />
+            <TableColumn fx:id="TabelaKolumnaPunkt2" prefWidth="59.0" text="Punkt 2" />
+            <TableColumn fx:id="TabelaKolumnaPunkt3" prefWidth="59.0" text="Punkt 3" />
+            <TableColumn fx:id="TabelaKolumnaPunkt4" prefWidth="91.0" text="Punkt 4" />
+            <TableColumn fx:id="TabelaKolumnaWykrytyNumer" prefWidth="217.0" text="Wykryty numer:" />
         </columns>
       </TableView>
+      <ComboBox fx:id="WybórWykrycia" layoutX="14.0" layoutY="50.0" onAction="#handleComboBoxWybórWykryciaAction" prefHeight="25.0" prefWidth="247.0" promptText="Wybierz po czym rozpoznać biegacza">
+           <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Wykryj po Twarzy" />
+                  <String fx:value="Wykryj po Sylwetce" />
+                  <String fx:value="Wykryj po Torsie" />
+                </FXCollections>
+           </items>
+       </ComboBox>
+    
+        
+        
     </children>
 </AnchorPane>
