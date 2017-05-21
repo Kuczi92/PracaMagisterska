@@ -34,7 +34,7 @@ public final class Picture   {
     /** Store the image width and height */
     private int width, height;
     
-    /** Pixels value - ARGB */
+    /** Pixels value - BGR  */
     private int pixels[];
     
     /** Total number of pixel in an image*/
@@ -74,7 +74,6 @@ public final class Picture   {
     /** Default constructor
      * @param image Buffered image obraz*/
     public Picture(BufferedImage image){
-        
         this.width = image.getWidth();
         this.height = image.getHeight();
         this.totalPixels = this.width * this.height;
@@ -207,7 +206,22 @@ public final class Picture   {
             System.out.println("Error Occurred!\n"+e);
         }
     }
-    
+    public BufferedImage DetectEdges(double threshold){
+        
+        Mat grayImage = new Mat();
+        Mat Image = new Mat(height, width, CvType.CV_8UC3);
+        BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+        convertedImg.getGraphics().drawImage(image, 0, 0, null);
+        Image.put(0, 0, ((DataBufferByte) convertedImg.getRaster().getDataBuffer()).getData());
+        Imgproc.cvtColor(Image, grayImage, Imgproc.COLOR_BGR2GRAY);
+        
+        
+        Imgproc.Canny(grayImage, grayImage, threshold, threshold*3, 3, false);
+       
+        
+        
+        return matToBufferedImage(grayImage,new BufferedImage(image.getWidth(),image.getHeight(),image.getType()));
+    }
     /**
      * Initialize the pixel array
      * Image origin is at coordinate (0,0)
@@ -525,6 +539,7 @@ public final class Picture   {
     private void updateImagePixelAt(int x, int y){
         image.setRGB(x, y, pixels[x+(y*width)]);
     }
+    
     public void  ZmieńRozmiarObrazu( int newW, int newH) { 
     Image tmp = image.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
     BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
@@ -533,7 +548,6 @@ public final class Picture   {
     g2d.drawImage(tmp, 0, 0, null);
     g2d.dispose();
     image = dimg;
-    
 }
     
     public BufferedImage changeBlurr(int x , int y){  

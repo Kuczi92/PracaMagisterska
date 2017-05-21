@@ -17,6 +17,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -58,25 +59,39 @@ public class FXMLDetectedRunnersController implements Initializable {
     Label LabelValueSliderRozmycie;
     @FXML
     ComboBox ComboBoxWybierzRodzajProgowania;
+    @FXML 
+    Slider SliderKrawedz; 
+    @FXML
+    Label LabelValueSliderKrawedz;
+    @FXML
+    CheckBox CheckBoxUseKrawedz;
     
     //Komponenty znajdujące się w zakładce Tab Kolory 
     @FXML
     Slider SliderCzerwony;
-    
     @FXML
     Slider SliderZielony;
-    
     @FXML
     Slider SliderNiebieski;
-    
+    @FXML
+    Slider SliderNasycenie;
+    @FXML
+    Slider SliderWartosc;
+    @FXML
+    Slider SliderOdcien;
     @FXML
     Label LabelSliderValueCzerwony;
-    
     @FXML
     Label LabelSliderValueZielony;
-    
     @FXML
     Label LabelSliderValueNiebieski;
+    @FXML
+    Label LabelSliderValueNasycenie;
+    @FXML
+    Label LabelSliderValueWartosc;
+    
+    @FXML
+    Label LabelSliderValueOdcien;
     
     //Komponenty znajdujące się w zakładce dane 
     @FXML
@@ -148,7 +163,7 @@ public class FXMLDetectedRunnersController implements Initializable {
         if(currentImage+1<Images.size()&&currentImage+1>=0){
             Image image = SwingFXUtils.toFXImage(Images.get(++currentImage), null);
             ImageView.setImage(image);
-            Label.setText("Obraz nr: "+currentImage+" spośród: "+Images.size());
+            Label.setText("Obraz nr: "+(currentImage+1)+" spośród: "+Images.size());
             changeValuesOfPicture();
         }
         else 
@@ -156,7 +171,7 @@ public class FXMLDetectedRunnersController implements Initializable {
             currentImage=0;
             Image image = SwingFXUtils.toFXImage(Images.get(currentImage), null);
             ImageView.setImage(image);
-            Label.setText("Obraz nr: "+currentImage+" spośród: "+Images.size()+ " Brak innych obrazów!");
+            Label.setText("Obraz nr: "+(currentImage+1)+" spośród: "+Images.size()+ " Brak innych obrazów!");
             changeValuesOfPicture();
            
         }
@@ -168,7 +183,7 @@ public class FXMLDetectedRunnersController implements Initializable {
         if(currentImage-1<Images.size()&&currentImage-1>=0){
             Image image = SwingFXUtils.toFXImage(Images.get(--currentImage), null);
             ImageView.setImage(image);
-            Label.setText("Obraz nr: "+currentImage+" spośród: "+Images.size());
+            Label.setText("Obraz nr: "+(currentImage+1)+" spośród: "+Images.size());
             changeValuesOfPicture();
         }
         else 
@@ -176,7 +191,7 @@ public class FXMLDetectedRunnersController implements Initializable {
             currentImage=Images.size()-1;
             Image image = SwingFXUtils.toFXImage(Images.get(currentImage), null);
             ImageView.setImage(image);
-            Label.setText("Obraz nr: "+currentImage+" spośród: "+Images.size()+ " Brak innych obrazów!");
+            Label.setText("Obraz nr: "+(currentImage+1)+" spośród: "+Images.size()+ " Brak innych obrazów!");
             changeValuesOfPicture();
         }
        
@@ -185,9 +200,15 @@ public class FXMLDetectedRunnersController implements Initializable {
     @FXML
     public void changeValuesOfPicture(){
         ViewPicture Pic = new ViewPicture(Images.get(currentImage));
+        //zmiana progowania mod jasnosci kontrastu kolorów
         int[] pixels = Pic.ModyfikujKoloryWKanaleRGB(SliderCzerwony.getValue()+SliderJasnosc.getValue(), SliderZielony.getValue()+SliderJasnosc.getValue(), SliderNiebieski.getValue()+SliderJasnosc.getValue(), SliderKontrast.getValue()/1000.0,TypeOfThreshold, (int) SliderWartoscProgowa.getValue());
         Picture Out = new Picture(pixels,Images.get(currentImage).getWidth(),Images.get(currentImage).getHeight());
-        Image image = SwingFXUtils.toFXImage(Out.changeBlurr((int)SliderRozmycie.getValue(), (int) SliderRozmycie.getValue()), null);
+        BufferedImage Blurr = Out.changeBlurr((int)SliderRozmycie.getValue(), (int) SliderRozmycie.getValue());
+        Image image = SwingFXUtils.toFXImage(Blurr, null);
+        if(CheckBoxUseKrawedz.isSelected()){    
+            Out = new Picture (Blurr);
+            image = SwingFXUtils.toFXImage(Out.DetectEdges(SliderKrawedz.getValue()), null); 
+        }
         ImageView.setImage(image);
     }
     
@@ -203,15 +224,11 @@ public class FXMLDetectedRunnersController implements Initializable {
          changeValuesOfPicture();
     }
     
-    
-    
     @FXML
     public void changeValueSliderNiebieski(){
          LabelSliderValueNiebieski.setText(format("%.2f",SliderNiebieski.getValue()));
          changeValuesOfPicture();
     }
-    
-    
     
     @FXML
     public void changeValueSliderJasnosc(){
@@ -219,13 +236,11 @@ public class FXMLDetectedRunnersController implements Initializable {
          changeValuesOfPicture();
     }
     
-    
     @FXML
     public void changeValueSliderKontrast(){
          LabelSliderValueKontrast.setText(format("%.2f",SliderKontrast.getValue()/1000.0));
          changeValuesOfPicture();
     }
-    
     
     @FXML
     public void changeValueSliderWartoscProgowa(){
@@ -239,6 +254,29 @@ public class FXMLDetectedRunnersController implements Initializable {
          changeValuesOfPicture();
     }
     
+    @FXML
+    public void changeValueSliderKrawedz(){
+         LabelValueSliderKrawedz.setText(format("%.2f",SliderKrawedz.getValue()));
+         changeValuesOfPicture();
+    }
+    
+    @FXML
+    public void changeValueSliderOdcien(){
+         LabelSliderValueOdcien.setText(format("%.2f",SliderOdcien.getValue()));
+         changeValuesOfPicture();
+    }
+    
+    @FXML
+    public void changeValueSliderNasycenie(){
+         LabelSliderValueNasycenie.setText(format("%.2f",SliderNasycenie.getValue()));
+         changeValuesOfPicture();
+    }
+    
+    @FXML
+    public void changeValueSliderWartosc(){
+         LabelSliderValueWartosc.setText(format("%.2f",SliderWartosc.getValue()));
+         changeValuesOfPicture();
+    }
     
     @FXML
     public void defaultValues(){

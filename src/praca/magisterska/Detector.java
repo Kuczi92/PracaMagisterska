@@ -123,7 +123,12 @@ public BufferedImage GetFragmentOfPicture(int startX, int startY, int endX,int  
        if(startY+endY>h){
            endY = h-startY;
        }
-    
+       if(startX<0){
+           startX=0;
+       }
+       if(startY<0){
+           startY=0;
+       }
        BufferedImage img = ObrazWejsciowy.getSubimage(startX, startY, endX, endY); //fill in the corners of the desired crop location here
        BufferedImage copyOfImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
        Graphics g = copyOfImage.createGraphics();

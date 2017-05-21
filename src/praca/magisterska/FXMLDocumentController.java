@@ -21,6 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -43,6 +44,12 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private ComboBox WybórWykrycia; 
     
+    
+    @FXML
+    public TextField TextFieldRozdzielczonscMAX_X;
+     
+    @FXML
+    public TextField TextFieldRozdzielczonscMAX_Y;
     @FXML
     private void handleButtonAction(ActionEvent event) throws Exception {
             Stage stage = new Stage();
@@ -69,7 +76,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void handleButtonWykrywanieAction(ActionEvent event) throws Exception {
-        RunnersDetection RunnersDetection = new RunnersDetection(type,Sciezka.getText());
+        RunnersDetection RunnersDetection = new RunnersDetection(type,Sciezka.getText(),Integer.valueOf(TextFieldRozdzielczonscMAX_X.getCharacters().toString()),Integer.valueOf(TextFieldRozdzielczonscMAX_Y.getCharacters().toString()));
         DetectedRunners = RunnersDetection.DetectedRunners();
         DrawOnCanvas DrawOnCanvas = new DrawOnCanvas(RunnersDetection.PicWithRunners(),RunnersDetection.ListaPunktów.size());
         Stage stage = new Stage();

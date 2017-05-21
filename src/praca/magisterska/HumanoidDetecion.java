@@ -33,32 +33,32 @@ public class HumanoidDetecion extends Detector {
         super(SciezkaPliku);
         this.Type = Type;
    }
-   public ArrayList<BufferedImage> DetectHumanoids() {
+   public ArrayList<BufferedImage> DetectHumanoids(int x , int y) {
        ArrayList<BufferedImage> ListaBiegaczy = new ArrayList();
        
        if(null == Type){
-       ListaBiegaczy = DetectUpperBody();
+       ListaBiegaczy = DetectUpperBody(x,y);
        }
        else switch (Type) {
            case HUMANOID_DETECT:
-              ListaBiegaczy = DetectFullBody();   
+              ListaBiegaczy = DetectFullBody(x,y);   
                break;
            case UPPER_BODY_DETECT:
-              ListaBiegaczy = DetectUpperBody();
+              ListaBiegaczy = DetectUpperBody(x,y);
                break;
            default:
-              ListaBiegaczy = DetectUpperBody();
+              ListaBiegaczy = DetectUpperBody(x,y);
                break;
        }
 
        return ListaBiegaczy;
    }
    
-   public ArrayList<BufferedImage> DetectUpperBody(){
+   public ArrayList<BufferedImage> DetectUpperBody(int x , int y){
                 CascadeClassifier HumanoidsDetector;
                 HumanoidsDetector = new CascadeClassifier("haarcascade_upperbody.xml");
                 MatOfRect faceDetections = new MatOfRect();
-                ObrazWejsciowy =  setPicture(ObrazWejsciowy,400,400);
+                ObrazWejsciowy =  setPicture(ObrazWejsciowy,x,y);
                 Mat image = bufferedImageToMat(ObrazWejsciowy);
                 HumanoidsDetector.detectMultiScale(image, faceDetections, 1.1, 3,0, new Size(), new Size()); 
         
@@ -80,12 +80,12 @@ public class HumanoidDetecion extends Detector {
    }
    
    
-   public ArrayList<BufferedImage> DetectFullBody(){
+   public ArrayList<BufferedImage> DetectFullBody(int x , int y){
        final HOGDescriptor hog = new HOGDescriptor();
                                      final MatOfFloat descriptors = HOGDescriptor.getDefaultPeopleDetector();
                                      hog.setSVMDetector(descriptors);
 
-                                     ObrazWejsciowy =  setPicture(ObrazWejsciowy,400,400);
+                                     ObrazWejsciowy =  setPicture(ObrazWejsciowy,x,y);
                                      
                                      Mat image = bufferedImageToMat(ObrazWejsciowy);
 
