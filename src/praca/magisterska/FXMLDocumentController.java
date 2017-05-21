@@ -92,13 +92,18 @@ public class FXMLDocumentController implements Initializable {
         Image image = SwingFXUtils.toFXImage(DetectedRunners.get(0), null);
         FXMLDetectedRunnersController.ImageView.setImage(image);
         FXMLDetectedRunnersController.Images = DetectedRunners;
+        
+        
+        
         StagePic.show();
+        
     }
     
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
+       WybórWykrycia.getSelectionModel().selectFirst();
+       type = TypeOfDetect.HUMANOID_DETECT;
     }    
     
 }

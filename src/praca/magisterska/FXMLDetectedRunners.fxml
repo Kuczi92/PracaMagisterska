@@ -6,13 +6,86 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="praca.magisterska.FXMLDetectedRunnersController">
+<AnchorPane id="AnchorPane" prefHeight="443.0" prefWidth="883.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="praca.magisterska.FXMLDetectedRunnersController">
    <children>
-      <ImageView fx:id="ImageView" fitHeight="448.0" fitWidth="442.0" layoutX="-3.0" layoutY="-5.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="Label" layoutX="439.0" layoutY="14.0" text="Lista wykrytych biegaczy" />
-      <Button fx:id="ButtonPrevios" layoutX="439.0" layoutY="404.0" mnemonicParsing="false" text="Poprzedni " onAction="#handleButtonPrevious" />
-      <Button fx:id="ButtonNext" layoutX="519.0" layoutY="404.0" mnemonicParsing="false" text="Następny" onAction="#handleButtonNext"/>
+      <ImageView fx:id="ImageView" fitHeight="448.0" fitWidth="284.0" layoutX="-3.0" layoutY="-5.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="Label" layoutX="282.0" layoutY="14.0" text="Lista wykrytych biegaczy" />
+      <Button fx:id="ButtonPrevios" layoutX="691.0" layoutY="404.0" mnemonicParsing="false" onAction="#handleButtonPrevious" text="Poprzedni " />
+      <Button fx:id="ButtonNext" layoutX="785.0" layoutY="404.0" mnemonicParsing="false" onAction="#handleButtonNext" text="Następny" />
+      <TabPane layoutX="282.0" layoutY="101.0" prefHeight="286.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Obraz">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Slider id="SliderJasnosc" fx:id="SliderJasnosc" layoutX="14.0" layoutY="14.0" max="255.0" min="-255.0" onMouseDragged="#changeValueSliderJasnosc" onMousePressed="#changeValueSliderJasnosc" onMouseReleased="#changeValueSliderJasnosc" prefHeight="14.0" prefWidth="385.0" />
+                        <Slider id="SliderKontrast" fx:id="SliderKontrast" layoutX="14.0" layoutY="49.0" max="7000.0" onMouseDragged="#changeValueSliderKontrast" onMousePressed="#changeValueSliderKontrast" onMouseReleased="#changeValueSliderKontrast" prefHeight="14.0" prefWidth="385.0" value="1000.0" />
+                        <Slider id="SliderWartoscProgowa" fx:id="SliderWartoscProgowa" layoutX="14.0" layoutY="81.0" max="255.0" onMouseDragged="#changeValueSliderWartoscProgowa" onMousePressed="#changeValueSliderWartoscProgowa" onMouseReleased="#changeValueSliderWartoscProgowa" prefHeight="14.0" prefWidth="385.0" />
+                        <Label id="LabelSlderValueJasnosc" fx:id="LabelSlderValueJasnosc" layoutX="413.0" layoutY="13.0" text="0,00" />
+                        <Label id="LabelSliderValueKontrast" fx:id="LabelSliderValueKontrast" layoutX="413.0" layoutY="48.0" text="1,00" />
+                        <Label id="LabelSliderValueWartoscProgowa" fx:id="LabelSliderValueWartoscProgowa" layoutX="413.0" layoutY="80.0" text="0,00" />
+                        <Label layoutX="492.0" layoutY="13.0" text="Jasność" />
+                        <Label layoutX="492.0" layoutY="48.0" text="Kontrast" />
+                        <Label layoutX="492.0" layoutY="80.0" text="Wartość progowa" />
+                        <ComboBox id="ComboBoxWybierzRodzajProgowania" fx:id="ComboBoxWybierzRodzajProgowania" layoutX="14.0" layoutY="142.0" onAction="#ChangeTypeOfThreshold" prefHeight="25.0" prefWidth="191.0" promptText="Wybierz rodzaj progowania">
+                             <items>
+                                  <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Brak progowania" />
+                                    <String fx:value="Progowanie zwykłe" />
+                                    <String fx:value="Efekt rozjaśniający" />
+                                    <String fx:value="Efekt przyciemniający" />
+                                  </FXCollections>
+                             </items>
+                         </ComboBox>
+                        <Button id="ButtonZwrocDomyslneUstawienie" layoutX="219.0" layoutY="142.0" mnemonicParsing="false" onMouseClicked="#defaultValues" text="Zwróć domyślne ustawienie" />
+                        <Button layoutX="14.0" layoutY="218.0" mnemonicParsing="false" text="Zapisz Ustawienia" />
+                        <Slider fx:id="SliderRozmycie" layoutX="14.0" layoutY="115.0" onMouseDragged="#changeValueSliderRozmycie" onMousePressed="#changeValueSliderRozmycie" onMouseReleased="#changeValueSliderRozmycie" prefHeight="14.0" prefWidth="385.0" />
+                        <Label id="LabelSliderValueRozmycie" fx:id="LabelValueSliderRozmycie" layoutX="411.0" layoutY="114.0" text="0,00" />
+                        <Label layoutX="492.0" layoutY="114.0" text="Rozmycie" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Kolory">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="171.0" prefWidth="223.0">
+                     <children>
+                        <Slider id="SliderCzerwony" fx:id="SliderCzerwony" layoutX="14.0" layoutY="17.0" max="255.0" min="-255.0" onMouseDragged="#changeValueSliderCzerwony" onMousePressed="#changeValueSliderCzerwony" onMouseReleased="#changeValueSliderCzerwony" prefHeight="14.0" prefWidth="440.0" AnchorPane.rightAnchor="146.0" />
+                        <Slider id="SliderZielony" fx:id="SliderZielony" layoutX="14.0" layoutY="53.0" max="255.0" min="-255.0" onMouseDragged="#changeValueSliderZielony" onMousePressed="#changeValueSliderZielony" onMouseReleased="#changeValueSliderZielony" prefHeight="14.0" prefWidth="440.0" />
+                        <Slider id="SliderNiebieski" fx:id="SliderNiebieski" layoutX="14.0" layoutY="90.0" max="255.0" min="-255.0" onMouseDragged="#changeValueSliderNiebieski" onMousePressed="#changeValueSliderNiebieski" onMouseReleased="#changeValueSliderNiebieski" prefHeight="14.0" prefWidth="440.0" />
+                        <Label id="LabelSliderValueCzerwony" fx:id="LabelSliderValueCzerwony" layoutX="481.0" layoutY="15.0" text="0,00" />
+                        <Label layoutX="533.0" layoutY="15.0" text="Czerwony" />
+                        <Label layoutX="533.0" layoutY="51.0" text="Zielony" />
+                        <Label layoutX="535.0" layoutY="89.0" text="Niebieski" />
+                        <Label id="LabelSliderValueZielony" fx:id="LabelSliderValueZielony" layoutX="481.0" layoutY="51.0" text="0,00" />
+                        <Label id="LabelSliderValueNiebieski" fx:id="LabelSliderValueNiebieski" layoutX="481.0" layoutY="89.0" text="0,00" />
+                        <Button layoutX="14.0" layoutY="218.0" mnemonicParsing="false" text="Zapisz Ustawienia" />
+                        <Button id="ButtonZwrocDomyslneUstawienie" layoutX="14.0" layoutY="129.0" mnemonicParsing="false" onMouseClicked="#defaultValues" text="Zwróć domyślne ustawienie" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="Dane">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView layoutX="66.0" layoutY="43.0" prefHeight="67.0" prefWidth="301.0">
+                          <columns>
+                              <TableColumn id="Point1FromPic" fx:id="Point1FromPic" prefWidth="75.0" text="Punkt 1" />
+                              <TableColumn id="Point2FromPic" fx:id="Point2FromPic" prefWidth="75.0" text="Punkt 2" />
+                              <TableColumn id="Point3FromPic" fx:id="Point3FromPic" prefWidth="75.0" text="Punkt 3" />
+                              <TableColumn id="Point4fromPic" fx:id="Point4fromPic" prefWidth="75.0" text="Punkt 4" />
+                          </columns>
+                        </TableView>
+                        <Label layoutX="66.0" layoutY="14.0" text="Punkty z oryginalnego obrazu" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <Label fx:id="Label1" layoutX="282.0" layoutY="81.0" text="Ustawienia i dane" />
    </children>
 </AnchorPane>

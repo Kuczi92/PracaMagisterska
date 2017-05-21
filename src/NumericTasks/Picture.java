@@ -5,28 +5,31 @@
  */
 package NumericTasks;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.awt.image.PixelGrabber;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
 
 /**
  *
  * @author Quchi
  */
-public final class Picture extends JPanel  {
+public final class Picture   {
     
     //////////////////////////// VARIABLES /////////////////////////////////////
     
     /** Store the Image reference */
-    private BufferedImage image;
+    private  BufferedImage image;
     
     /** Store the image width and height */
     private int width, height;
@@ -36,6 +39,15 @@ public final class Picture extends JPanel  {
     
     /** Total number of pixel in an image*/
     private int totalPixels;
+
+    public Picture(int[] pixels, int width, int height) {
+        this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        this.width = width;
+        this.height = height;
+        this.totalPixels = this.width * this.height;
+        this.pixels = pixels;
+        setPixelArray(pixels);
+    }
 
     
     
@@ -61,8 +73,14 @@ public final class Picture extends JPanel  {
     
     /** Default constructor
      * @param image Buffered image obraz*/
-    public Picture( BufferedImage image){
-    this.image=image;
+    public Picture(BufferedImage image){
+        
+        this.width = image.getWidth();
+        this.height = image.getHeight();
+        this.totalPixels = this.width * this.height;
+        this.pixels = new int[this.totalPixels];
+        this.image=image;
+        initPixelArray();
     }
     
     public Picture(String filePath){
@@ -77,6 +95,7 @@ public final class Picture extends JPanel  {
      * @param height height of the image passed by the user
      */
     public Picture(int width, int height){
+        
         this.width = width;
         this.height = height;
         this.totalPixels = this.width * this.height;
@@ -506,13 +525,6 @@ public final class Picture extends JPanel  {
     private void updateImagePixelAt(int x, int y){
         image.setRGB(x, y, pixels[x+(y*width)]);
     }
-    
-    @Override
-    public void paint(Graphics g) {
-          g.drawImage(image, 0, 0, this);
-       } 
-    
-    
     public void  ZmieńRozmiarObrazu( int newW, int newH) { 
     Image tmp = image.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
     BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
@@ -524,6 +536,63 @@ public final class Picture extends JPanel  {
     
 }
     
+    public BufferedImage changeBlurr(int x , int y){  
+                                                      
+                                                      
+                                                      if(x<=0&&y<=0){
+                                                            return image;   
+                                                      }
+                                                      else
+                                                      {
+                                                        BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+                                                        convertedImg.getGraphics().drawImage(image, 0, 0, null);
+                                                        byte[] data = ((DataBufferByte) convertedImg.getRaster().getDataBuffer()).getData();
+                                                        Mat opencv = new Mat(convertedImg.getHeight(), convertedImg.getWidth(), CvType.CV_8UC3);
+                                                        opencv.put(0, 0, data);
+                                                        Imgproc.blur(opencv, opencv, new Size(x, y));
+                                                            return matToBufferedImage(opencv,new BufferedImage(image.getWidth(),image.getHeight(),image.getType()));
+                                                      }
+    }
+    
+    
+    
+    public static BufferedImage matToBufferedImage(Mat matrix, BufferedImage bimg)
+{
+    if ( matrix != null ) { 
+        int cols = matrix.cols();  
+        int rows = matrix.rows();  
+        int elemSize = (int)matrix.elemSize();  
+        byte[] data = new byte[cols * rows * elemSize];  
+        int type;  
+        matrix.get(0, 0, data);  
+        switch (matrix.channels()) {  
+        case 1:  
+            type = BufferedImage.TYPE_BYTE_GRAY;  
+            break;  
+        case 3:  
+            type = BufferedImage.TYPE_3BYTE_BGR;  
+            // bgr to rgb  
+            byte b;  
+            for(int i=0; i<data.length; i=i+3) {  
+                b = data[i];  
+                data[i] = data[i+2];  
+                data[i+2] = b;  
+            }  
+            break;  
+        default:  
+            return null;  
+        }  
+
+        // Reuse existing BufferedImage if possible
+        if (bimg == null || bimg.getWidth() != cols || bimg.getHeight() != rows || bimg.getType() != type) {
+            bimg = new BufferedImage(cols, rows, type);
+        }        
+        bimg.getRaster().setDataElements(0, 0, cols, rows, data);
+    } else { // mat was null
+        bimg = null;
+    }
+    return bimg;  
+}  
     BufferedImage obrazOryginalny() {
      return  image;
     }

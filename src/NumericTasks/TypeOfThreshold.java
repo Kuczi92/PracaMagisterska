@@ -10,7 +10,5 @@ package NumericTasks;
  * @author Quchi
  */
 public enum TypeOfThreshold {
-   
     EFEKT_ROZJASNIAJACY, EFEKT_PRZYCIEMNAJACY, PROGOWANIE,BRAK_PROGROWANIA;
-   
 }

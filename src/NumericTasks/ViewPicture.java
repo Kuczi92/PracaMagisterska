@@ -5,20 +5,11 @@
  */
 package NumericTasks;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 
 
@@ -26,74 +17,27 @@ import javax.swing.JPanel;
  *
  * @author Quchi
  */
-public class ViewPicture extends JFrame implements ActionListener {
-    private static String Sciezka;
+public class ViewPicture{
     private final Picture RGB;
-    public  JPanel Wyświetlacz;
- 
-    public String tutułOkna;
-    public String nazwapliku;
-    
-   
-    
-    public ViewPicture(String sciezka, String TytułOkna,String nazwaPliku) {
-        RGB = new Picture(sciezka); 
-        this.tutułOkna=TytułOkna;
-        initComponents();
-        Sciezka=sciezka;
-        this.nazwapliku=nazwaPliku;
-        
-    }
-    
-   public ViewPicture(BufferedImage Obraz, String TytułOkna,String nazwaPliku) {
+
+   public ViewPicture(BufferedImage Obraz) {
        RGB = new Picture(Obraz);
-       this.tutułOkna=TytułOkna;
-       initComponents();
-       this.nazwapliku=nazwaPliku;
-  
-        
     }
-  
-  
-   
-   public ViewPicture(Picture ObrazEdytowalny, String TytułOkna,String nazwaPliku) {
+
+   public ViewPicture(Picture ObrazEdytowalny) {
        this.RGB=ObrazEdytowalny;
-       this.tutułOkna=TytułOkna;
-       this.nazwapliku=nazwaPliku;
-
     }
-   
-   static String stripExtension (String str) {
-        // Handle null case specially.
-
-        if (str == null) return null;
-
-        // Get position of last '.'.
-
-        int pos = str.lastIndexOf(".");
-
-        // If there wasn't any '.' just return the string as is.
-
-        if (pos == -1) return str;
-
-        // Otherwise return the string, up to the dot.
-
-        return str.substring(0, pos);
-    }
-   public String pobierzNazwePliku(){
-       return stripExtension (nazwapliku);
+   public ViewPicture(String Sciezka) {
+      RGB = new Picture(Sciezka);
    }
+   
     public void zapiszObraz(String Sciezka){
        RGB.writeImage(Sciezka);
    }
-   public String pobierzSciezkePliku(){
-        return Sciezka;
-    }
    public int[] pobierzTabliceRGB(){
        return RGB.getPixelArray();
    }
    public int pobierzX(){
-       
         return RGB.getImageWidth();
    }
    public int pobierzY()
@@ -109,9 +53,7 @@ public class ViewPicture extends JFrame implements ActionListener {
        return RGB.Image();
    }
 
-    void UstawObraz(ArrayList<BufferedImage> ListaGalaktyk) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
 
     void zapiszObraz(String absolutePath, int x, int y) {
        BufferedImage Obraz = ZmieńRozmiarObrazu(RGB.Image(),(int)(RGB.Image().getWidth()*x/100.0), (int) (RGB.Image().getHeight()*y/100.0));
@@ -442,54 +384,8 @@ public class ViewPicture extends JFrame implements ActionListener {
        
           return WyjsciowyRGB;
         } 
-        
-  
-   
-   
-        public void Odswierzenie(){
-                                      
-                                      Graphics g  = RGB.Image().getGraphics();
-                                      g.drawImage(RGB.Image(), 0, 0, this);
-                                      g.dispose();
-                                      this.repaint();
-        }
-       
-        
-        
-        
-   
+
    public void UstawObraz(BufferedImage Obraz){
        RGB.setImage(Obraz);
    }
-   
-   
-   
-     private void initComponents() {
-       Wyświetlacz = RGB;
-       setResizable(true);
-       setPreferredSize(new Dimension(pobierzX(),pobierzY()));
-       setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-       setTitle(tutułOkna);
-       setLayout(new BorderLayout());
-       add(Wyświetlacz, BorderLayout.CENTER);
-       setLocation(100, 100);
-       pack();
-
-   }
-     
-     
-
-  
-    
-    public void mouseDragged(MouseEvent e) {
-      
-       
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
 }

@@ -196,10 +196,7 @@ public BufferedImage  setPicture(BufferedImage img,int width ,int height){
                 double[] areas = np.calculate_area(DetectedRectangles);
                 ArrayList<Integer> idxs = np.ToArrayList(np.argsort(areas, true));
                  
-  
                 while(idxs.size()>0){
-                 
-                 
                     int size = idxs.size();
                     
                     for(int box = 0; box<size;box++){
