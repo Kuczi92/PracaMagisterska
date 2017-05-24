@@ -194,7 +194,7 @@ public BufferedImage  setPicture(BufferedImage img,int width ,int height){
          return Out;
      }
 
-            public MatOfRect deleteFailedBoxes(MatOfRect DetectedRectangles ,double overlaptresh){
+   public MatOfRect deleteFailedBoxes(MatOfRect DetectedRectangles ,double overlaptresh){
                 ArrayUtils np = new ArrayUtils();
                 ArrayList <Rect> FailedBoxes  = new ArrayList<>();
                 Rect[] Boxes = DetectedRectangles.toArray();
@@ -238,7 +238,7 @@ public BufferedImage  setPicture(BufferedImage img,int width ,int height){
              
              ArrayList<Rect> DefaultBox = new ArrayList<>(Arrays.asList(Boxes));
              
-                 DefaultBox.removeAll(FailedBoxes);
+            DefaultBox.removeAll(FailedBoxes);
               
               
             Rect[] Out = DefaultBox.toArray(new Rect[0]);

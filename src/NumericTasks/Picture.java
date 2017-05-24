@@ -5,6 +5,7 @@
  */
 package NumericTasks;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -14,9 +15,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
@@ -567,46 +573,157 @@ public final class Picture   {
                                                             return matToBufferedImage(opencv,new BufferedImage(image.getWidth(),image.getHeight(),image.getType()));
                                                       }
     }
+    public BufferedImage Zoom(double procent){
+        if(!(procent==0)){
+        BufferedImage Output =  PobierzWycinekObrazu(image,(int)(procent/100*image.getWidth()),(int)(procent/100*image.getHeight()),(int)(image.getWidth()-(procent/100*image.getWidth())*2),(int)(image.getHeight()-(procent/100*image.getHeight())*2));  
+        Image tmp = Output.getScaledInstance(image.getWidth(), image.getHeight(), Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return dimg;
+        }
+        else{
+            return image;
+        }
+    }
     
     
+    
+    public BufferedImage PobierzWycinekObrazu(BufferedImage Obraz ,int startX, int startY, int endX,int  endY){
+       BufferedImage img = Obraz.getSubimage(startX, startY, endX, endY); //fill in the corners of the desired crop location here
+       BufferedImage copyOfImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+       Graphics g = copyOfImage.createGraphics();
+       g.drawImage(img, 0, 0, null);
+       return copyOfImage;
+   }
+    public ArrayList<BufferedImage> FindContorous(int blurr,int threshold, int min_wielkoscx, int min_wielkoscy, int max_wielkoscy, int max_wielkoscx){
+        
+         ArrayList<MatOfPoint> contours = new ArrayList<>(); 
+         Mat hierarchy = new Mat();
+         BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+         convertedImg.getGraphics().drawImage(image, 0, 0, null);              
+         byte[] data = ((DataBufferByte) convertedImg.getRaster().getDataBuffer()).getData();
+                                                                            
+         Mat opencv = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
+         opencv.put(0, 0, data);
+                                                                            
+                                                                                    
+           if(!(blurr==0))
+                         {
+                          Imgproc.blur(opencv, opencv, new Size(blurr, blurr));
+                         }
+                                                                                      
+                                                                                     
+                // macierz w skali szarosci          
+                Mat grayscaleMat  = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC1); 
+                //konwert z koloru do szarosci
+                Imgproc.cvtColor(opencv, grayscaleMat, Imgproc.COLOR_BGR2GRAY);  
+                 //inicjacja maski binarnej
+                Mat maskaobrazu = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC1);
+                // fuckja tresholde wykorzystywana do wyodrebnienia obiektow         
+                Imgproc.threshold(grayscaleMat,maskaobrazu , threshold,  threshold, Imgproc.THRESH_BINARY);
+                 // funkcja find contours do znajodownia punktow oraz obiektow      
+                Imgproc.findContours(maskaobrazu, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);          
+                                                                            int MinX = image.getWidth();
+                                                                            int MinY = image.getHeight();
+                                                                            int MaxX=0;
+                                                                            int MaxY=0;                   
+                                                                          
+                                                                            int PoczatekX,PoczatekY,Wysokosc,Szerokosc;
+                  for(int i = 0 ; i<contours.size();i++){
+                      Imgproc.drawContours(opencv, contours, i,  new Scalar(255,0,0));
+                  }                                                                                    
+                 
+                  ArrayList<BufferedImage> PicturesWithNumbers  = new ArrayList<>();
+                               for( MatOfPoint mop: contours )
+                                    {
+                                       
+                                     for( Point p: mop.toList() )
+                                            {
+                                                        if(MaxX<p.x)
+                                                        {
+                                                        MaxX=(int)p.x;
+                                               
+                                                        }
+                                                        if(MaxY<p.y)
+                                                        {
+                                                        MaxY=(int)p.y;
+                                                
+                                                        }
+                                                        if(MinX>p.x)
+                                                        {
+                                                        MinX=(int)p.x;
+                                                     
+                                                        }
+                                                        if(MinY>p.y)
+                                                        {
+                                                        MinY=(int)p.y;
+                                                      
+                                                        }                                                      
+                                            } 
+                                            PoczatekX=MinX;
+                                            PoczatekY=MinY;
+                                            Szerokosc=MaxX-MinX;
+                                            Wysokosc=MaxY-MinY;
+
+                                           
+                                           if((min_wielkoscx<Szerokosc&&min_wielkoscy<Wysokosc)&&(max_wielkoscy>Wysokosc&&max_wielkoscx>Szerokosc)&&(Szerokosc<Wysokosc))
+                                         
+                                                                   {
+                                            Scalar color = new Scalar(0,0,255);
+                                                                       Core.rectangle(opencv, new Point(PoczatekX,PoczatekY), new Point(PoczatekX+Szerokosc,PoczatekY+Wysokosc), color);
+                                                                       PicturesWithNumbers.add(PobierzWycinekObrazu(image,PoczatekX,PoczatekY,Szerokosc,Wysokosc));
+                                                                   }
+                                                                          
+                                          MinX = image.getWidth();
+                                          MinY = image.getHeight();
+                                          MaxX=0;
+                                          MaxY=0;                                
+                                                                          
+                                     }
+        
+        image = matToBufferedImage(opencv,new BufferedImage(image.getWidth(),image.getHeight(),image.getType()));
+        return PicturesWithNumbers;
+    }
     
     public static BufferedImage matToBufferedImage(Mat matrix, BufferedImage bimg)
-{
-    if ( matrix != null ) { 
-        int cols = matrix.cols();  
-        int rows = matrix.rows();  
-        int elemSize = (int)matrix.elemSize();  
-        byte[] data = new byte[cols * rows * elemSize];  
-        int type;  
-        matrix.get(0, 0, data);  
-        switch (matrix.channels()) {  
-        case 1:  
-            type = BufferedImage.TYPE_BYTE_GRAY;  
-            break;  
-        case 3:  
-            type = BufferedImage.TYPE_3BYTE_BGR;  
-            // bgr to rgb  
-            byte b;  
-            for(int i=0; i<data.length; i=i+3) {  
-                b = data[i];  
-                data[i] = data[i+2];  
-                data[i+2] = b;  
-            }  
-            break;  
-        default:  
-            return null;  
-        }  
+    {
+            if ( matrix != null ) { 
+                int cols = matrix.cols();  
+                int rows = matrix.rows();  
+                int elemSize = (int)matrix.elemSize();  
+                byte[] data = new byte[cols * rows * elemSize];  
+                int type;  
+                matrix.get(0, 0, data);  
+                switch (matrix.channels()) {  
+                case 1:  
+                    type = BufferedImage.TYPE_BYTE_GRAY;  
+                    break;  
+                case 3:  
+                    type = BufferedImage.TYPE_3BYTE_BGR;  
+                    // bgr to rgb  
+                    byte b;  
+                    for(int i=0; i<data.length; i=i+3) {  
+                        b = data[i];  
+                        data[i] = data[i+2];  
+                        data[i+2] = b;  
+                    }  
+                    break;  
+                default:  
+                    return null;  
+                }  
 
-        // Reuse existing BufferedImage if possible
-        if (bimg == null || bimg.getWidth() != cols || bimg.getHeight() != rows || bimg.getType() != type) {
-            bimg = new BufferedImage(cols, rows, type);
-        }        
-        bimg.getRaster().setDataElements(0, 0, cols, rows, data);
-    } else { // mat was null
-        bimg = null;
-    }
-    return bimg;  
-}  
+                // Reuse existing BufferedImage if possible
+                if (bimg == null || bimg.getWidth() != cols || bimg.getHeight() != rows || bimg.getType() != type) {
+                    bimg = new BufferedImage(cols, rows, type);
+                }        
+                bimg.getRaster().setDataElements(0, 0, cols, rows, data);
+            } else { // mat was null
+                bimg = null;
+            }
+            return bimg;  
+    }  
     BufferedImage obrazOryginalny() {
      return  image;
     }

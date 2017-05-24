@@ -49,6 +49,27 @@ public class FXMLDetectedRunnersController implements Initializable {
     Slider SliderWartoscProgowa;
     @FXML
     Slider SliderRozmycie;
+    @FXML 
+    Slider SliderMinimalnyX;
+    @FXML 
+    Slider SliderMinimalnyY;
+    @FXML 
+    Label LabelMinimalnyY;
+    @FXML
+    Label LabelMinimalnyX;
+    
+    @FXML 
+    Slider SliderMaksymalnyX;
+    @FXML 
+    Slider SliderMaksymalnyY;
+    @FXML 
+    Label LabelMaksymalnyY;
+    @FXML
+    Label LabelMaksymalnyX;
+    
+    
+    @FXML
+    CheckBox CheckBoxKontury;
     @FXML
     Label LabelSliderValueKontrast;
     @FXML 
@@ -93,6 +114,10 @@ public class FXMLDetectedRunnersController implements Initializable {
     @FXML
     Label LabelSliderValueOdcien;
     
+    @FXML 
+    Slider SliderZoom;
+    @FXML 
+    Label LabelSliderValueZoom;
     //Komponenty znajdujące się w zakładce dane 
     @FXML
     TableColumn Point1FromPic;
@@ -103,6 +128,19 @@ public class FXMLDetectedRunnersController implements Initializable {
     @FXML
     TableColumn Point4FromPic;
     
+    // Komponenty znajdujące się w Wykrytych Liczbach
+    
+    
+    @FXML
+    ImageView ImageViewNumber;
+    @FXML
+    Button ButtonPoprzedniNumber;
+    @FXML
+    Button ButtonNastepnyNumber;
+    @FXML
+    Button ButtonRecognizeNumber;
+    @FXML
+    Label LabelRecogizedNumer;
     
     //Komponenty ogólne
     @FXML
@@ -116,6 +154,9 @@ public class FXMLDetectedRunnersController implements Initializable {
     
     TypeOfThreshold TypeOfThreshold;
     int currentImage= 0;
+    
+    int currentDetectedNumber = 0;
+    ArrayList<BufferedImage> DetectedNumbers;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
      TypeOfThreshold = TypeOfThreshold.BRAK_PROGROWANIA;
@@ -203,13 +244,52 @@ public class FXMLDetectedRunnersController implements Initializable {
         //zmiana progowania mod jasnosci kontrastu kolorów
         int[] pixels = Pic.ModyfikujKoloryWKanaleRGB(SliderCzerwony.getValue()+SliderJasnosc.getValue(), SliderZielony.getValue()+SliderJasnosc.getValue(), SliderNiebieski.getValue()+SliderJasnosc.getValue(), SliderKontrast.getValue()/1000.0,TypeOfThreshold, (int) SliderWartoscProgowa.getValue());
         Picture Out = new Picture(pixels,Images.get(currentImage).getWidth(),Images.get(currentImage).getHeight());
-        BufferedImage Blurr = Out.changeBlurr((int)SliderRozmycie.getValue(), (int) SliderRozmycie.getValue());
-        Image image = SwingFXUtils.toFXImage(Blurr, null);
-        if(CheckBoxUseKrawedz.isSelected()){    
-            Out = new Picture (Blurr);
+        Out = new Picture( Out.Zoom(SliderZoom.getValue()/2));
+        Image image = null;
+        if(CheckBoxUseKrawedz.isSelected()){
+            Out = new Picture (Out.changeBlurr((int)SliderRozmycie.getValue(), (int) SliderRozmycie.getValue()));
             image = SwingFXUtils.toFXImage(Out.DetectEdges(SliderKrawedz.getValue()), null); 
         }
+        else if(CheckBoxKontury.isSelected()){
+            DetectedNumbers = Out.FindContorous((int)SliderRozmycie.getValue(), (int) SliderKrawedz.getValue(), (int)(SliderMinimalnyX.getValue()/100.0*Out.getImageWidth()), (int)(SliderMinimalnyY.getValue()/100.0*Out.getImageHeight()), (int)(SliderMaksymalnyX.getValue()/100.0*Out.getImageWidth()), (int)(SliderMaksymalnyY.getValue()/100.0*Out.getImageHeight()));
+            image = SwingFXUtils.toFXImage(Out.Image(), null);
+            if(DetectedNumbers.size()>0){
+                ImageViewNumber.setImage(SwingFXUtils.toFXImage(DetectedNumbers.get(0), null));
+            }
+             
+        }
+        else{
+            image = SwingFXUtils.toFXImage(Out.changeBlurr((int)SliderRozmycie.getValue(), (int) SliderRozmycie.getValue()), null);
+        }
         ImageView.setImage(image);
+    }
+    
+    @FXML
+    public void changedetectedNumberPrevious(){
+     if(currentDetectedNumber-1<DetectedNumbers.size()&&currentDetectedNumber-1>=0){
+            Image image = SwingFXUtils.toFXImage(DetectedNumbers.get(--currentDetectedNumber), null);
+            ImageViewNumber.setImage(image);
+        }
+        else 
+        {   
+            currentDetectedNumber=DetectedNumbers.size()-1;
+            Image image = SwingFXUtils.toFXImage(DetectedNumbers.get(currentDetectedNumber), null);
+            ImageViewNumber.setImage(image);
+        }
+    }
+    
+    @FXML
+    public void changedetectedNumberNext(){
+     if(currentDetectedNumber+1<DetectedNumbers.size()&&currentDetectedNumber+1>=0){
+            Image image = SwingFXUtils.toFXImage(DetectedNumbers.get(++currentDetectedNumber), null);
+            ImageViewNumber.setImage(image);
+        }
+        else 
+        {   
+            currentDetectedNumber=0;
+            Image image = SwingFXUtils.toFXImage(DetectedNumbers.get(currentDetectedNumber), null);
+            ImageViewNumber.setImage(image);
+        }
     }
     
     @FXML
@@ -276,6 +356,36 @@ public class FXMLDetectedRunnersController implements Initializable {
     public void changeValueSliderWartosc(){
          LabelSliderValueWartosc.setText(format("%.2f",SliderWartosc.getValue()));
          changeValuesOfPicture();
+    }
+    
+    @FXML 
+    public void changeValueSliderMinimalnyX(){
+        LabelMinimalnyX.setText(format("%.2f",SliderMinimalnyX.getValue()));
+        changeValuesOfPicture();
+    }  
+    
+    @FXML
+    public void changeValueSliderMinimalnyY(){
+        LabelMinimalnyY.setText(format("%.2f",SliderMinimalnyY.getValue()));
+        changeValuesOfPicture();
+    } 
+    
+    @FXML
+    public void changeValueSliderMaksymalnyX(){
+        LabelMaksymalnyX.setText(format("%.2f",SliderMaksymalnyX.getValue()));
+        changeValuesOfPicture();
+    } 
+    
+    @FXML
+    public void changeValueSliderMaksymalnyY(){
+        LabelMaksymalnyY.setText(format("%.2f",SliderMaksymalnyY.getValue()));
+        changeValuesOfPicture();
+    }
+    
+    @FXML
+    public void changeValueSliderZoom(){
+        LabelSliderValueZoom.setText(format("%.2f",SliderZoom.getValue()));
+        changeValuesOfPicture();
     }
     
     @FXML
