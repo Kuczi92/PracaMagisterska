@@ -669,7 +669,6 @@ public final class Picture   {
 
                                            
                                            if((min_wielkoscx<Szerokosc&&min_wielkoscy<Wysokosc)&&(max_wielkoscy>Wysokosc&&max_wielkoscx>Szerokosc)&&(Szerokosc<Wysokosc))
-                                         
                                                                    {
                                             Scalar color = new Scalar(0,0,255);
                                                                        Core.rectangle(opencv, new Point(PoczatekX,PoczatekY), new Point(PoczatekX+Szerokosc,PoczatekY+Wysokosc), color);

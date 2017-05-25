@@ -33,28 +33,28 @@ public class HumanoidDetecion extends Detector {
         super(SciezkaPliku);
         this.Type = Type;
    }
-   public ArrayList<BufferedImage> DetectHumanoids(int x , int y) {
+   public ArrayList<BufferedImage> DetectHumanoids(int x , int y,int max_X, int max_Y, int min_X,int min_Y,double overlapFailedbox) {
        ArrayList<BufferedImage> ListaBiegaczy = new ArrayList();
        
        if(null == Type){
-       ListaBiegaczy = DetectUpperBody(x,y);
+       ListaBiegaczy = DetectUpperBody(x,y,max_X,max_Y,min_X,min_Y);
        }
        else switch (Type) {
            case HUMANOID_DETECT:
-              ListaBiegaczy = DetectFullBody(x,y);   
+              ListaBiegaczy = DetectFullBody(x,y,max_X,max_Y,min_X,min_Y,overlapFailedbox);   
                break;
            case UPPER_BODY_DETECT:
-              ListaBiegaczy = DetectUpperBody(x,y);
+              ListaBiegaczy = DetectUpperBody(x,y,max_X,max_Y,min_X,min_Y);
                break;
            default:
-              ListaBiegaczy = DetectUpperBody(x,y);
+              ListaBiegaczy = DetectUpperBody(x,y,max_X,max_Y,min_X,min_Y);
                break;
        }
 
        return ListaBiegaczy;
    }
    
-   public ArrayList<BufferedImage> DetectUpperBody(int x , int y){
+   public ArrayList<BufferedImage> DetectUpperBody(int x , int y,int max_X, int max_Y, int min_X,int min_Y){
                 CascadeClassifier HumanoidsDetector;
                 HumanoidsDetector = new CascadeClassifier("haarcascade_upperbody.xml");
                 MatOfRect faceDetections = new MatOfRect();
@@ -80,7 +80,7 @@ public class HumanoidDetecion extends Detector {
    }
    
    
-   public ArrayList<BufferedImage> DetectFullBody(int x , int y){
+   public ArrayList<BufferedImage> DetectFullBody(int x , int y,int max_X, int max_Y, int min_X,int min_Y,double overlapFailedbox){
        final HOGDescriptor hog = new HOGDescriptor();
                                      final MatOfFloat descriptors = HOGDescriptor.getDefaultPeopleDetector();
                                      hog.setSVMDetector(descriptors);
@@ -98,29 +98,48 @@ public class HumanoidDetecion extends Detector {
                                     // tu zaimplementuj non maxima suspression by nie powtarzały sie dotekcje w określonym obszarze
                                     
                                     // HumanoidsDetections  = non_max_suppression_slow(HumanoidsDetections,0.65);
-                                      HumanoidsDetections = deleteFailedBoxes(HumanoidsDetections,0.65);
+                                      HumanoidsDetections = deleteFailedBoxes(HumanoidsDetections,overlapFailedbox);
                                      System.out.println(String.format("Detected %s Humanoids", HumanoidsDetections.toArray().length));
                                      ArrayList<BufferedImage> Out = new ArrayList<>();
                                          for (Rect rect : HumanoidsDetections.toArray()) {
-                                          ListaPunktów.add(new ArrayList<>());
-                                          Core.rectangle(image, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),new Scalar(0, 255, 0),1);
-
-                                          Out.add(this.GetFragmentOfPicture(rect.x, rect.y,rect.width,rect.height)); 
-                                          ListaPunktów.get(ListaPunktów.size()-1).add(rect.x);
-                                          ListaPunktów.get(ListaPunktów.size()-1).add(rect.y);
-                                          ListaPunktów.get(ListaPunktów.size()-1).add(rect.x+rect.width);
-                                          ListaPunktów.get(ListaPunktów.size()-1).add(rect.y+rect.height);
-                                         }
+                                             
+                                                double MinimumX = min_X/100.0*ObrazWejsciowy.getWidth();
+                                                double MinumumY = min_Y/100.0*ObrazWejsciowy.getHeight();
+                                                double MaximumX = max_X/100.0*ObrazWejsciowy.getWidth();
+                                                double MaximumY = max_Y/100.0*ObrazWejsciowy.getHeight();
+                                                
+                                                if((MinimumX<rect.width&&MinumumY<rect.height)&&(MaximumX>rect.height&&MaximumY>rect.width))
+                                                {
+                                                         
+                                                          
+                                                          ListaPunktów.add(new ArrayList<>());
+                                                          Core.rectangle(image, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),new Scalar(0, 255, 0),1);
+                                                          Out.add(this.GetFragmentOfPicture(rect.x, rect.y,rect.width,rect.height)); 
+                                                          ListaPunktów.get(ListaPunktów.size()-1).add(rect.x);
+                                                          ListaPunktów.get(ListaPunktów.size()-1).add(rect.y);
+                                                          ListaPunktów.get(ListaPunktów.size()-1).add(rect.x+rect.width);
+                                                          ListaPunktów.get(ListaPunktów.size()-1).add(rect.y+rect.height);
+                                                          Core.putText(image,"X: "+rect.x+" Y:"+rect.y+" W:"+rect.width+" H:"+rect.height, new Point(rect.x, rect.y), Core.FONT_HERSHEY_PLAIN, 0.8, new Scalar(255, 255, 255));
+                                                          
+                                                }
+                                                else{
+                                                    
+                                                }
+                                          }  
+                                          
+                                         
 
                                  ObrazWejsciowy = MatDoBufferedImage(image);
                                  
                                  return Out;
    }
-   
-   
-   
-   
-   
-   
-   
 }
+   
+   
+   
+   
+   
+   
+   
+   
+

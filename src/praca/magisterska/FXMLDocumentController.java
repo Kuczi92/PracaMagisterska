@@ -7,6 +7,7 @@ package praca.magisterska;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import static java.lang.String.format;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -21,6 +22,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -35,21 +37,42 @@ public class FXMLDocumentController implements Initializable {
     FXMLDetectedRunnersController FXMLDetectedRunnersController;
     TypeOfDetect type;
     String pobranaścieszka;
-    
     ArrayList<BufferedImage> DetectedRunners;
-    
+    public int widthOriginImage;
+    public int heightOriginImage;       
+            
+    //Pre processing
     @FXML
     private Label Sciezka;
-    
     @FXML
     private ComboBox WybórWykrycia; 
-    
-    
     @FXML
     public TextField TextFieldRozdzielczonscMAX_X;
-     
     @FXML
     public TextField TextFieldRozdzielczonscMAX_Y;
+    @FXML 
+    public Slider SliderRozmiarMinX;
+    @FXML 
+    public Slider SliderRozmiarMinY;
+    @FXML 
+    public Slider SliderRozmiarMaxX;
+    @FXML 
+    public Slider SliderRozmiarMaxY;
+    @FXML
+    public Slider SliderFailedBoxes;
+    @FXML
+    public Label LabelFailedBoxes;
+    @FXML
+    public Label LabelValueRozmiarMinX;
+    @FXML
+    public Label LabelValueRozmiarMinY;
+    @FXML
+    public Label LabelValueRozmiarMaxX;
+    @FXML
+    public Label LabelValueRozmiarMaxY;
+    
+    
+    
     @FXML
     private void handleButtonAction(ActionEvent event) throws Exception {
             Stage stage = new Stage();
@@ -74,18 +97,34 @@ public class FXMLDocumentController implements Initializable {
             }
          }
     
+    
+    @FXML
+    public void changeValueMinX(){
+        LabelValueRozmiarMinX.setText(format("%.2f",SliderRozmiarMinX.getValue()));
+    }
+    @FXML
+    public void changeValueMinY(){
+        LabelValueRozmiarMinY.setText(format("%.2f",SliderRozmiarMinY.getValue())); 
+    }
+    @FXML
+    public void changeValueMaxX(){
+         LabelValueRozmiarMaxX.setText(format("%.2f",SliderRozmiarMaxX.getValue()));
+    }
+    @FXML
+    public void changeValueMaxY(){
+         LabelValueRozmiarMaxY.setText(format("%.2f",SliderRozmiarMaxY.getValue()));
+    }
+    
     @FXML
     private void handleButtonWykrywanieAction(ActionEvent event) throws Exception {
-        RunnersDetection RunnersDetection = new RunnersDetection(type,Sciezka.getText(),Integer.valueOf(TextFieldRozdzielczonscMAX_X.getCharacters().toString()),Integer.valueOf(TextFieldRozdzielczonscMAX_Y.getCharacters().toString()));
+        RunnersDetection RunnersDetection = new RunnersDetection(type,Sciezka.getText(),Integer.valueOf(TextFieldRozdzielczonscMAX_X.getCharacters().toString()),Integer.valueOf(TextFieldRozdzielczonscMAX_Y.getCharacters().toString()),
+        (int) (SliderRozmiarMaxX.getValue()),(int)(SliderRozmiarMaxY.getValue()),(int)(SliderRozmiarMinX.getValue()),(int)(SliderRozmiarMinY.getValue()),SliderFailedBoxes.getValue()/100.0);
         DetectedRunners = RunnersDetection.DetectedRunners();
         DrawOnCanvas DrawOnCanvas = new DrawOnCanvas(RunnersDetection.PicWithRunners(),RunnersDetection.ListaPunktów.size());
         Stage stage = new Stage();
         DrawOnCanvas.start(stage);
         stage.show();
-        
 
-        
-        
         loader = new FXMLLoader(getClass().getResource("FXMLDetectedRunners.fxml"));
         try {
           root = (Parent) loader.load();
@@ -99,9 +138,6 @@ public class FXMLDocumentController implements Initializable {
         Image image = SwingFXUtils.toFXImage(DetectedRunners.get(0), null);
         FXMLDetectedRunnersController.ImageView.setImage(image);
         FXMLDetectedRunnersController.Images = DetectedRunners;
-        
-        
-        
         StagePic.show();
         
     }

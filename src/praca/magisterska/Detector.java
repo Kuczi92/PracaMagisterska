@@ -205,27 +205,23 @@ public BufferedImage  setPicture(BufferedImage img,int width ,int height){
                     int size = idxs.size();
                     
                     for(int box = 0; box<size;box++){
-                        if(idxs.get(0)==box){
-                            
-                        }
-                       else if(np.IsInclude(Boxes[idxs.get(0)], Boxes[box]))
-                        {
-                            int xx1 = Math.max(Boxes[idxs.get(0)].x,Boxes[box].x);
-                            int yy1 = Math.max(Boxes[idxs.get(0)].y,Boxes[box].y);
-                            int xx2 = Math.min(Boxes[idxs.get(0)].x+Boxes[idxs.get(0)].width, Boxes[box].x+Boxes[box].width);
-                            int yy2 = Math.min(Boxes[idxs.get(0)].y+Boxes[idxs.get(0)].height, Boxes[box].y+Boxes[box].height);
-                            
-                            int w = Math.abs(xx2 - xx1);
-                            int h = Math.abs(yy2 - yy1);
-                            
-                            float overlap = (float) ((w*h)/areas[idxs.get(0)]);
-                            if(overlap>overlaptresh)
-                            {
-                                        FailedBoxes.add(Boxes[idxs.get(0)]);
-                                        break;
-                            }
-                            
-                            
+                      
+                      if(np.IsInclude(Boxes[idxs.get(0)], Boxes[idxs.get(box)]))
+                         {
+                          int xx1 = Math.max(Boxes[idxs.get(0)].x,Boxes[idxs.get(box)].x);
+                          int yy1 = Math.max(Boxes[idxs.get(0)].y,Boxes[idxs.get(box)].y);
+                          int xx2 = Math.min(Boxes[idxs.get(0)].x+Boxes[idxs.get(0)].width, Boxes[idxs.get(box)].x+Boxes[idxs.get(box)].width);
+                          int yy2 = Math.min(Boxes[idxs.get(0)].y+Boxes[idxs.get(0)].height, Boxes[idxs.get(box)].y+Boxes[idxs.get(box)].height);
+                          
+                          int w = Math.abs(xx2 - xx1);
+                          int h = Math.abs(yy2 - yy1);
+                          
+                          float overlap = (float) ((w*h)/areas[idxs.get(0)]);
+                          if(overlap>overlaptresh)
+                          {
+                              FailedBoxes.add(Boxes[idxs.get(0)]);
+                              break;
+                          }
                         }
                     }
                     if(idxs.size()>0){

@@ -18,7 +18,7 @@ public class RunnersDetection  {
     ArrayList<ArrayList<Integer>> ListaPunktów = new ArrayList();
     ArrayList<BufferedImage> ListaBiegaczy = new ArrayList();
     BufferedImage Image;
-    RunnersDetection(TypeOfDetect Type,String path,int x, int y )
+    RunnersDetection(TypeOfDetect Type,String path,int x, int y, int max_X, int max_Y, int min_X,int min_Y,double overlapFailedbox)
     {
         this.Type = Type;
         this.Path = path;
@@ -32,13 +32,13 @@ public class RunnersDetection  {
                             break;
                         case HUMANOID_DETECT:
                             HumanoidDetecion HumanoidDetecionFullBody = new HumanoidDetecion(Path,Type);
-                            ListaBiegaczy =   HumanoidDetecionFullBody.DetectHumanoids(x,y);
+                            ListaBiegaczy =   HumanoidDetecionFullBody.DetectHumanoids(x,y,max_X,max_Y,min_X,min_Y,overlapFailedbox);
                             Image = HumanoidDetecionFullBody.GetObrazWynikowy();
                             ListaPunktów = HumanoidDetecionFullBody.ListaPunktów;
                             break;
                         case UPPER_BODY_DETECT:
                             HumanoidDetecion HumanoidDetecionUpper = new HumanoidDetecion(Path,Type);
-                            ListaBiegaczy =  HumanoidDetecionUpper.DetectHumanoids(x,y);
+                            ListaBiegaczy =  HumanoidDetecionUpper.DetectHumanoids(x,y,max_X,max_Y,min_X,min_Y,overlapFailedbox);
                             Image = HumanoidDetecionUpper.GetObrazWynikowy();
                             ListaPunktów = HumanoidDetecionUpper.ListaPunktów;
                             break;
