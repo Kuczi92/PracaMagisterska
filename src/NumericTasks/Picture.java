@@ -726,4 +726,44 @@ public final class Picture   {
     BufferedImage obrazOryginalny() {
      return  image;
     }
+    
+    public ArrayList<Double>convertTo2DWithoutUsingGetRGB(int threshold) {
+      if(image.getType()!=BufferedImage.TYPE_4BYTE_ABGR){
+      BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+      convertedImg.getGraphics().drawImage(image, 0, 0, null);
+      image = convertedImg;
+      }
+     
+      int[][] result = new int[height][width];
+      ArrayList<Double> ListOfRGBValues = new ArrayList<>();
+         final int pixelLength = 4;
+         for (int pixel = 0, row = 0, col = 0; pixel < pixels.length; pixel += pixelLength) {
+            int argb = 0;
+            argb += (((int) pixels[pixel] & 0xff) << 24); // alpha
+            argb += ((int) pixels[pixel + 1] & 0xff); // blue
+            argb += (((int) pixels[pixel + 2] & 0xff) << 8); // green
+            argb += (((int) pixels[pixel + 3] & 0xff) << 16); // red
+            
+            
+            int  red   = (argb & 0x00ff0000) >> 16;
+            int  green = (argb & 0x0000ff00) >> 8;
+            int  blue  =  argb & 0x000000ff;
+            
+            
+            if((red+green+blue)/3 <threshold){
+                ListOfRGBValues.add(1.0);
+            }
+            
+            else{
+                ListOfRGBValues.add(0.0);
+            }
+            result[row][col] = argb;
+            col++;
+            if (col == width) {
+               col = 0;
+               row++;
+            }
+         }
+      return ListOfRGBValues;
+   } 
 }

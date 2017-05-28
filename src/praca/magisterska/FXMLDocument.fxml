@@ -12,7 +12,7 @@
         <Button fx:id="button" layoutX="14.0" layoutY="16.0" onAction="#handleButtonAction" text="Wybierz Obraz" />
         <Label fx:id="Sciezka" layoutX="117.0" layoutY="20.0" minHeight="16" minWidth="69" text="Dokonaj wyboru pliku" />
         <Button fx:id="Wykrywanie" layoutX="14.0" layoutY="49.0" mnemonicParsing="false" onAction="#handleButtonWykrywanieAction" prefHeight="25.0" prefWidth="157.0" text="Wykryj Biegaczy" />
-      <TabPane layoutX="14.0" layoutY="85.0" prefHeight="428.0" prefWidth="935.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="14.0" layoutY="85.0" prefHeight="514.0" prefWidth="935.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Pre - processing">
             <content>
@@ -32,7 +32,7 @@
                         <Label layoutX="20.0" layoutY="86.0" text="Rozdzielczość x:" />
                         <Label layoutX="20.0" layoutY="116.0" text="Rozdzielczość y:" />
                         <Label layoutX="20.0" layoutY="61.0" text="Ustawienie rozdzielczości:" />
-                        <Button layoutX="14.0" layoutY="360.0" mnemonicParsing="false" text="Zapisz ustawienia" />
+                        <Button layoutX="14.0" layoutY="446.0" mnemonicParsing="false" text="Zapisz ustawienia" />
                         <Slider fx:id="SliderFailedBoxes" layoutX="282.0" layoutY="38.0" prefHeight="14.0" prefWidth="310.0" value="65.0" />
                         <Label fx:id="LabelFailedBoxes" layoutX="610.0" layoutY="37.0" text="0" />
                         <Label layoutX="282.0" layoutY="8.0" prefHeight="25.0" prefWidth="353.0" text="Parametr dopuszczalnej części wspólnej dla wykrytych biegaczy:" />
@@ -54,6 +54,16 @@
                         <Label layoutX="509.0" layoutY="137.0" text="\%" />
                         <Label layoutX="533.0" layoutY="137.0" text="Maksymalny rozmiar Y" />
                         <Label layoutX="625.0" layoutY="37.0" text="\%" />
+                        <TableView layoutX="14.0" layoutY="154.0" prefHeight="171.0" prefWidth="561.0">
+                          <columns>
+                              <TableColumn fx:id="TabelaKolumnaNr" prefWidth="122.0" text="Wykryty biegacz nr: " />
+                              <TableColumn fx:id="TabelaKolumnaPunkt1" prefWidth="59.0" text="Punkt 1" />
+                              <TableColumn fx:id="TabelaKolumnaPunkt2" prefWidth="60.0" text="Punkt 2" />
+                              <TableColumn fx:id="TabelaKolumnaPunkt3" prefWidth="58.0" text="Punkt 3" />
+                              <TableColumn fx:id="TabelaKolumnaPunkt4" prefWidth="91.0" text="Punkt 4" />
+                              <TableColumn fx:id="TabelaKolumnaWykrytyNumer" minWidth="0.0" prefWidth="0.0" text="Wykryty numer:" />
+                          </columns>
+                        </TableView>
                      </children>
                   </AnchorPane>
             </content>
@@ -62,7 +72,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button layoutX="14.0" layoutY="360.0" mnemonicParsing="false" text="Zapisz ustawienia" />
+                        <Button layoutX="14.0" layoutY="446.0" mnemonicParsing="false" text="Zapisz ustawienia" />
                      </children>
                   </AnchorPane>
             </content>
@@ -71,51 +81,47 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button layoutX="14.0" layoutY="360.0" mnemonicParsing="false" text="Zapisz ustawienia" />
-                        <TabPane layoutX="14.0" layoutY="14.0" prefHeight="336.0" prefWidth="913.0" tabClosingPolicy="UNAVAILABLE">
+                        <Button layoutX="14.0" layoutY="446.0" mnemonicParsing="false" text="Zapisz ustawienia" />
+                        <TabPane layoutX="14.0" layoutY="14.0" prefHeight="431.0" prefWidth="913.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Nowa sieć ">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="149.0" prefWidth="900.0">
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="913.0">
                                        <children>
-                                          <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="218.0" text="Stworzenie pliku źródłowego" />
-                                          <Button layoutX="14.0" layoutY="47.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="218.0" text="Wybór folderu z cyframi trenującymi" />
+                                          <Button fx:id="CreateNewFileNeural" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#createFilewithNeuralNet" prefHeight="25.0" prefWidth="218.0" text="Stworzenie pliku źródłowego" />
+                                          <Button fx:id="ChoosefolderWithNumbers" layoutX="14.0" layoutY="47.0" mnemonicParsing="false" onAction="#chooseFolderWithTrainingNumbers" prefHeight="25.0" prefWidth="218.0" text="Wybór folderu z cyframi trenującymi" />
                                           <Label layoutX="265.0" layoutY="12.0" text="Wymiary obrazu:" />
-                                          <Button layoutX="14.0" layoutY="81.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="218.0" text="Trenuj sieć" />
+                                          <Button layoutX="14.0" layoutY="363.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="218.0" text="Trenuj sieć" />
                                           <Separator layoutX="235.0" layoutY="-4.0" orientation="VERTICAL" prefHeight="156.0" prefWidth="29.0" />
-                                          <TextField layoutX="354.0" layoutY="27.0" prefHeight="25.0" prefWidth="78.0" />
+                                          <TextField fx:id="NormalizeWidthX" layoutX="354.0" layoutY="27.0" prefHeight="25.0" prefWidth="78.0" />
                                           <Label layoutX="265.0" layoutY="27.0" prefHeight="25.0" prefWidth="75.0" text="Szerokość (x) :" />
-                                          <TextField layoutX="354.0" layoutY="56.0" prefHeight="25.0" prefWidth="78.0" />
+                                          <TextField fx:id="NormalizeHeightY" layoutX="354.0" layoutY="56.0" prefHeight="25.0" prefWidth="78.0" />
                                           <Label layoutX="265.0" layoutY="60.0" text="Wysokość (y) :" />
                                           <Label layoutX="448.0" layoutY="31.0" text="Liczba warstw: " />
-                                          <TextField layoutX="448.0" layoutY="56.0" prefHeight="25.0" prefWidth="116.0" />
+                                          <TextField fx:id="NumbersOFLayers" layoutX="448.0" layoutY="56.0" prefHeight="25.0" prefWidth="116.0" />
                                           <Separator layoutX="576.0" layoutY="-7.0" orientation="VERTICAL" prefHeight="161.0" prefWidth="33.0" />
-                                          <Button layoutX="448.0" layoutY="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="116.0" text="Potwierdź" />
+                                          <Button fx:id="Confirm2" layoutX="448.0" layoutY="120.0" mnemonicParsing="false" onAction="#confirm2Values" prefHeight="25.0" prefWidth="116.0" text="Potwierdź" />
                                           <Separator layoutX="-2.0" layoutY="145.0" prefHeight="17.0" prefWidth="918.0" />
                                           <Label layoutX="23.0" layoutY="169.0" text="Sciezka dla nowej sieci: " />
                                           <Label layoutX="23.0" layoutY="184.0" text="Sciażka dla folderu trenującego:" />
                                           <Label layoutX="23.0" layoutY="199.0" text="Przyjęta szerokość: " />
                                           <Label layoutX="23.0" layoutY="214.0" text="Przyjeta wysokość: " />
                                           <Label layoutX="24.0" layoutY="229.0" text="Liczba warstw: " />
-                                          <Label layoutX="202.0" layoutY="170.0" prefHeight="17.0" prefWidth="362.0" text="Wybierz ścieżkę dla sieci" />
-                                          <Label layoutX="202.0" layoutY="184.0" prefHeight="17.0" prefWidth="362.0" text="Wybierz folder z  zestawe trenującycm" />
-                                          <Label layoutX="202.0" layoutY="199.0" text="Podaj szerokość" />
-                                          <Label layoutX="202.0" layoutY="214.0" text="Podaj wysokość " />
-                                          <Label layoutX="202.0" layoutY="229.0" text="Podaj liczbe warstw" />
+                                          <Label fx:id="PathToNeuralNet" layoutX="202.0" layoutY="170.0" prefHeight="17.0" prefWidth="362.0" text="Wybierz ścieżkę dla sieci" />
+                                          <Label fx:id="PathToTrainingSet" layoutX="202.0" layoutY="184.0" prefHeight="17.0" prefWidth="362.0" text="Wybierz folder z  zestawe trenującycm" />
+                                          <Label fx:id="NormalizeWidth" layoutX="202.0" layoutY="199.0" text="Podaj szerokość" />
+                                          <Label fx:id="NormalizeHeight" layoutX="202.0" layoutY="214.0" text="Podaj wysokość " />
+                                          <Label fx:id="NumbersOfCount" layoutX="202.0" layoutY="229.0" text="Podaj liczbe warstw" />
                                           <Label layoutX="266.0" layoutY="94.0" text="Liczba iteracji:" />
-                                          <TextField layoutX="354.0" layoutY="90.0" prefHeight="25.0" prefWidth="210.0" />
-                                          <Button layoutX="116.0" layoutY="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="116.0" text="Potwierdź" />
-                                          <SplitMenuButton layoutX="609.0" layoutY="40.0" mnemonicParsing="false" text="Wybierz warstwę">
-                                            <items>
-                                              <MenuItem mnemonicParsing="false" text="Action 1" />
-                                              <MenuItem mnemonicParsing="false" text="Action 2" />
-                                            </items>
-                                          </SplitMenuButton>
-                                          <Label layoutX="609.0" layoutY="12.0" text="Liczba neuronów dla każdej z warstw: " />
-                                          <TextField layoutX="609.0" layoutY="94.0" prefHeight="25.0" prefWidth="148.0" />
-                                          <Label layoutX="609.0" layoutY="73.0" text="Liczba neuronów dla wybranej warstwy:" />
-                                          <Button layoutX="783.0" layoutY="120.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="116.0" text="Potwierdź" />
-                                          <TreeView layoutX="593.0" layoutY="162.0" prefHeight="132.0" prefWidth="315.0" />
+                                          <TextField fx:id="NumbersOfItarationCount" layoutX="354.0" layoutY="90.0" prefHeight="25.0" prefWidth="210.0" />
+                                          <Label layoutX="608.0" layoutY="12.0" text="Liczba neuronów dla każdej z warstw: " />
+                                          <TextField fx:id="NumbersOfNeuoronforLayer" layoutX="610.0" layoutY="78.0" prefHeight="25.0" prefWidth="148.0" />
+                                          <Label layoutX="610.0" layoutY="60.0" text="Liczba neuronów dla wybranej warstwy:" />
+                                          <Button fx:id="Confirm3" layoutX="783.0" layoutY="120.0" mnemonicParsing="false" onAction="#confirm3values" prefHeight="25.0" prefWidth="116.0" text="Potwierdź" />
+                                          <TreeView fx:id="LayersAndNumbersOfNeuralNet" layoutX="593.0" layoutY="162.0" prefHeight="237.0" prefWidth="315.0" />
+                                          <Label layoutX="23.0" layoutY="244.0" text="Liczba iteracji:" />
+                                          <Label fx:id="NumberOfIteration" layoutX="202.0" layoutY="244.0" text="Podaj liczbę iteracji" />
+                                          <ComboBox fx:id="ChoooseLayer" layoutX="610.0" layoutY="27.0" prefHeight="25.0" prefWidth="295.0" promptText="Dana warstwa" />
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -124,9 +130,9 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="224.0" text="Wczytaj plik z siecią neuronową" />
-                                          <Button layoutX="14.0" layoutY="46.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="224.0" text="Wczytaj plik z obrazem do rozpoznania" />
-                                          <Button layoutX="14.0" layoutY="78.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="224.0" text="Rozpoznaj cyfrę" />
+                                          <Button fx:id="ReadFileWithNeuralNet" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="224.0" text="Wczytaj plik z siecią neuronową" />
+                                          <Button fx:id="ReadFileWithPicture" layoutX="14.0" layoutY="46.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="224.0" text="Wczytaj plik z obrazem do rozpoznania" />
+                                          <Button fx:id="RecognizeNumber" layoutX="14.0" layoutY="78.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="224.0" text="Rozpoznaj cyfrę" />
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -139,16 +145,6 @@
             </Tab>
         </tabs>
       </TabPane>
-      <TableView layoutX="14.0" layoutY="568.0" prefHeight="85.0" prefWidth="362.0">
-        <columns>
-            <TableColumn fx:id="TabelaKolumnaNr" prefWidth="122.0" text="Wykryty biegacz nr: " />
-            <TableColumn fx:id="TabelaKolumnaPunkt1" prefWidth="59.0" text="Punkt 1" />
-            <TableColumn fx:id="TabelaKolumnaPunkt2" prefWidth="60.0" text="Punkt 2" />
-            <TableColumn fx:id="TabelaKolumnaPunkt3" prefWidth="58.0" text="Punkt 3" />
-            <TableColumn fx:id="TabelaKolumnaPunkt4" prefWidth="91.0" text="Punkt 4" />
-            <TableColumn fx:id="TabelaKolumnaWykrytyNumer" minWidth="0.0" prefWidth="0.0" text="Wykryty numer:" />
-        </columns>
-      </TableView>
       <Button layoutX="509.0" layoutY="16.0" mnemonicParsing="false" text="Wybierz Folder źródłowy" />
       <Label layoutX="430.0" layoutY="66.0" text="Ustawienia" />
       <Button layoutX="509.0" layoutY="49.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="148.0" text="Wykryj Biegaczy ze zdjęć" />

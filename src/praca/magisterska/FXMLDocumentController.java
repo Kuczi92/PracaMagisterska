@@ -20,11 +20,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 /**
@@ -39,8 +43,13 @@ public class FXMLDocumentController implements Initializable {
     String pobranaścieszka;
     ArrayList<BufferedImage> DetectedRunners;
     public int widthOriginImage;
-    public int heightOriginImage;       
-            
+    public int heightOriginImage; 
+    
+    
+   private final Image rootIcon = new Image("file:icontitle//neuralnet.jpg"); 
+   private final Image LayerIcon = new Image("file:icontitle//layers.png");
+   private final Image NeuronIcon = new Image("file:icontitle//neuron.png");
+   
     //Pre processing
     @FXML
     private Label Sciezka;
@@ -71,8 +80,125 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public Label LabelValueRozmiarMaxY;
     
+    //Ustawienia sieci neuronowej
+    
+    //Nowa siec
+    @FXML
+    public Button CreateNewFileNeural;
+    @FXML 
+    public Button ChoosefolderWithNumbers;
+    @FXML 
+    public Button Confirm1;
+    @FXML 
+    public TextField NormalizeWidthX;
+    @FXML 
+    public TextField NormalizeHeightY;
+    @FXML
+    public TextField NumbersOFLayers;
+    @FXML 
+    public TextField NumbersOfItarationCount;
+    @FXML 
+    public Button Confirm2;
+    @FXML 
+    public ComboBox ChoooseLayer;
+    @FXML 
+    public TextField NumbersOfNeuoronforLayer;
+    
+    @FXML 
+    public Button Confirm3;
+    
+    @FXML 
+    public Label PathToNeuralNet;
+    
+    @FXML 
+    public Label PathToTrainingSet;
+    
+    @FXML 
+    public Label NormalizeWidth;
+    
+    @FXML 
+    public Label NormalizeHeight;
+    
+    @FXML
+    public Label NumbersOfCount;
+    
+    @FXML
+    public TreeView LayersAndNumbersOfNeuralNet;
+    
+    //Wczytanie sieci
+    @FXML 
+    public Button ReadFileWithNeuralNet;
+    
+    @FXML 
+    public Button ReadFileWithPicture;
+    
+    @FXML 
+    public Button RecognizeNumber;
     
     
+    
+    @FXML 
+    public void createFilewithNeuralNet(){
+            Stage stage = new Stage();
+            FileChooserFile FileChooserFile = new FileChooserFile(PathToNeuralNet.getText());
+            FileChooserFile.start(stage); 
+            PathToNeuralNet.setText(FileChooserFile.Sciezka);
+    }
+    
+    
+    @FXML
+    public void chooseFolderWithTrainingNumbers(){
+            Stage stage = new Stage();
+            FolderChooser FolderChooser = new FolderChooser(PathToTrainingSet.getText());
+            FolderChooser.start(stage); 
+            PathToTrainingSet.setText(FolderChooser.getPobranaŚciezka());
+    }
+    
+    
+    @FXML 
+    public  Label NumberOfIteration;
+    
+    @FXML 
+    public void confirm2Values(){
+        NormalizeWidth.setText(NormalizeWidthX.getText());
+        NormalizeHeight.setText(NormalizeHeightY.getText());
+        NumbersOfCount.setText(NumbersOFLayers.getText());
+        NumberOfIteration.setText(NumbersOfItarationCount.getText());
+        
+        int NumbersOfLayers = Integer.valueOf(NumbersOFLayers.getText());
+        if(ChoooseLayer.getItems().size()>0){
+            ChoooseLayer.getItems().clear();
+        }
+        for(int i = 1 ; i<=NumbersOfLayers;i++)
+                ChoooseLayer.getItems().add("Ustaw liczbę neuronów dla warstwy: "+i);
+        
+        LayersAndNumbersOfNeuralNet.setEditable(true);
+        TreeItem<String> rootItem = new TreeItem<> ("Sieć Neuronowa", new ImageView(rootIcon));
+        rootItem.setExpanded(true);
+        for (int i = 1; i < NumbersOfLayers+1; i++) {
+            TreeItem<String> item = new TreeItem<> ("Warstwa: " + i,new ImageView(LayerIcon));            
+            rootItem.getChildren().add(item);
+        }          
+        LayersAndNumbersOfNeuralNet.setRoot(rootItem);
+    }
+    
+    
+    @FXML
+    public void confirm3values(){
+         int NumberOfNeurons = Integer.valueOf(NumbersOfNeuoronforLayer.getText());
+         String[] numbers = ChoooseLayer.getSelectionModel().getSelectedItem().toString().split(" ");
+         int selectedLayer = Integer.valueOf(numbers[5]);
+         TreeItem<String> item =  (TreeItem<String>) LayersAndNumbersOfNeuralNet.getRoot().getChildren().get(selectedLayer-1);
+         TreeItem<String> Neuron = new TreeItem<> ("Liczba neuronów: " + NumberOfNeurons,new ImageView(NeuronIcon)); 
+         if(item.isLeaf()){
+             item.getChildren().add(Neuron);
+         }
+         else {
+           item.getChildren().clear();
+           item.getChildren().add(Neuron);
+         }
+           
+    }
     @FXML
     private void handleButtonAction(ActionEvent event) throws Exception {
             Stage stage = new Stage();
@@ -147,6 +273,10 @@ public class FXMLDocumentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
        WybórWykrycia.getSelectionModel().selectFirst();
        type = TypeOfDetect.HUMANOID_DETECT;
+       @SuppressWarnings("LocalVariableHidesMemberVariable")
+       TreeItem<String> root = new TreeItem<>("Sieć Neuronowa");
+       
+       LayersAndNumbersOfNeuralNet.setRoot(root);
     }    
     
 }
