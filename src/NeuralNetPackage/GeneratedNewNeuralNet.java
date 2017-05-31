@@ -14,10 +14,10 @@ import java.util.Random;
  */
 public class GeneratedNewNeuralNet {
     
-    ArrayList<ArrayList<ArrayList<Double>>> ListaWagPoszególnychNeuronów = new ArrayList<>();
-    ArrayList<ArrayList<Double>> ListaUkosówPoszególnychNeuronów = new ArrayList<>();
+   public ArrayList<ArrayList<ArrayList<Double>>> ListaWagPoszególnychNeuronów = new ArrayList<>();
+   public ArrayList<ArrayList<Double>> ListaUkosówPoszególnychNeuronów = new ArrayList<>();
     
-    GeneratedNewNeuralNet(int numberOfInput,int NumberOfLayers,int[] numberOfNeuronPerLayer){
+  public  GeneratedNewNeuralNet(int numberOfInput,int NumberOfLayers,int[] numberOfNeuronPerLayer){
       Random Random = new Random();
   
             ArrayList<ArrayList<Double>> NeuronsWeights = new ArrayList<>();

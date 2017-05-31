@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="praca.magisterska.TrainingNeuralNetController">
+   <children>
+      <ProgressBar fx:id="ProgressBar" layoutX="14.0" layoutY="31.0" prefHeight="36.0" prefWidth="925.0" progress="0.0" />
+      <Label layoutX="15.0" layoutY="14.0" text="Postęp" />
+      <Label fx:id="AktualnyProcent" layoutX="62.0" layoutY="14.0" text="liczba " />
+      <Label layoutX="97.0" layoutY="14.0" text="\%" />
+      <Label layoutX="20.0" layoutY="77.0" text="Wartości błędów:" />
+      <Label layoutX="20.0" layoutY="95.0" text="0: " />
+      <Label fx:id="LabelError0" layoutX="38.0" layoutY="95.0" text="Error" />
+      <LineChart fx:id="ChartOfErrors" layoutX="1.0" layoutY="210.0" prefHeight="440.0" prefWidth="950.0">
+        <xAxis>
+          <NumberAxis prefHeight="33.0" prefWidth="893.0" side="BOTTOM" tickLabelRotation="-2.0" fx:id="xAxis" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis fx:id="yAxis" side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <Label fx:id="LabelError1" layoutX="38.0" layoutY="112.0" text="Error" />
+      <Label layoutX="20.0" layoutY="112.0" text="1: " />
+      <Label fx:id="LabelError2" layoutX="38.0" layoutY="129.0" text="Error" />
+      <Label layoutX="20.0" layoutY="129.0" text="2: " />
+      <Label fx:id="LabelError3" layoutX="38.0" layoutY="146.0" text="Error" />
+      <Label layoutX="20.0" layoutY="146.0" text="3: " />
+      <Label fx:id="LabelError5" layoutX="273.0" layoutY="95.0" text="Error" />
+      <Label layoutX="255.0" layoutY="95.0" text="5: " />
+      <Label fx:id="LabelError6" layoutX="273.0" layoutY="112.0" text="Error" />
+      <Label layoutX="255.0" layoutY="112.0" text="6: " />
+      <Label fx:id="LabelError7" layoutX="273.0" layoutY="129.0" text="Error" />
+      <Label layoutX="255.0" layoutY="129.0" text="7: " />
+      <Label layoutX="255.0" layoutY="146.0" text="8: " />
+      <Label fx:id="LabelError8" layoutX="273.0" layoutY="146.0" text="Error" />
+      <Label layoutX="20.0" layoutY="163.0" text="4: " />
+      <Label fx:id="LabelError4" layoutX="38.0" layoutY="163.0" text="Error" />
+      <Label layoutX="255.0" layoutY="163.0" text="9: " />
+      <Label fx:id="LabelError9" layoutX="273.0" layoutY="163.0" text="Error" />
+      <Label layoutX="7.0" layoutY="193.0" text="Wykres błędów :" />
+      <Label layoutX="153.0" layoutY="14.0" text="Liczba cykli: " />
+      <Label fx:id="NumbersOfCycle" layoutX="227.0" layoutY="14.0" text="Label" />
+   </children>
+</AnchorPane>

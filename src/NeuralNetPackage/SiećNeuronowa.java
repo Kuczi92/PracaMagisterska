@@ -222,7 +222,10 @@ public class SiećNeuronowa
     
    public void ZapiszSiećDoPliku(String NazwaPliku) throws FileNotFoundException{
         try (PrintWriter zapis = new PrintWriter(NazwaPliku)) 
-        {
+        {   
+            
+            zapis.println("Size "+this.x+" "+this.y);
+                                           
             for(int Warstwa = 0 ; Warstwa<LiczbaWarstw;Warstwa++){
                 zapis.println("War "+WartstwaNeuronów.get(Warstwa).PobierzLiczbeNeuronów()+" "+WartstwaNeuronów.get(Warstwa).PodajTypFunkcjiAktywacji());
                 int LiczbaNeuronów = WartstwaNeuronów.get(Warstwa).PobierzLiczbeNeuronów();

@@ -8,6 +8,7 @@ package NeuralNetPackage;
 import NumericTasks.Picture;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import static java.lang.String.format;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,8 +18,13 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
+import javafx.application.Platform;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+
+
 
 /**
  *
@@ -47,7 +53,7 @@ public class Numbers {
     String[] Number9;
     
     SiećNeuronowa NeuralNetRecognizeNumbers;
-    Numbers(String Path,int sizeX,int sizeY) throws FileNotFoundException{
+   public Numbers(String Path,int sizeX,int sizeY) throws FileNotFoundException{
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.PathToNeuralNet = Path;
@@ -56,18 +62,20 @@ public class Numbers {
 
     }
     
-    Numbers(SiećNeuronowa NeuralNet,int sizeX,int sizeY){
+   public  Numbers(SiećNeuronowa NeuralNet,int sizeX,int sizeY){
       this.sizeX = sizeX;
       this.sizeY = sizeY;
       NeuralNetRecognizeNumbers = NeuralNet;
     }
 
-    Numbers(String SourcePathLoadedNeuralNet) throws FileNotFoundException {
+   public  Numbers(String SourcePathLoadedNeuralNet) throws FileNotFoundException {
         this.PathToNeuralNet = SourcePathLoadedNeuralNet;
         NeuralNetRecognizeNumbers = new SiećNeuronowa(PathToNeuralNet);
         this.sizeX = NeuralNetRecognizeNumbers.x;
         this.sizeY = NeuralNetRecognizeNumbers.y;
     }
+
+    
     
     public int RecognizeNumber(Picture Picture,int threshold){
       
@@ -91,7 +99,8 @@ public class Numbers {
         powerOfLearn = PowerLearn;
     }
     
-    public void TrainingNeuralnet(int LearningCount,JProgressBar JProgressBar,JLabel JLabel,JLabel JLabel0,JLabel JLabel1,JLabel JLabel2,JLabel JLabel3,JLabel JLabel4,JLabel JLabel5,JLabel JLabel6,JLabel JLabel7,JLabel JLabel8,JLabel JLabel9) throws FileNotFoundException{
+    @SuppressWarnings("SleepWhileInLoop")
+    public void TrainingNeuralnet(int LearningCount,ProgressBar ProgressBar,Label JLabel,Label JLabel0,Label JLabel1,Label JLabel2,Label JLabel3,Label JLabel4,Label JLabel5,Label JLabel6,Label JLabel7,Label JLabel8,Label JLabel9,Label AktualnyProcent,LineChart<Number,Number> ChartOfErrors) throws FileNotFoundException, InterruptedException{
         
         
         int number0=Number0.length;
@@ -111,91 +120,166 @@ public class Numbers {
            Random whichNumberToTrain = new Random();
            int Number = whichNumberToTrain.nextInt(10);
            Picture Picture;
+          
            switch(Number){
                     case 0:     
                     Picture = new Picture(Number0[whichNumberToTrain.nextInt(Number0.length)]);
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
                     ErrorsNeuralNets[0]  =  NeuralNetRecognizeNumbers.TrenujSieć(Picture.convertTo2DWithoutUsingGetRGB(127), new ArrayList<>(Arrays.asList(1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0)), powerOfLearn);
+                    Platform.runLater(() -> {
+                    JLabel0.setText(""+ErrorsNeuralNets[0]*100);
+                    });
                     break;
                     
                     case 1:     
                     Picture = new Picture(Number1[whichNumberToTrain.nextInt(Number1.length)]);
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
                     ErrorsNeuralNets[1]  =  NeuralNetRecognizeNumbers.TrenujSieć(Picture.convertTo2DWithoutUsingGetRGB(127), new ArrayList<>(Arrays.asList(0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0)), powerOfLearn);
+                    Platform.runLater(() -> {
+                    JLabel1.setText(""+ErrorsNeuralNets[1]*100);
+                    });
                     break;
                     
                     case 2:     
                     Picture = new Picture(Number2[whichNumberToTrain.nextInt(Number2.length)]);
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
                     ErrorsNeuralNets[2]  =  NeuralNetRecognizeNumbers.TrenujSieć(Picture.convertTo2DWithoutUsingGetRGB(127), new ArrayList<>(Arrays.asList(0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0)), powerOfLearn);
+                    Platform.runLater(() -> {
+                    JLabel2.setText(""+ErrorsNeuralNets[2]*100);
+                    });
                     break;
                     
                     case 3:     
                     Picture = new Picture(Number3[whichNumberToTrain.nextInt(Number3.length)]);
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
                     ErrorsNeuralNets[3]  =  NeuralNetRecognizeNumbers.TrenujSieć(Picture.convertTo2DWithoutUsingGetRGB(127), new ArrayList<>(Arrays.asList(0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0)), powerOfLearn);
+                    Platform.runLater(() -> {
+                    JLabel3.setText(""+ErrorsNeuralNets[3]*100);
+                    });
                     break;
                     
                     case 4:     
                     Picture = new Picture(Number4[whichNumberToTrain.nextInt(Number4.length)]);
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
                     ErrorsNeuralNets[4]  =  NeuralNetRecognizeNumbers.TrenujSieć(Picture.convertTo2DWithoutUsingGetRGB(127), new ArrayList<>(Arrays.asList(0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0)), powerOfLearn);
+                    Platform.runLater(() -> {
+                    JLabel4.setText(""+ErrorsNeuralNets[4]*100);
+                    });
                     break;
                     
                     case 5:     
                     Picture = new Picture(Number5[whichNumberToTrain.nextInt(Number5.length)]);
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
                     ErrorsNeuralNets[5]  =  NeuralNetRecognizeNumbers.TrenujSieć(Picture.convertTo2DWithoutUsingGetRGB(127), new ArrayList<>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0)), powerOfLearn);
+                    Platform.runLater(() -> {
+                    JLabel5.setText(""+ErrorsNeuralNets[5]*100);
+                    });
                     break;
                     
                     case 6:     
                     Picture = new Picture(Number6[whichNumberToTrain.nextInt(Number6.length)]);
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
                     ErrorsNeuralNets[6]  =  NeuralNetRecognizeNumbers.TrenujSieć(Picture.convertTo2DWithoutUsingGetRGB(127), new ArrayList<>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0)), powerOfLearn);
+                    Platform.runLater(() -> {
+                    JLabel6.setText(""+ErrorsNeuralNets[6]*100);
+                    });
                     break;
                     
                     case 7:     
                     Picture = new Picture(Number7[whichNumberToTrain.nextInt(Number7.length)]);
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
                     ErrorsNeuralNets[7]  =  NeuralNetRecognizeNumbers.TrenujSieć(Picture.convertTo2DWithoutUsingGetRGB(127), new ArrayList<>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0)), powerOfLearn);
+                    Platform.runLater(() -> {
+                    JLabel7.setText(""+ErrorsNeuralNets[7]*100);
+                    });
                     break;
                     
                     case 8:     
                     Picture = new Picture(Number8[whichNumberToTrain.nextInt(Number8.length)]);
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
                     ErrorsNeuralNets[8]  =  NeuralNetRecognizeNumbers.TrenujSieć(Picture.convertTo2DWithoutUsingGetRGB(127), new ArrayList<>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0)), powerOfLearn);
+                    Platform.runLater(() -> {
+                    JLabel8.setText(""+ErrorsNeuralNets[8]*100);
+                    });
                     break;
                     
                     case 9:     
                     Picture = new Picture(Number8[whichNumberToTrain.nextInt(Number9.length)]);
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
                     ErrorsNeuralNets[9]  =  NeuralNetRecognizeNumbers.TrenujSieć(Picture.convertTo2DWithoutUsingGetRGB(127), new ArrayList<>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0)), powerOfLearn);
+                    Platform.runLater(() -> {
+                    JLabel9.setText(""+ErrorsNeuralNets[9]*100);
+                    });
                     break;
            }
+            
+           
+                int div; 
+                 if(LearningCount/1000<1){
+                    div = 1; 
+                 }
+                 else {
+                   div =  LearningCount/1000;
+                 }
+                 if(i%(div)==0){
+                        final int cyklu;
+                        cyklu = i;
+                        Platform.runLater(()->{
+                        ChartOfErrors.getData().get(9).getData().add(new XYChart.Data(cyklu,ErrorsNeuralNets[9]*100));
+                        });
+                        Platform.runLater(()->{
+                        ChartOfErrors.getData().get(8).getData().add(new XYChart.Data(cyklu,ErrorsNeuralNets[8]*100));
+                        });
+                        Platform.runLater(()->{
+                        ChartOfErrors.getData().get(7).getData().add(new XYChart.Data(cyklu,ErrorsNeuralNets[7]*100));
+                        });
+                        Platform.runLater(()->{
+                        ChartOfErrors.getData().get(6).getData().add(new XYChart.Data(cyklu,ErrorsNeuralNets[6]*100));
+                        });
+                        Platform.runLater(()->{
+                        ChartOfErrors.getData().get(5).getData().add(new XYChart.Data(cyklu,ErrorsNeuralNets[5]*100));
+                        });
+                        Platform.runLater(()->{
+                        ChartOfErrors.getData().get(4).getData().add(new XYChart.Data(cyklu,ErrorsNeuralNets[4]*100));
+                        });
+                        Platform.runLater(()->{
+                        ChartOfErrors.getData().get(3).getData().add(new XYChart.Data(cyklu,ErrorsNeuralNets[3]*100));
+                        });
+                        Platform.runLater(()->{
+                        ChartOfErrors.getData().get(2).getData().add(new XYChart.Data(cyklu,ErrorsNeuralNets[2]*100));
+                        });
+                        Platform.runLater(()->{
+                        ChartOfErrors.getData().get(1).getData().add(new XYChart.Data(cyklu,ErrorsNeuralNets[1]*100));
+                        });
+                        Platform.runLater(()->{
+                        ChartOfErrors.getData().get(0).getData().add(new XYChart.Data(cyklu,ErrorsNeuralNets[0]*100));
+                        });
+                 }
+                        
           
-           
-           
-           JProgressBar.setValue((int)(100*CurrentCoutLearn/LearningCount));
-           JLabel.setText(CurrentCoutLearn+" wykonano na: "+LearningCount);
-           JLabel0.setText(""+ErrorsNeuralNets[0]*100);
-           JLabel1.setText(""+ErrorsNeuralNets[1]*100);
-           JLabel2.setText(""+ErrorsNeuralNets[2]*100);
-           JLabel3.setText(""+ErrorsNeuralNets[3]*100);
-           JLabel4.setText(""+ErrorsNeuralNets[4]*100);
-           JLabel5.setText(""+ErrorsNeuralNets[5]*100);
-           JLabel6.setText(""+ErrorsNeuralNets[6]*100);
-           JLabel7.setText(""+ErrorsNeuralNets[7]*100);
-           JLabel8.setText(""+ErrorsNeuralNets[8]*100);
-           JLabel9.setText(""+ErrorsNeuralNets[9]*100);
-           
-        }
-         JProgressBar.setValue(100);
+                 
+                                                      
+                Platform.runLater(() -> {
+                 ProgressBar.setProgress(((double)CurrentCoutLearn/LearningCount));
+                  });
+                
+                Platform.runLater(() -> {
+                AktualnyProcent.setText(format("%.2f",((double)CurrentCoutLearn/LearningCount*100)));
+                 }); 
+                
+                
+                Platform.runLater(() -> {
+                 JLabel.setText(CurrentCoutLearn+" wykonano na: "+LearningCount);
+                  });
+            
+
         
-        
-        
-        
+            }      
+
+        Platform.runLater(() -> {
+         ProgressBar.setProgress(1);
+         });
     }
-    
     public void loadNumbersToTrainNeuralNet(String PathToTrainSet){
         
         try {

@@ -5,6 +5,10 @@
  */
 package praca.magisterska;
 
+import NeuralNetPackage.FunkcjaAktywacji;
+import NeuralNetPackage.GeneratedNewNeuralNet;
+import NeuralNetPackage.Numbers;
+import NeuralNetPackage.SiećNeuronowa;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import static java.lang.String.format;
@@ -13,6 +17,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,14 +41,33 @@ import javafx.stage.Stage;
  * @author Quchi
  */
 public class FXMLDocumentController implements Initializable {
-    FXMLLoader loader;
     Parent root;
+    
+    
     FXMLDetectedRunnersController FXMLDetectedRunnersController;
+    
+    
+    TrainingNeuralNetController TrainingNeuralNetController;
+    
+    
     TypeOfDetect type;
     String pobranaścieszka;
+    
+    
+    
     ArrayList<BufferedImage> DetectedRunners;
+    
+    
+    
+    
     public int widthOriginImage;
-    public int heightOriginImage; 
+    public int heightOriginImage;
+    
+    
+    
+    
+    Numbers NumbersNeuralNet;
+    
     
     
    private final Image rootIcon = new Image("file:icontitle//neuralnet.jpg"); 
@@ -183,6 +207,63 @@ public class FXMLDocumentController implements Initializable {
     }
     
     
+    
+    @FXML
+    public void confirmNewNeuralNet(){
+  
+    //Tu se wpierdol walidacje danych bo jebnie, jak typy ktos zjebane wprowadzi.  
+    int NumberOfInput = Integer.valueOf(NormalizeWidthX.getText())*Integer.valueOf(NormalizeHeightY.getText());
+    int NumberOfLearningIteration = Integer.valueOf(NumbersOfItarationCount.getText());
+    int NumberOfLayers  = Integer.valueOf(NumbersOFLayers.getText());
+    int[] numberOfNeuronsforEachLayer = new int[NumberOfLayers];
+    
+    for(int layer = 0 ;layer<NumberOfLayers;layer++){
+        TreeItem<String> item =  (TreeItem<String>) LayersAndNumbersOfNeuralNet.getRoot().getChildren().get(layer);
+        String[] output = item.getChildren().get(0).getValue().split(" ");
+        numberOfNeuronsforEachLayer[layer] = Integer.valueOf(output[2]);
+    }
+    
+    
+    String PathToTrainSet = PathToTrainingSet.getText();
+    String PathToNewNeuralNet = PathToNeuralNet.getText();
+    
+    GeneratedNewNeuralNet GeneratedNewNeuralNet = new GeneratedNewNeuralNet(NumberOfInput,numberOfNeuronsforEachLayer.length,numberOfNeuronsforEachLayer); 
+    NumbersNeuralNet = new Numbers(new SiećNeuronowa(GeneratedNewNeuralNet.ListaWagPoszególnychNeuronów,GeneratedNewNeuralNet.ListaUkosówPoszególnychNeuronów,FunkcjaAktywacji.SIGMOIDALNA_UNIPOLARNA)
+            ,Integer.valueOf(NormalizeWidthX.getText())
+            ,Integer.valueOf(NormalizeHeightY.getText()));
+ 
+           Platform.runLater(() -> {
+                   //Update UI here
+                                FXMLLoader loader;
+                                loader = new FXMLLoader(getClass().getResource("TrainingNeuralNet.fxml"));
+                                Parent root = null;
+                                
+                                try {
+                                  root = (Parent) loader.load();
+                                } catch (IOException ex) {
+                                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+
+                                TrainingNeuralNetController = loader.getController();
+                                TrainingNeuralNetController.SetVariables(NumbersNeuralNet, PathToTrainSet, NumberOfLearningIteration, PathToNewNeuralNet, NumberOfLayers);
+                                
+                                Scene scene = new Scene(root);
+                                Image i =  new Image("file:title_icon.png");
+                                Stage StagePic = new Stage();
+                                StagePic.getIcons().add(i);
+                                StagePic.setTitle("Proces uczenia sieci neuronowej - "+PathToNewNeuralNet);
+                                StagePic.setScene(scene);
+                                StagePic.show();
+                                
+                                new Thread(()->{
+                                    TrainingNeuralNetController.Training.run();
+                                }).start();
+                                
+                                });
+                                
+    }
+    
     @FXML
     public void confirm3values(){
          int NumberOfNeurons = Integer.valueOf(NumbersOfNeuoronforLayer.getText());
@@ -250,13 +331,16 @@ public class FXMLDocumentController implements Initializable {
         Stage stage = new Stage();
         DrawOnCanvas.start(stage);
         stage.show();
-
+        FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource("FXMLDetectedRunners.fxml"));
+        Parent root = null;
         try {
           root = (Parent) loader.load();
         } catch (IOException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
         FXMLDetectedRunnersController = loader.getController();
         Scene scene = new Scene(root);
         Stage StagePic = new Stage();

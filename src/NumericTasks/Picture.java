@@ -547,15 +547,17 @@ public final class Picture   {
     }
     
     public void  ZmieńRozmiarObrazu( int newW, int newH) { 
-    Image tmp = image.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+    image = resize(image,newW,newH);
+}
+    private static BufferedImage resize(BufferedImage img, int newW, int newH) { 
+    Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
     BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
-
     Graphics2D g2d = dimg.createGraphics();
     g2d.drawImage(tmp, 0, 0, null);
     g2d.dispose();
-    image = dimg;
+
+    return dimg;
 }
-    
     public BufferedImage changeBlurr(int x , int y){  
                                                       
                                                       
@@ -733,7 +735,11 @@ public final class Picture   {
       convertedImg.getGraphics().drawImage(image, 0, 0, null);
       image = convertedImg;
       }
-     
+      
+      
+      final byte[] pixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
+      final int width = image.getWidth();
+      final int height = image.getHeight();
       int[][] result = new int[height][width];
       ArrayList<Double> ListOfRGBValues = new ArrayList<>();
          final int pixelLength = 4;
