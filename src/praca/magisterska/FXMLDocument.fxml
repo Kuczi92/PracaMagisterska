@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
@@ -73,6 +75,10 @@
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <Button layoutX="14.0" layoutY="446.0" mnemonicParsing="false" text="Zapisz ustawienia" />
+                        <Button fx:id="ButtonChooseFolderExamples" layoutX="22.0" layoutY="47.0" mnemonicParsing="false" onAction="#chooseFolderExamples" text="Wybierz folder" />
+                        <Label layoutX="22.0" layoutY="30.0" text="Wybór folderu do zapisu nowych obrazów z pojedyńczymi cyframi " />
+                        <Label layoutX="123.0" layoutY="51.0" text="Wybrany folder:" />
+                        <Label fx:id="FolderNewExamples" layoutX="215.0" layoutY="51.0" text="Wybierz folder!" />
                      </children>
                   </AnchorPane>
             </content>
@@ -130,9 +136,33 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Button fx:id="ReadFileWithNeuralNet" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="224.0" text="Wczytaj plik z siecią neuronową" />
-                                          <Button fx:id="ReadFileWithPicture" layoutX="14.0" layoutY="46.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="224.0" text="Wczytaj plik z obrazem do rozpoznania" />
-                                          <Button fx:id="RecognizeNumber" layoutX="14.0" layoutY="78.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="224.0" text="Rozpoznaj cyfrę" />
+                                          <Button fx:id="ReadFileWithNeuralNet" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#ReadNeuralNetFromFile" prefHeight="25.0" prefWidth="224.0" text="Wczytaj plik z siecią neuronową" />
+                                          <Button fx:id="ReadFileWithPicture" layoutX="246.0" layoutY="14.0" mnemonicParsing="false" onAction="#ReadImageFromFile" prefHeight="25.0" prefWidth="224.0" text="Wczytaj plik z obrazem do rozpoznania" />
+                                          <Button fx:id="RecognizeNumber" layoutX="483.0" layoutY="14.0" mnemonicParsing="false" onAction="#RecognizeNumberWithNeuralNet" prefHeight="25.0" prefWidth="157.0" text="Rozpoznaj cyfrę" />
+                                          <ImageView fx:id="ImageViewRecognizedNumber" fitHeight="262.0" fitWidth="221.0" layoutX="675.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true" />
+                                          <Label layoutX="670.0" layoutY="64.0" text="Obraz cyfry" />
+                                          <Label layoutX="670.0" layoutY="361.0" text="Rozpoznana cyfra:" />
+                                          <Label fx:id="LabelRecognizedNumber" layoutX="777.0" layoutY="361.0" text="Brak liczby" />
+                                          <Separator layoutX="670.0" layoutY="81.0" orientation="VERTICAL" prefHeight="271.0" prefWidth="2.0" />
+                                          <Separator layoutX="671.0" layoutY="79.0" prefHeight="6.0" prefWidth="223.0" />
+                                          <Separator layoutX="893.0" layoutY="81.0" orientation="VERTICAL" prefHeight="271.0" prefWidth="2.0" />
+                                          <BarChart fx:id="ChartNumbersDetect" layoutX="14.0" layoutY="147.0" prefHeight="231.0" prefWidth="646.0">
+                                            <xAxis>
+                                              <CategoryAxis fx:id="Numbers" side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                              <NumberAxis fx:id="NumbersValues" side="LEFT" />
+                                            </yAxis>
+                                          </BarChart>
+                                          <Label layoutX="298.0" layoutY="130.0" text="Wykres podobieństwa " />
+                                          <Separator layoutX="671.0" layoutY="349.0" prefHeight="6.0" prefWidth="223.0" />
+                                          <Label layoutX="14.0" layoutY="47.0" text="Ścieżka wczytanej sieci neuronowej:" />
+                                          <Label fx:id="LabelFileWithNeuralNet" layoutX="224.0" layoutY="47.0" text="Wybierz plik." />
+                                          <Label layoutX="14.0" layoutY="64.0" text="Ścieżka do obrazu z cyfrą: " />
+                                          <Label fx:id="LabelPicWithNumber" layoutX="224.0" layoutY="64.0" text="Wybierz plik." />
+                                          <Slider fx:id="SliderThreszholdrecognize" layoutX="209.0" layoutY="82.0" max="255.0" onMouseDragged="#ChangeSliderValueSliderThreszholdrecognize" onMousePressed="#ChangeSliderValueSliderThreszholdrecognize" onMouseReleased="#ChangeSliderValueSliderThreszholdrecognize" prefHeight="14.0" prefWidth="264.0" value="127.0" />
+                                          <Label fx:id="ValueSliderrecognize" layoutX="483.0" layoutY="81.0" text="127,00" />
+                                          <Label layoutX="14.0" layoutY="80.0" text="Wartość progująca do rozpoznania" />
                                        </children>
                                     </AnchorPane>
                               </content>

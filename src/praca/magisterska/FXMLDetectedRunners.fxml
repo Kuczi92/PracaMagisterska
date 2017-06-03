@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -14,7 +15,7 @@
       <Label fx:id="Label" layoutX="282.0" layoutY="14.0" text="Lista wykrytych biegaczy" />
       <Button fx:id="ButtonPrevios" layoutX="691.0" layoutY="404.0" mnemonicParsing="false" onAction="#handleButtonPrevious" text="Poprzedni " />
       <Button fx:id="ButtonNext" layoutX="785.0" layoutY="404.0" mnemonicParsing="false" onAction="#handleButtonNext" text="Następny" />
-      <TabPane layoutX="282.0" layoutY="101.0" prefHeight="286.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="282.0" layoutY="58.0" prefHeight="329.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Obraz">
             <content>
@@ -39,15 +40,15 @@
                                   </FXCollections>
                              </items>
                          </ComboBox>
-                        <Button id="ButtonZwrocDomyslneUstawienie" layoutX="137.0" layoutY="218.0" mnemonicParsing="false" onMouseClicked="#defaultValues" text="Zwróć domyślne ustawienie" />
-                        <Button layoutX="14.0" layoutY="218.0" mnemonicParsing="false" text="Zapisz Ustawienia" />
+                        <Button id="ButtonZwrocDomyslneUstawienie" layoutX="130.0" layoutY="261.0" mnemonicParsing="false" onMouseClicked="#defaultValues" text="Zwróć domyślne ustawienie" />
+                        <Button layoutX="15.0" layoutY="261.0" mnemonicParsing="false" text="Zapisz Ustawienia" />
                         <Slider fx:id="SliderRozmycie" layoutX="14.0" layoutY="66.0" onMouseDragged="#changeValueSliderRozmycie" onMousePressed="#changeValueSliderRozmycie" onMouseReleased="#changeValueSliderRozmycie" prefHeight="14.0" prefWidth="385.0" />
                         <Label id="LabelSliderValueRozmycie" fx:id="LabelValueSliderRozmycie" layoutX="411.0" layoutY="64.0" text="0,00" />
                         <Label layoutX="501.0" layoutY="64.0" text="Rozmycie" />
                         <CheckBox fx:id="CheckBoxUseKrawedz" layoutX="15.0" layoutY="114.0" mnemonicParsing="false" onMouseClicked="#changeValuesOfPicture" text="Uzyj detekcji krawędzi " />
-                        <Slider fx:id="SliderKrawedz" layoutX="13.0" layoutY="165.0" max="255.0" onMouseDragged="#changeValueSliderKrawedz" onMousePressed="#changeValueSliderKrawedz" onMouseReleased="#changeValueSliderKrawedz" prefHeight="14.0" prefWidth="385.0" />
-                        <Label fx:id="LabelValueSliderKrawedz" layoutX="413.0" layoutY="164.0" text="0,00" />
-                        <Label layoutX="454.0" layoutY="164.0" prefHeight="17.0" prefWidth="145.0" text="Próg do wykrycia krawędzi" />
+                        <Slider fx:id="SliderKrawedz" layoutX="15.0" layoutY="219.0" max="255.0" onMouseDragged="#changeValueSliderKrawedz" onMousePressed="#changeValueSliderKrawedz" onMouseReleased="#changeValueSliderKrawedz" prefHeight="14.0" prefWidth="385.0" />
+                        <Label fx:id="LabelValueSliderKrawedz" layoutX="402.0" layoutY="218.0" text="0,00" />
+                        <Label layoutX="437.0" layoutY="218.0" prefHeight="17.0" prefWidth="145.0" text="Próg do wykrycia krawędzi" />
                         <CheckBox fx:id="CheckBoxKontury" layoutX="15.0" layoutY="138.0" mnemonicParsing="false" onMouseClicked="#changeValuesOfPicture" text="Użyj znajdowania kontur" />
                         <Slider fx:id="SliderMinimalnyX" layoutX="223.0" layoutY="87.0" onMouseDragged="#changeValueSliderMinimalnyX" onMousePressed="#changeValueSliderMinimalnyX" onMouseReleased="#changeValueSliderMinimalnyX" prefHeight="14.0" prefWidth="225.0" />
                         <Slider fx:id="SliderMinimalnyY" layoutX="223.0" layoutY="105.0" onMouseDragged="#changeValueSliderMinimalnyY" onMousePressed="#changeValueSliderMinimalnyY" onMouseReleased="#changeValueSliderMinimalnyY" prefHeight="14.0" prefWidth="225.0" />
@@ -65,11 +66,12 @@
                         <Label layoutX="504.0" layoutY="138.0" text="\%" />
                         <Label layoutX="519.0" layoutY="121.0" text="Maksymalny X" />
                         <Label layoutX="519.0" layoutY="138.0" text="Maksymalny Y" />
-                        <Label layoutX="454.0" layoutY="181.0" text="lub konrurowania" />
-                        <Slider fx:id="SliderZoom" layoutX="13.0" layoutY="183.0" onMouseDragged="#changeValueSliderZoom" onMousePressed="#changeValueSliderZoom" onMouseReleased="#changeValueSliderZoom" prefHeight="14.0" prefWidth="233.0" />
-                        <Label fx:id="LabelSliderValueZoom" layoutX="255.0" layoutY="181.0" text="0,00" />
-                        <Label layoutX="290.0" layoutY="181.0" text="\%" />
-                        <Label layoutX="308.0" layoutY="182.0" text="Powiększenie " />
+                        <Label layoutX="440.0" layoutY="232.0" text="lub konrurowania" />
+                        <Slider fx:id="SliderZoom" layoutX="15.0" layoutY="240.0" onMouseDragged="#changeValueSliderZoom" onMousePressed="#changeValueSliderZoom" onMouseReleased="#changeValueSliderZoom" prefHeight="14.0" prefWidth="233.0" />
+                        <Label fx:id="LabelSliderValueZoom" layoutX="258.0" layoutY="239.0" text="0,00" />
+                        <Label layoutX="295.0" layoutY="239.0" text="\%" />
+                        <Label layoutX="313.0" layoutY="239.0" text="Powiększenie " />
+                        <CheckBox fx:id="DrawContorous" layoutX="15.0" layoutY="162.0" mnemonicParsing="false" onMouseClicked="#changeValuesOfPicture" text="Maluj krawędzie" />
                      </children>
                   </AnchorPane>
             </content>
@@ -133,19 +135,46 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ImageView fx:id="ImageViewNumber" fitHeight="257.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true" />
-                        <Label layoutX="208.0" layoutY="14.0" text="Wykryta cyfra z obrazem" />
-                        <Button fx:id="ButtonPoprzedniNumber" layoutX="208.0" layoutY="218.0" mnemonicParsing="false" onMouseClicked="#changedetectedNumberPrevious" text="Poprzedni" />
-                        <Button fx:id="ButtonNastepnyNumber" layoutX="287.0" layoutY="218.0" mnemonicParsing="false" onMouseClicked="#changedetectedNumberNext" text="Następny" />
-                        <Button fx:id="ButtonRecognizeNumber" layoutX="372.0" layoutY="218.0" mnemonicParsing="false" text="Rozpoznaj cyfrę" />
-                        <Label layoutX="372.0" layoutY="190.0" text="Wykryta cyfra: " />
-                        <Label fx:id="LabelRecogizedNumer" layoutX="472.0" layoutY="190.0" text="Label" />
+                        <ImageView fx:id="ImageViewNumber" fitHeight="259.0" fitWidth="211.0" pickOnBounds="true" preserveRatio="true" />
+                        <Button fx:id="ButtonPoprzedniNumber" layoutX="14.0" layoutY="263.0" mnemonicParsing="false" onMouseClicked="#changedetectedNumberPrevious" prefHeight="25.0" prefWidth="83.0" text="Poprzedni" />
+                        <Button fx:id="ButtonNastepnyNumber" layoutX="103.0" layoutY="263.0" mnemonicParsing="false" onMouseClicked="#changedetectedNumberNext" prefHeight="25.0" prefWidth="81.0" text="Następny" />
+                        <Button fx:id="ButtonRecognizeNumber" layoutX="215.0" layoutY="263.0" mnemonicParsing="false" onAction="#RecognizeNumberWithNeuralNet" text="Rozpoznaj cyfrę" />
+                        <Label layoutX="327.0" layoutY="267.0" text="Wykryta cyfra: " />
+                        <Label fx:id="LabelRecogizedNumer" layoutX="414.0" layoutY="267.0" text="Label" />
+                        <Slider fx:id="SliderDetectThreshold" layoutX="219.0" layoutY="173.0" max="255.0" onMouseDragged="#ChangeSliderValueSliderThreszholdrecognize" onMousePressed="#ChangeSliderValueSliderThreszholdrecognize" onMouseReleased="#ChangeSliderValueSliderThreszholdrecognize" prefHeight="14.0" prefWidth="291.0" value="127.0" />
+                        <Label layoutX="219.0" layoutY="156.0" text="Wartość progowa" />
+                        <Label fx:id="LabelCurrentValue" layoutX="525.0" layoutY="172.0" text="127,00" />
+                        <BarChart fx:id="ChartNumbers" layoutX="197.0" layoutY="14.0" prefHeight="150.0" prefWidth="378.0">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                        <Button fx:id="SaveButton" layoutX="215.0" layoutY="218.0" mnemonicParsing="false" onAction="#saveCorrectDetectNumber" text="Zapisz obraz" />
+                        <ComboBox fx:id="CorrectNumber" layoutX="311.0" layoutY="218.0" prefHeight="25.0" prefWidth="187.0" promptText="Wybierz prawdzwą cyfrę">
+                        <items>
+                                  <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="0" />
+                                    <String fx:value="1" />
+                                    <String fx:value="2" />
+                                    <String fx:value="3" />
+                                    <String fx:value="4" />
+                                    <String fx:value="5" />
+                                    <String fx:value="6" />
+                                    <String fx:value="7" />
+                                    <String fx:value="8" />
+                                    <String fx:value="9" />
+                                  </FXCollections>
+                             </items>
+                         </ComboBox>
                      </children>
                   </AnchorPane>
               </content>
             </Tab>
         </tabs>
       </TabPane>
-      <Label fx:id="Label1" layoutX="282.0" layoutY="81.0" text="Ustawienia i dane" />
+      <Label fx:id="Label1" layoutX="282.0" layoutY="38.0" text="Ustawienia i dane" />
    </children>
 </AnchorPane>

@@ -549,6 +549,8 @@ public final class Picture   {
     public void  ZmieńRozmiarObrazu( int newW, int newH) { 
     image = resize(image,newW,newH);
 }
+    
+    
     private static BufferedImage resize(BufferedImage img, int newW, int newH) { 
     Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
     BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
@@ -599,7 +601,7 @@ public final class Picture   {
        g.drawImage(img, 0, 0, null);
        return copyOfImage;
    }
-    public ArrayList<BufferedImage> FindContorous(int blurr,int threshold, int min_wielkoscx, int min_wielkoscy, int max_wielkoscy, int max_wielkoscx){
+    public ArrayList<BufferedImage> FindContorous(int blurr,int threshold, int min_wielkoscx, int min_wielkoscy, int max_wielkoscy, int max_wielkoscx,boolean drawContorous){
         
          ArrayList<MatOfPoint> contours = new ArrayList<>(); 
          Mat hierarchy = new Mat();
@@ -632,11 +634,13 @@ public final class Picture   {
                                                                             int MaxX=0;
                                                                             int MaxY=0;                   
                                                                           
+                   
                                                                             int PoczatekX,PoczatekY,Wysokosc,Szerokosc;
-                  for(int i = 0 ; i<contours.size();i++){
-                      Imgproc.drawContours(opencv, contours, i,  new Scalar(255,0,0));
-                  }                                                                                    
-                 
+                                                                            if(drawContorous){
+                                                                                for(int i = 0 ; i<contours.size();i++){
+                                                                                    Imgproc.drawContours(opencv, contours, i,  new Scalar(255,0,0));
+                                                                                }                                                                                    
+                                                                            }
                   ArrayList<BufferedImage> PicturesWithNumbers  = new ArrayList<>();
                                for( MatOfPoint mop: contours )
                                     {

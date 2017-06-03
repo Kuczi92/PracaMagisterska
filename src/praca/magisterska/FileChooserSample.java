@@ -24,7 +24,12 @@ public final class FileChooserSample extends Application {
     String Sciezka;
 
     FileChooserSample(String pobranaścieszka) {
-       this.pobranaścieszka = pobranaścieszka;
+        if(pobranaścieszka==null){
+            this.pobranaścieszka = " ";
+        }else{
+            this.pobranaścieszka = pobranaścieszka;
+        }
+       
     }
     
     public String getPobranaŚciezka(){
@@ -40,14 +45,19 @@ public final class FileChooserSample extends Application {
             if (file != null) {
                 openFile(file);
             }
+            stage.close();
 
     }
  
     private void configureFileChooser(final FileChooser fileChooser) 
     {      
-        
-            fileChooser.setTitle("View Pictures");
-            if(pobranaścieszka!=null){
+             
+            fileChooser.setTitle("Wybierz obraz");
+             if(pobranaścieszka==null){
+                pobranaścieszka = Sciezka.substring(0,Sciezka.lastIndexOf("\\"));
+            }
+            if(pobranaścieszka.endsWith(".jpg")||pobranaścieszka.endsWith(".png")||pobranaścieszka.endsWith(".bmp")){
+                pobranaścieszka = pobranaścieszka.substring(0,pobranaścieszka.lastIndexOf("\\"));
                 fileChooser.setInitialDirectory(new File(pobranaścieszka));   
             }
             
@@ -60,9 +70,10 @@ public final class FileChooserSample extends Application {
             
                             
             fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Images", "*.*"),
+                new FileChooser.ExtensionFilter("Wszystkie obrazy", "*.*"),
                 new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("PNG", "*.png")
+                new FileChooser.ExtensionFilter("PNG", "*.png"),
+                new FileChooser.ExtensionFilter("BMP", "*.bmp")
             );
     }
  

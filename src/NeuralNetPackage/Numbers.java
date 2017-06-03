@@ -40,6 +40,8 @@ public class Numbers {
     int sizeX;
     int sizeY;
     
+    private ArrayList<Double> CalculatedValues;
+    
     //List of Adress with numbers to training
     String[] Number0;
     String[] Number1;
@@ -61,25 +63,30 @@ public class Numbers {
         NeuralNetRecognizeNumbers = new SiećNeuronowa(PathToNeuralNet);
 
     }
-    
-   public  Numbers(SiećNeuronowa NeuralNet,int sizeX,int sizeY){
-      this.sizeX = sizeX;
-      this.sizeY = sizeY;
-      NeuralNetRecognizeNumbers = NeuralNet;
-    }
-
-   public  Numbers(String SourcePathLoadedNeuralNet) throws FileNotFoundException {
-        this.PathToNeuralNet = SourcePathLoadedNeuralNet;
+   
+    public Numbers(String Path) throws FileNotFoundException{
+        
+        this.PathToNeuralNet = Path;
+        
         NeuralNetRecognizeNumbers = new SiećNeuronowa(PathToNeuralNet);
         this.sizeX = NeuralNetRecognizeNumbers.x;
         this.sizeY = NeuralNetRecognizeNumbers.y;
     }
+   public  Numbers(SiećNeuronowa NeuralNet,int sizeX,int sizeY){
+      this.sizeX = sizeX;
+      this.sizeY = sizeY;
+      NeuralNetRecognizeNumbers = NeuralNet;
+      NeuralNetRecognizeNumbers.x = sizeX;
+      NeuralNetRecognizeNumbers.y = sizeY;
+    }
 
     
-    
+    public ArrayList<Double> CalculatedValuesArray(){
+       return CalculatedValues;
+    }
     public int RecognizeNumber(Picture Picture,int threshold){
-      
-      ArrayList<Double> CalculatedValues = NeuralNetRecognizeNumbers.ObliczWartości(Picture.convertTo2DWithoutUsingGetRGB(threshold));
+      Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
+      CalculatedValues = NeuralNetRecognizeNumbers.ObliczWartości(Picture.convertTo2DWithoutUsingGetRGB(threshold));
       int size=CalculatedValues.size();
       int recognizedNumber=0;
       double max = 0;
@@ -204,7 +211,7 @@ public class Numbers {
                     break;
                     
                     case 9:     
-                    Picture = new Picture(Number8[whichNumberToTrain.nextInt(Number9.length)]);
+                    Picture = new Picture(Number9[whichNumberToTrain.nextInt(Number9.length)]);
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
                     ErrorsNeuralNets[9]  =  NeuralNetRecognizeNumbers.TrenujSieć(Picture.convertTo2DWithoutUsingGetRGB(127), new ArrayList<>(Arrays.asList(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0)), powerOfLearn);
                     Platform.runLater(() -> {
@@ -272,8 +279,6 @@ public class Numbers {
                  JLabel.setText(CurrentCoutLearn+" wykonano na: "+LearningCount);
                   });
             
-
-        
             }      
 
         Platform.runLater(() -> {

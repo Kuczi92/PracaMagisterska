@@ -5,17 +5,24 @@
  */
 package praca.magisterska;
 
+import NeuralNetPackage.Numbers;
 import NumericTasks.Picture;
 import NumericTasks.TypeOfThreshold;
 import NumericTasks.ViewPicture;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import static java.lang.String.format;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -24,6 +31,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javax.imageio.ImageIO;
 
 /**
  * FXML Controller class
@@ -39,7 +47,8 @@ public class FXMLDetectedRunnersController implements Initializable {
      */
     
     static ArrayList<BufferedImage> Images;
- 
+    public Numbers Numbers;
+    public String PathToTrainingFolderExamples;
     //komponenty znajdujące się w zakładce ustawienia obrazu w Tab text Obraz
     @FXML
     Slider SliderJasnosc;
@@ -130,7 +139,10 @@ public class FXMLDetectedRunnersController implements Initializable {
     
     // Komponenty znajdujące się w Wykrytych Liczbach
     
-    
+    @FXML
+    BarChart ChartNumbers;
+    @FXML
+    Slider SliderDetectThreshold; 
     @FXML
     ImageView ImageViewNumber;
     @FXML
@@ -141,7 +153,9 @@ public class FXMLDetectedRunnersController implements Initializable {
     Button ButtonRecognizeNumber;
     @FXML
     Label LabelRecogizedNumer;
-    
+    final static String[] NUMBERS = {"0","1","2","3","4","5","6","7","8","9"};
+    @FXML
+    Label LabelCurrentValue;
     //Komponenty ogólne
     @FXML
     ImageView ImageView;
@@ -152,6 +166,8 @@ public class FXMLDetectedRunnersController implements Initializable {
     @FXML 
     Button ButtonNext;
     
+   
+    
     TypeOfThreshold TypeOfThreshold;
     int currentImage= 0;
     
@@ -161,6 +177,21 @@ public class FXMLDetectedRunnersController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
      TypeOfThreshold = TypeOfThreshold.BRAK_PROGROWANIA;
      ComboBoxWybierzRodzajProgowania.getSelectionModel().selectFirst();
+      XYChart.Series series1 = new XYChart.Series();
+        series1.setName("Stopień podobieństwa");
+        series1.getData().add(new XYChart.Data(NUMBERS[0], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[1], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[2], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[3], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[4], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[5], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[6], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[7], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[8], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[9], 0.0));
+       
+       ChartNumbers.getData().add(series1);
+       ChartNumbers.setAnimated(true);
     }    
     
     
@@ -169,6 +200,25 @@ public class FXMLDetectedRunnersController implements Initializable {
     }
     
     
+    @FXML
+    public void ChangeSliderValueSliderThreszholdrecognize(){
+        LabelCurrentValue.setText(format("%.2f",SliderDetectThreshold.getValue()));
+    }
+    
+    @FXML 
+    public void RecognizeNumberWithNeuralNet(){
+        
+        int o = Numbers.RecognizeNumber(new Picture(DetectedNumbers.get(currentDetectedNumber)), (int) SliderDetectThreshold.getValue());
+        LabelRecogizedNumer.setText(" "+o);
+        XYChart.Series series1 = (XYChart.Series) ChartNumbers.getData().get(0);
+        int size =  series1.getData().size();
+        for(int i = 0 ; i<size ; i++){
+            XYChart.Data p =   new XYChart.Data();
+           p = (XYChart.Data) series1.getData().get(i);
+           p.setXValue(NUMBERS[i]);
+           p.setYValue(Numbers.CalculatedValuesArray().get(i));
+       }
+    }
    
     
     @FXML
@@ -237,6 +287,21 @@ public class FXMLDetectedRunnersController implements Initializable {
         }
        
     }
+    @FXML
+    CheckBox DrawContorous;
+    
+    @FXML
+    ComboBox CorrectNumber;
+    @FXML
+    public void saveCorrectDetectNumber() throws IOException{
+         long i  = (int) Files.list(Paths.get(PathToTrainingFolderExamples)).count();
+         String FilePath = PathToTrainingFolderExamples+"\\Liczba_"+CorrectNumber.getSelectionModel().getSelectedItem().toString()+"_"+i+".png";
+         File outputfile = new File(FilePath);
+         ImageIO.write(DetectedNumbers.get(currentDetectedNumber), "png", outputfile);
+        
+    }
+    
+    
     
     @FXML
     public void changeValuesOfPicture(){
@@ -251,7 +316,7 @@ public class FXMLDetectedRunnersController implements Initializable {
             image = SwingFXUtils.toFXImage(Out.DetectEdges(SliderKrawedz.getValue()), null); 
         }
         else if(CheckBoxKontury.isSelected()){
-            DetectedNumbers = Out.FindContorous((int)SliderRozmycie.getValue(), (int) SliderKrawedz.getValue(), (int)(SliderMinimalnyX.getValue()/100.0*Out.getImageWidth()), (int)(SliderMinimalnyY.getValue()/100.0*Out.getImageHeight()), (int)(SliderMaksymalnyX.getValue()/100.0*Out.getImageWidth()), (int)(SliderMaksymalnyY.getValue()/100.0*Out.getImageHeight()));
+            DetectedNumbers = Out.FindContorous((int)SliderRozmycie.getValue(), (int) SliderKrawedz.getValue(), (int)(SliderMinimalnyX.getValue()/100.0*Out.getImageWidth()), (int)(SliderMinimalnyY.getValue()/100.0*Out.getImageHeight()), (int)(SliderMaksymalnyX.getValue()/100.0*Out.getImageWidth()), (int)(SliderMaksymalnyY.getValue()/100.0*Out.getImageHeight()),DrawContorous.isSelected());
             image = SwingFXUtils.toFXImage(Out.Image(), null);
             if(DetectedNumbers.size()>0){
                 ImageViewNumber.setImage(SwingFXUtils.toFXImage(DetectedNumbers.get(0), null));

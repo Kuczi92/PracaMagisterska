@@ -9,7 +9,10 @@ import NeuralNetPackage.FunkcjaAktywacji;
 import NeuralNetPackage.GeneratedNewNeuralNet;
 import NeuralNetPackage.Numbers;
 import NeuralNetPackage.SiećNeuronowa;
+import NumericTasks.Picture;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import static java.lang.String.format;
 import java.net.URL;
@@ -25,6 +28,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -35,6 +42,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -159,7 +167,91 @@ public class FXMLDocumentController implements Initializable {
     @FXML 
     public Button RecognizeNumber;
     
+    @FXML 
+    public BarChart ChartNumbersDetect;
+    @FXML
+    public CategoryAxis Numbers;
+    @FXML 
+    public NumberAxis NumbersValues;
+    @FXML      
+    public ImageView ImageViewRecognizedNumber;
+    @FXML
+    public Label LabelRecognizedNumber;
+    @FXML 
+    public Label LabelFileWithNeuralNet;
+    @FXML 
+    public Label LabelPicWithNumber;
+    @FXML 
+    public Slider SliderThreszholdrecognize;
+    @FXML
+    public Label ValueSliderrecognize;
+    final static String[] NUMBERS = {"0","1","2","3","4","5","6","7","8","9"};
+   //Wykrywanie cyfr
+    @FXML
+    public Label FolderNewExamples;
     
+    @FXML
+    public void chooseFolderExamples(){
+        Stage stage = new Stage();
+        FolderChooser FolderChooser = new FolderChooser(FolderNewExamples.getText());
+        FolderChooser.start(stage);
+        FolderNewExamples.setText(FolderChooser.getPobranaŚciezka());
+    }
+    
+    @FXML
+    public void ChangeSliderValueSliderThreszholdrecognize(){
+        ValueSliderrecognize.setText(format("%.2f",SliderThreszholdrecognize.getValue()));
+    }
+    @FXML
+    public void ReadNeuralNetFromFile(){
+            Stage stage = new Stage();
+            FileChooserFile FileChooserFile = new FileChooserFile(LabelFileWithNeuralNet.getText(),false);
+            FileChooserFile.start(stage); 
+            LabelFileWithNeuralNet.setText(FileChooserFile.Sciezka);
+        try {
+            NumbersNeuralNet = new Numbers(LabelFileWithNeuralNet.getText());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            LabelFileWithNeuralNet.setText("Błąd w odczytywaniu pliku");
+        }
+    }
+    
+    @FXML 
+    public void RecognizeNumberWithNeuralNet(){
+        
+        try {
+            int i = NumbersNeuralNet.RecognizeNumber(new Picture(ImageIO.read(new File(LabelPicWithNumber.getText()))), (int) SliderThreszholdrecognize.getValue());
+            LabelRecognizedNumber.setText(" "+i);
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            LabelRecognizedNumber.setText("Błąd podczas ładowania pliku!");
+        }
+        XYChart.Series series1 = (XYChart.Series) ChartNumbersDetect.getData().get(0);
+       int size =  series1.getData().size();
+       for(int i = 0 ; i<size ; i++){
+            XYChart.Data p =   new XYChart.Data();
+           p = (XYChart.Data) series1.getData().get(i);
+           p.setXValue(NUMBERS[i]);
+           p.setYValue(NumbersNeuralNet.CalculatedValuesArray().get(i));
+       }
+    }
+    
+    @FXML
+    public void ReadImageFromFile(){
+        Stage stage = new Stage();
+        FileChooserSample FileChooserSample = new FileChooserSample(LabelPicWithNumber.getText());
+        FileChooserSample.start(stage);
+        LabelPicWithNumber.setText(FileChooserSample.Sciezka);
+        Image Pic = null;
+        try {
+         Pic = SwingFXUtils.toFXImage(ImageIO.read(new File(LabelPicWithNumber.getText())), null);
+        } catch (IOException ex) {
+            LabelPicWithNumber.setText("Błąd podczas ładowania pliku");
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        ImageViewRecognizedNumber.setImage(Pic);
+    }
     
     @FXML 
     public void createFilewithNeuralNet(){
@@ -339,7 +431,9 @@ public class FXMLDocumentController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        Image i =  new Image("file:title_icon.png");
+        stage.getIcons().add(i);
+        stage.setTitle("Ustawienia parametrów na wykrytych biegaczach");
         
         FXMLDetectedRunnersController = loader.getController();
         Scene scene = new Scene(root);
@@ -348,19 +442,36 @@ public class FXMLDocumentController implements Initializable {
         Image image = SwingFXUtils.toFXImage(DetectedRunners.get(0), null);
         FXMLDetectedRunnersController.ImageView.setImage(image);
         FXMLDetectedRunnersController.Images = DetectedRunners;
+        FXMLDetectedRunnersController.Numbers = NumbersNeuralNet;
+        FXMLDetectedRunnersController.PathToTrainingFolderExamples = FolderNewExamples.getText();
         StagePic.show();
         
     }
-    
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
        WybórWykrycia.getSelectionModel().selectFirst();
        type = TypeOfDetect.HUMANOID_DETECT;
        @SuppressWarnings("LocalVariableHidesMemberVariable")
        TreeItem<String> root = new TreeItem<>("Sieć Neuronowa");
-       
        LayersAndNumbersOfNeuralNet.setRoot(root);
+       
+       XYChart.Series series1 = new XYChart.Series();
+        series1.setName("Stopień podobieństwa");
+        series1.getData().add(new XYChart.Data(NUMBERS[0], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[1], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[2], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[3], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[4], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[5], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[6], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[7], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[8], 0.0));
+        series1.getData().add(new XYChart.Data(NUMBERS[9], 0.0));
+       
+       ChartNumbersDetect.getData().add(series1);
+       ChartNumbersDetect.setAnimated(true);
+       
     }    
     
 }

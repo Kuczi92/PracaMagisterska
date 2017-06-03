@@ -34,6 +34,7 @@ public class FolderChooser extends Application{
            File File = DirectoryChooser.showDialog(stage);
             
        pobranaścieszka =  File.toString();
+       stage.close();
 
     }
  

@@ -22,9 +22,20 @@ public class FileChooserFile extends Application{
     private String pobranaścieszka;
     private final Desktop desktop = Desktop.getDesktop();
     String Sciezka;
+    boolean createFile = true;
     
     FileChooserFile(String pobranaścieszka) {
-       this.pobranaścieszka = pobranaścieszka;
+        if(pobranaścieszka==null){
+            this.pobranaścieszka = "Brak";
+        }else{
+            this.pobranaścieszka = pobranaścieszka;
+        }
+    
+    }
+
+    FileChooserFile(String text, boolean b) {
+      this.pobranaścieszka = text;
+      this.createFile = b;
     }
     
     public String getPobranaŚciezka(){
@@ -36,23 +47,39 @@ public class FileChooserFile extends Application{
         
         final FileChooser fileChooser = new FileChooser();
             configureFileChooser(fileChooser);
-            File file = fileChooser.showSaveDialog(stage);
+            File file;
+            if(createFile){
+                 file = fileChooser.showSaveDialog(stage);
+            }
+            else{
+                 file = fileChooser.showOpenDialog(stage);
+            }
+            
             if (file != null) {
                 openFile(file);
+                
             }
-
+            stage.close();
     }
  
     private void configureFileChooser(final FileChooser fileChooser) 
     {      
             
             fileChooser.setTitle("Stwórz plik txt z siecia neuronową ");
+            if(pobranaścieszka==null){
+                pobranaścieszka = Sciezka.substring(0,Sciezka.lastIndexOf("\\"));
+            }
             if(pobranaścieszka.endsWith(".txt")){
+                pobranaścieszka = pobranaścieszka.substring(0,pobranaścieszka.lastIndexOf("\\"));
                 fileChooser.setInitialDirectory(new File(pobranaścieszka));   
             }
             
             else
-            {   fileChooser.setInitialFileName("Nowa sieć neuronowa.txt");
+            {   
+                if(createFile){
+                    fileChooser.setInitialFileName("Nowa sieć neuronowa.txt");
+                }
+                
                 fileChooser.setInitialDirectory(                
                         new File(System.getProperty("user.home"))
                 );
@@ -68,13 +95,17 @@ public class FileChooserFile extends Application{
  
     private void openFile(File file) {
         try {
-            file.createNewFile();
+            if(createFile){
+                 file.createNewFile();
+            }
+           
             try {
                 
                 desktop.open(file);
                 Sciezka = file.getAbsolutePath();
                 pobranaścieszka = Sciezka.substring(0,Sciezka.lastIndexOf("\\"));
-            } catch (IOException ex) {
+            } 
+            catch (IOException ex) {
                 Logger.getLogger(FileChooserSample.class.getName()).log(
                         Level.SEVERE, null, ex
                 );
