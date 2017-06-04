@@ -50,6 +50,7 @@ public class FXMLDetectedRunnersController implements Initializable {
     public Numbers Numbers;
     public String PathToTrainingFolderExamples;
     //komponenty znajdujące się w zakładce ustawienia obrazu w Tab text Obraz
+    
     @FXML
     Slider SliderJasnosc;
     @FXML
@@ -95,7 +96,11 @@ public class FXMLDetectedRunnersController implements Initializable {
     Label LabelValueSliderKrawedz;
     @FXML
     CheckBox CheckBoxUseKrawedz;
+    @FXML
+    CheckBox UseNegative;
     
+    @FXML
+    CheckBox LoadOriginPic;
     //Komponenty znajdujące się w zakładce Tab Kolory 
     @FXML
     Slider SliderCzerwony;
@@ -119,10 +124,8 @@ public class FXMLDetectedRunnersController implements Initializable {
     Label LabelSliderValueNasycenie;
     @FXML
     Label LabelSliderValueWartosc;
-    
     @FXML
     Label LabelSliderValueOdcien;
-    
     @FXML 
     Slider SliderZoom;
     @FXML 
@@ -223,8 +226,6 @@ public class FXMLDetectedRunnersController implements Initializable {
     
     @FXML
     public void ChangeTypeOfThreshold(){
-        
-    
         switch(ComboBoxWybierzRodzajProgowania.getSelectionModel().getSelectedIndex())
         {
             case 0:
@@ -315,15 +316,24 @@ public class FXMLDetectedRunnersController implements Initializable {
             Out = new Picture (Out.changeBlurr((int)SliderRozmycie.getValue(), (int) SliderRozmycie.getValue()));
             image = SwingFXUtils.toFXImage(Out.DetectEdges(SliderKrawedz.getValue()), null); 
         }
-        else if(CheckBoxKontury.isSelected()){
-            DetectedNumbers = Out.FindContorous((int)SliderRozmycie.getValue(), (int) SliderKrawedz.getValue(), (int)(SliderMinimalnyX.getValue()/100.0*Out.getImageWidth()), (int)(SliderMinimalnyY.getValue()/100.0*Out.getImageHeight()), (int)(SliderMaksymalnyX.getValue()/100.0*Out.getImageWidth()), (int)(SliderMaksymalnyY.getValue()/100.0*Out.getImageHeight()),DrawContorous.isSelected());
+        
+        if(UseNegative.isSelected()){
+            Out = new Picture (Out.Negative(Out.Image()));
+            image = SwingFXUtils.toFXImage(Out.DetectEdges(SliderKrawedz.getValue()), null); 
+        }
+        if(CheckBoxKontury.isSelected()||LoadOriginPic.isSelected()){
+            DetectedNumbers = Out.FindContorous((int)SliderRozmycie.getValue(), (int) SliderKrawedz.getValue(), (int)(SliderMinimalnyX.getValue()/100.0*Out.getImageWidth()),
+                    (int)(SliderMinimalnyY.getValue()/100.0*Out.getImageHeight()), (int)(SliderMaksymalnyX.getValue()/100.0*Out.getImageWidth()),
+                    (int)(SliderMaksymalnyY.getValue()/100.0*Out.getImageHeight()),
+                    DrawContorous.isSelected(),new Picture(Images.get(currentImage)).Zoom(SliderZoom.getValue()/2),
+                    LoadOriginPic.isSelected());
             image = SwingFXUtils.toFXImage(Out.Image(), null);
             if(DetectedNumbers.size()>0){
                 ImageViewNumber.setImage(SwingFXUtils.toFXImage(DetectedNumbers.get(0), null));
             }
-             
         }
-        else{
+        else
+        {
             image = SwingFXUtils.toFXImage(Out.changeBlurr((int)SliderRozmycie.getValue(), (int) SliderRozmycie.getValue()), null);
         }
         ImageView.setImage(image);

@@ -72,6 +72,8 @@
                         <Label layoutX="295.0" layoutY="239.0" text="\%" />
                         <Label layoutX="313.0" layoutY="239.0" text="Powiększenie " />
                         <CheckBox fx:id="DrawContorous" layoutX="15.0" layoutY="162.0" mnemonicParsing="false" onMouseClicked="#changeValuesOfPicture" text="Maluj krawędzie" />
+                        <CheckBox fx:id="UseNegative" layoutX="15.0" layoutY="186.0" mnemonicParsing="false" onMouseClicked="#changeValuesOfPicture" onMousePressed="#changeValuesOfPicture" onMouseReleased="#changeValuesOfPicture" text="Zastosuj Negatyw" />
+                        <CheckBox fx:id="LoadOriginPic" layoutX="150.0" layoutY="186.0" mnemonicParsing="false" onMouseClicked="#changeValuesOfPicture" onMousePressed="#changeValuesOfPicture" onMouseReleased="#changeValuesOfPicture" text="Wyświetl oryginał" />
                      </children>
                   </AnchorPane>
             </content>

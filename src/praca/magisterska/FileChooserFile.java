@@ -64,10 +64,13 @@ public class FileChooserFile extends Application{
  
     private void configureFileChooser(final FileChooser fileChooser) 
     {      
-            
-            fileChooser.setTitle("Stwórz plik txt z siecia neuronową ");
+   
+            fileChooser.setTitle("Wybierz plik txt z siecia neuronową ");
             if(pobranaścieszka==null){
-                pobranaścieszka = Sciezka.substring(0,Sciezka.lastIndexOf("\\"));
+                pobranaścieszka = "wybierzplik";
+                fileChooser.setInitialDirectory(                
+                        new File(System.getProperty("user.home"))
+                );
             }
             if(pobranaścieszka.endsWith(".txt")){
                 pobranaścieszka = pobranaścieszka.substring(0,pobranaścieszka.lastIndexOf("\\"));
@@ -77,6 +80,7 @@ public class FileChooserFile extends Application{
             else
             {   
                 if(createFile){
+                    fileChooser.setTitle("Stwórz plik txt z siecia neuronową ");
                     fileChooser.setInitialFileName("Nowa sieć neuronowa.txt");
                 }
                 

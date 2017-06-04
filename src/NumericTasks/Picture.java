@@ -47,7 +47,7 @@ public final class Picture   {
     private int totalPixels;
 
     public Picture(int[] pixels, int width, int height) {
-        this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        this.image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
         this.width = width;
         this.height = height;
         this.totalPixels = this.width * this.height;
@@ -55,6 +55,9 @@ public final class Picture   {
         setPixelArray(pixels);
     }
 
+    public Picture(){
+        
+    }
     
     
     /** 
@@ -105,7 +108,7 @@ public final class Picture   {
         this.height = height;
         this.totalPixels = this.width * this.height;
         this.pixels = new int[this.totalPixels];
-        image = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_ARGB);
+        image = new BufferedImage(this.width, this.height, BufferedImage.TYPE_3BYTE_BGR);
         this.imgType = ImageType.PNG;
         initPixelArray();
     }
@@ -151,11 +154,7 @@ public final class Picture   {
         this.height = height;
         this.totalPixels = this.width * this.height;
         this.pixels = new int[this.totalPixels];
-        if(this.imgType == ImageType.PNG){
-            this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        }else{
-            this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        }
+        this.image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D g2d = this.image.createGraphics();
         g2d.drawImage(bi, 0, 0, null);
         g2d.dispose();
@@ -601,18 +600,40 @@ public final class Picture   {
        g.drawImage(img, 0, 0, null);
        return copyOfImage;
    }
-    public ArrayList<BufferedImage> FindContorous(int blurr,int threshold, int min_wielkoscx, int min_wielkoscy, int max_wielkoscy, int max_wielkoscx,boolean drawContorous){
+    
+    public BufferedImage Negative(BufferedImage Input){
+         BufferedImage convertedImg = new BufferedImage(Input.getWidth(), Input.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+         convertedImg.getGraphics().drawImage(Input, 0, 0, null);              
+         byte[] data = ((DataBufferByte) convertedImg.getRaster().getDataBuffer()).getData();
+         Mat opencv = new Mat(Input.getHeight(), Input.getWidth(), CvType.CV_8UC3);
+         opencv.put(0, 0, data);
+         Mat invertcolormatrix= new Mat(Input.getHeight(), Input.getWidth(), CvType.CV_8UC3,new Scalar(255,255,255));
+         Mat output = new Mat(Input.getHeight(), Input.getWidth(),CvType.CV_8UC3);
+         Core.subtract(invertcolormatrix, opencv,output);
+         return  matToBufferedImage(output,new BufferedImage(image.getWidth(),image.getHeight(),image.getType()));
+    }
+    
+    
+    
+    
+    
+    
+    public ArrayList<BufferedImage> FindContorous(int blurr,int threshold, int min_wielkoscx, int min_wielkoscy, int max_wielkoscy, int max_wielkoscx,
+            boolean drawContorous,BufferedImage original,boolean originalview){
         
          ArrayList<MatOfPoint> contours = new ArrayList<>(); 
          Mat hierarchy = new Mat();
          BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
          convertedImg.getGraphics().drawImage(image, 0, 0, null);              
-         byte[] data = ((DataBufferByte) convertedImg.getRaster().getDataBuffer()).getData();
-                                                                            
+         byte[] data = ((DataBufferByte) convertedImg.getRaster().getDataBuffer()).getData();                                                                   
          Mat opencv = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
          opencv.put(0, 0, data);
-                                                                            
-                                                                                    
+        //ładowanie oryginalu                    
+        data = ((DataBufferByte) original.getRaster().getDataBuffer()).getData();  
+        Mat originalImage = new Mat(original.getHeight(), original.getWidth(), CvType.CV_8UC3);  
+        originalImage.put(0, 0, data);
+        
+        
            if(!(blurr==0))
                          {
                           Imgproc.blur(opencv, opencv, new Size(blurr, blurr));
@@ -636,11 +657,24 @@ public final class Picture   {
                                                                           
                    
                                                                             int PoczatekX,PoczatekY,Wysokosc,Szerokosc;
+                                                                            
+                                                                            
+                                                                            
+                                                                            
                                                                             if(drawContorous){
                                                                                 for(int i = 0 ; i<contours.size();i++){
                                                                                     Imgproc.drawContours(opencv, contours, i,  new Scalar(255,0,0));
                                                                                 }                                                                                    
                                                                             }
+                                                                            
+                                                                            if(drawContorous&&originalview)
+                                                                            {
+                                                                                for(int i = 0 ; i<contours.size();i++){
+                                                                                    Imgproc.drawContours(originalImage, contours, i,  new Scalar(255,0,0));
+                                                                                } 
+                                                                            }
+                                                                            
+                                                                            
                   ArrayList<BufferedImage> PicturesWithNumbers  = new ArrayList<>();
                                for( MatOfPoint mop: contours )
                                     {
@@ -675,11 +709,22 @@ public final class Picture   {
 
                                            
                                            if((min_wielkoscx<Szerokosc&&min_wielkoscy<Wysokosc)&&(max_wielkoscy>Wysokosc&&max_wielkoscx>Szerokosc)&&(Szerokosc<Wysokosc))
-                                                                   {
-                                            Scalar color = new Scalar(0,0,255);
+                                                   {                
+                                                       Scalar color = new Scalar(0,0,255);
+                                                                     if(originalview)
+                                                                      {
+                                                                       Core.rectangle(originalImage, new Point(PoczatekX,PoczatekY), new Point(PoczatekX+Szerokosc,PoczatekY+Wysokosc), color);
+                                                                       PicturesWithNumbers.add(PobierzWycinekObrazu(original,PoczatekX,PoczatekY,Szerokosc,Wysokosc));   
+                                                                      
+                                                                      }
+                                                                       else
+                                                                      {
                                                                        Core.rectangle(opencv, new Point(PoczatekX,PoczatekY), new Point(PoczatekX+Szerokosc,PoczatekY+Wysokosc), color);
                                                                        PicturesWithNumbers.add(PobierzWycinekObrazu(image,PoczatekX,PoczatekY,Szerokosc,Wysokosc));
-                                                                   }
+                                                                      }
+                                                                    
+                                                                     
+                                                    }
                                                                           
                                           MinX = image.getWidth();
                                           MinY = image.getHeight();
@@ -687,8 +732,13 @@ public final class Picture   {
                                           MaxY=0;                                
                                                                           
                                      }
+        if(originalview){
+            image = matToBufferedImage(originalImage,new BufferedImage(original.getWidth(),original.getHeight(),original.getType()));
+        }
+        else{
+            image = matToBufferedImage(opencv,new BufferedImage(image.getWidth(),image.getHeight(),image.getType()));
+        }
         
-        image = matToBufferedImage(opencv,new BufferedImage(image.getWidth(),image.getHeight(),image.getType()));
         return PicturesWithNumbers;
     }
     
@@ -734,8 +784,8 @@ public final class Picture   {
     }
     
     public ArrayList<Double>convertTo2DWithoutUsingGetRGB(int threshold) {
-      if(image.getType()!=BufferedImage.TYPE_4BYTE_ABGR){
-      BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+      if(image.getType()!=BufferedImage.TYPE_3BYTE_BGR){
+      BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
       convertedImg.getGraphics().drawImage(image, 0, 0, null);
       image = convertedImg;
       }
@@ -746,20 +796,20 @@ public final class Picture   {
       final int height = image.getHeight();
       int[][] result = new int[height][width];
       ArrayList<Double> ListOfRGBValues = new ArrayList<>();
-         final int pixelLength = 4;
+         final int pixelLength = 3;
          for (int pixel = 0, row = 0, col = 0; pixel < pixels.length; pixel += pixelLength) {
             int argb = 0;
-            argb += (((int) pixels[pixel] & 0xff) << 24); // alpha
-            argb += ((int) pixels[pixel + 1] & 0xff); // blue
-            argb += (((int) pixels[pixel + 2] & 0xff) << 8); // green
-            argb += (((int) pixels[pixel + 3] & 0xff) << 16); // red
+            argb += -16777216;
+            argb += ((int) pixels[pixel] & 0xff); // blue
+            argb += (((int) pixels[pixel + 1] & 0xff) << 8); // green
+            argb += (((int) pixels[pixel + 2] & 0xff) << 16); // red
             
             
             int  red   = (argb & 0x00ff0000) >> 16;
             int  green = (argb & 0x0000ff00) >> 8;
             int  blue  =  argb & 0x000000ff;
             
-            
+            double value = 0.2989 * red + 0.5870 * green + 0.1140 * blue;
             if((red+green+blue)/3 <threshold){
                 ListOfRGBValues.add(1.0);
             }

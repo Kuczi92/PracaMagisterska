@@ -9,6 +9,7 @@ import NeuralNetPackage.FunkcjaAktywacji;
 import NeuralNetPackage.GeneratedNewNeuralNet;
 import NeuralNetPackage.Numbers;
 import NeuralNetPackage.SiećNeuronowa;
+import NumericTasks.ArrayUtils;
 import NumericTasks.Picture;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -189,6 +190,68 @@ public class FXMLDocumentController implements Initializable {
    //Wykrywanie cyfr
     @FXML
     public Label FolderNewExamples;
+    @FXML
+    public Label ChoosePicture;
+    BufferedImage PicWithNumbers;
+    ArrayList <String> PathToNumbersFolder;
+    
+    @FXML
+    public void LoadFolderWithNumbers(){
+        Stage stage = new Stage();
+        FolderChooser FolderChooser = new FolderChooser(ChoosePicture.getText());
+        FolderChooser.start(stage);
+        ChoosePicture.setText(FolderChooser.getPobranaŚciezka());
+    
+        try {
+             
+            PathToNumbersFolder = new ArrayUtils().ListaPlikówWFolderze(ChoosePicture.getText());
+         
+        } catch (IOException ex) {
+            ChoosePicture.setText("Błąd podczas ładowania pliku");
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    
+    @FXML
+    public void detectNumbersformImage() throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLDetectedRunners.fxml"));
+        Parent root = null;
+        try 
+        {
+          root = (Parent) loader.load();
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Image i =  new Image("file:title_icon.png");
+        FXMLDetectedRunnersController = loader.getController();
+        Scene scene = new Scene(root);
+        Stage StagePic = new Stage();
+        StagePic.setScene(scene);
+        StagePic.getIcons().add(i);
+        StagePic.setTitle("Ustawienia potrzebne do rozpoznania liczby");
+        
+        
+        ArrayList<BufferedImage> one = new ArrayList<>();
+        for(int current = 0 ; current < PathToNumbersFolder.size();current++){
+            one.add(ImageIO.read(new File(PathToNumbersFolder.get(current))));
+        }
+        
+        Image Pic = SwingFXUtils.toFXImage(one.get(0), null);
+        FXMLDetectedRunnersController.ImageView.setImage(Pic);
+        FXMLDetectedRunnersController.Images = one;
+        FXMLDetectedRunnersController.Numbers = NumbersNeuralNet;
+        FXMLDetectedRunnersController.PathToTrainingFolderExamples = FolderNewExamples.getText();
+        StagePic.show();
+        
+        
+//         Platform.runLater(() -> {
+// 
+//         });
+    }    
     
     @FXML
     public void chooseFolderExamples(){
@@ -209,10 +272,15 @@ public class FXMLDocumentController implements Initializable {
             FileChooserFile.start(stage); 
             LabelFileWithNeuralNet.setText(FileChooserFile.Sciezka);
         try {
-            NumbersNeuralNet = new Numbers(LabelFileWithNeuralNet.getText());
+                 if(LabelFileWithNeuralNet.getText()!=null){
+                     NumbersNeuralNet = new Numbers(LabelFileWithNeuralNet.getText());
+                 }
+                 
+            
+           
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-            LabelFileWithNeuralNet.setText("Błąd w odczytywaniu pliku");
+            LabelFileWithNeuralNet.setText("Błąd w odczytywaniu pliku,  bądź nie został poprawnie wybrany");
         }
     }
     
@@ -439,6 +507,8 @@ public class FXMLDocumentController implements Initializable {
         Scene scene = new Scene(root);
         Stage StagePic = new Stage();
         StagePic.setScene(scene);
+        StagePic.getIcons().add(i);
+        StagePic.setTitle("Ustawienia potrzebne do rozpoznania biegaczy");
         Image image = SwingFXUtils.toFXImage(DetectedRunners.get(0), null);
         FXMLDetectedRunnersController.ImageView.setImage(image);
         FXMLDetectedRunnersController.Images = DetectedRunners;

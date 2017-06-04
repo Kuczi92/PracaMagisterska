@@ -77,8 +77,16 @@
                         <Button layoutX="14.0" layoutY="446.0" mnemonicParsing="false" text="Zapisz ustawienia" />
                         <Button fx:id="ButtonChooseFolderExamples" layoutX="22.0" layoutY="47.0" mnemonicParsing="false" onAction="#chooseFolderExamples" text="Wybierz folder" />
                         <Label layoutX="22.0" layoutY="30.0" text="Wybór folderu do zapisu nowych obrazów z pojedyńczymi cyframi " />
-                        <Label layoutX="123.0" layoutY="51.0" text="Wybrany folder:" />
-                        <Label fx:id="FolderNewExamples" layoutX="215.0" layoutY="51.0" text="Wybierz folder!" />
+                        <Label layoutX="18.0" layoutY="217.0" text="Folder do zapisu nowych cyfr:" />
+                        <Label fx:id="FolderNewExamples" layoutX="211.0" layoutY="217.0" text="Wybierz folder" />
+                        <Button layoutX="22.0" layoutY="96.0" mnemonicParsing="false" onAction="#LoadFolderWithNumbers" prefHeight="25.0" prefWidth="94.0" text="Wybierz folder" />
+                        <Label layoutX="22.0" layoutY="79.0" text="Wybierz folder zawierający liczby:" />
+                        <Label layoutX="18.0" layoutY="234.0" text="Załadowany folder z obrazami cyfr:" />
+                        <Label fx:id="ChoosePicture" layoutX="211.0" layoutY="234.0" text="Wybierz folder" />
+                        <Button layoutX="22.0" layoutY="150.0" mnemonicParsing="false" onAction="#detectNumbersformImage" prefHeight="25.0" prefWidth="102.0" text="Wykryj liczby" />
+                        <Label layoutX="21.0" layoutY="133.0" text="Wykrywanie cyfr i rozpoznawanie:" />
+                        <ListView layoutX="530.0" layoutY="51.0" prefHeight="426.0" prefWidth="397.0" />
+                        <Label layoutX="530.0" layoutY="30.0" text="Lista obrazów" />
                      </children>
                   </AnchorPane>
             </content>

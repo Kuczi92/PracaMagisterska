@@ -4,9 +4,14 @@
  * and open the template in the editor.
  */
 package NumericTasks;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.Stream;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Rect;
 /**
@@ -367,5 +372,23 @@ public final class ArrayUtils {
         boolean CoveringX = ((a.x+a.width)>b.x)&&(b.x>a.x)||((b.x+b.width)>a.x)&&(a.x>b.x);
         boolean CoveringY = ((a.y+a.height)>b.y)&&(b.y>a.y)||((b.y+b.height)>a.y)&&(a.y>b.y);
         return CoveringX&&CoveringY; 
+    }
+    
+     public ArrayList<String> ListaPlikówWFolderze(String Ściezka) throws IOException{
+        ArrayList<String> ListaPlików = new ArrayList<>();
+        try(Stream<Path> paths = Files.walk(Paths.get(Ściezka))) {
+          paths.forEach((Path filePath) -> {
+        if (Files.isRegularFile(filePath)) {
+            
+            String temp = filePath.toString();
+            if((temp.endsWith("jpg")||temp.endsWith("png")||temp.endsWith("jpeg")||temp.endsWith("JPEG")||temp.endsWith("JPG")||temp.endsWith("BMP")||temp.endsWith("bmp")))
+            {
+                ListaPlików.add(filePath.toString());
+            }
+
+           }
+          });
+         }
+        return ListaPlików;
     }
 }
