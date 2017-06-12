@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
@@ -177,6 +179,59 @@
                             </Tab>
                           </tabs>
                         </TabPane>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Pobranie próbek ">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutY="6.0" text="Załadowany obraz " />
+                        <Button layoutX="550.0" layoutY="411.0" mnemonicParsing="false" onAction="#KlasifPreviousImage" text="Poprzedni" />
+                        <Button layoutX="641.0" layoutY="411.0" mnemonicParsing="false" onAction="#KlasifNextImage" text="Następny " />
+                        <Button layoutX="550.0" layoutY="444.0" mnemonicParsing="false" onAction="#KlasifSaveCurrentSettings" text="Zapisz ustawienie " />
+                        <Label layoutX="548.0" layoutY="32.0" text="Wybór folderu z obrazami: " />
+                        <Button layoutX="547.0" layoutY="49.0" mnemonicParsing="false" onAction="#KlasifChooseFolder" prefHeight="25.0" prefWidth="94.0" text="Wybór folderu" />
+                        <Label fx:id="KlasifChooseFolder" layoutX="649.0" layoutY="53.0" text="Wybierz folder" />
+                        <Label fx:id="PathToCurrentImage" layoutX="101.0" layoutY="6.0" text="Dany obraz" />
+                        <TextField fx:id="KlasifHeight" layoutX="656.0" layoutY="124.0" prefHeight="25.0" prefWidth="86.0" />
+                        <TextField fx:id="KlasifWidth" layoutX="551.0" layoutY="124.0" prefHeight="25.0" prefWidth="87.0" />
+                        <Label layoutX="550.0" layoutY="107.0" text="Szerokość:" />
+                        <Label layoutX="656.0" layoutY="107.0" text="Wysokość:" />
+                        <Label layoutX="549.0" layoutY="84.0" text="Ustawienie ograniczeń dotyczących obrazów:" />
+                        <Button layoutX="750.0" layoutY="124.0" mnemonicParsing="false" onAction="#KlasifLoadImages" prefHeight="25.0" prefWidth="130.0" text="Wczytaj obrazy" />
+                        <ProgressBar fx:id="KlasifProgressbarLoadImages" layoutX="548.0" layoutY="380.0" prefHeight="25.0" prefWidth="378.0" progress="0.0" />
+                        <Label fx:id="KlasifLabelLoadPic" layoutX="550.0" layoutY="356.0" text="Ładowanie obrazów: " />
+                        <Label fx:id="KlasifLabelPercent" layoutX="668.0" layoutY="356.0" text="0,00 %" />
+                        <CheckBox fx:id="KlasifChakcboxOriginal" layoutX="549.0" layoutY="158.0" mnemonicParsing="false" text="Załaduj oryginalny rozmiar" />
+                        <Label fx:id="LabelXCord" layoutX="568.0" layoutY="308.0" prefHeight="17.0" prefWidth="305.0" text="X cord" />
+                        <Label fx:id="LabelYCord" layoutX="568.0" layoutY="332.0" prefHeight="17.0" prefWidth="285.0" text="Y cord" />
+                        <Canvas fx:id="KlasifImageView" height="449.0" layoutX="1.0" layoutY="21.0" onMouseDragged="#KlasifMauseCoordinates" onMousePressed="#KlasifMouseClickStartRect" onMouseReleased="#KlasifMouseClickEndRect" width="547.0" />
+                        <Label layoutX="547.0" layoutY="308.0" text="X:" />
+                        <Label layoutX="547.0" layoutY="332.0" text="Y:" />
+                        <Button layoutX="547.0" layoutY="211.0" mnemonicParsing="false" onAction="#KlasidChooseFolderOut" text="Wybór folderu " />
+                        <Label fx:id="klassifFolderOutSave" layoutX="653.0" layoutY="215.0" text="Wybierz folder" />
+                        <Label layoutX="548.0" layoutY="194.0" text="Wybór folderu zawierającego wybrane przykłady:" />
+                        <Button layoutX="547.0" layoutY="246.0" mnemonicParsing="false" onAction="#KlasifSaveChoosenFragments" prefHeight="25.0" prefWidth="101.0" text="Zapisz wyniki" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Tworzenie klasyfikatora">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button layoutX="26.0" layoutY="44.0" mnemonicParsing="false" onAction="#KlasifChooseFile" prefHeight="25.0" prefWidth="94.0" text="Wybierz plik" />
+                        <Label layoutX="27.0" layoutY="21.0" text="Miejsce zapisu klasyfikatora:" />
+                        <Label fx:id="KlasLabelFileXML" layoutX="129.0" layoutY="48.0" text="Wybierz plik" />
+                        <Label layoutX="27.0" layoutY="94.0" text="Wybór przykładów pozytywnych :" />
+                        <Button layoutX="26.0" layoutY="111.0" mnemonicParsing="false" text="Wybierz folder" />
+                        <Button layoutX="27.0" layoutY="168.0" mnemonicParsing="false" text="Wybierz folder" />
+                        <Label layoutX="27.0" layoutY="151.0" text="Wybór przykładów negatywnych: " />
+                        <Label layoutX="129.0" layoutY="115.0" text="Label" />
+                        <Label layoutX="129.0" layoutY="172.0" text="Label" />
+                        <Button layoutX="8.0" layoutY="445.0" mnemonicParsing="false" onAction="#KlasifTrainingClassifier" text="Rozpocznij trenowanie" />
                      </children>
                   </AnchorPane>
               </content>

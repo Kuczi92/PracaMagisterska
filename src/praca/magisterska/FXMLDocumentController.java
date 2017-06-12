@@ -9,8 +9,11 @@ import NeuralNetPackage.FunkcjaAktywacji;
 import NeuralNetPackage.GeneratedNewNeuralNet;
 import NeuralNetPackage.Numbers;
 import NeuralNetPackage.SiećNeuronowa;
+import NewWidnows.Warning;
 import NumericTasks.ArrayUtils;
+import NumericTasks.MarkedRect;
 import NumericTasks.Picture;
+import NumericTasks.TrainingPictures;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,19 +32,25 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 
@@ -51,34 +60,14 @@ import javax.imageio.ImageIO;
  */
 public class FXMLDocumentController implements Initializable {
     Parent root;
-    
-    
     FXMLDetectedRunnersController FXMLDetectedRunnersController;
-    
-    
     TrainingNeuralNetController TrainingNeuralNetController;
-    
-    
     TypeOfDetect type;
     String pobranaścieszka;
-    
-    
-    
     ArrayList<BufferedImage> DetectedRunners;
-    
-    
-    
-    
     public int widthOriginImage;
     public int heightOriginImage;
-    
-    
-    
-    
     Numbers NumbersNeuralNet;
-    
-    
-    
    private final Image rootIcon = new Image("file:icontitle//neuralnet.jpg"); 
    private final Image LayerIcon = new Image("file:icontitle//layers.png");
    private final Image NeuronIcon = new Image("file:icontitle//neuron.png");
@@ -161,13 +150,10 @@ public class FXMLDocumentController implements Initializable {
     //Wczytanie sieci
     @FXML 
     public Button ReadFileWithNeuralNet;
-    
     @FXML 
     public Button ReadFileWithPicture;
-    
     @FXML 
     public Button RecognizeNumber;
-    
     @FXML 
     public BarChart ChartNumbersDetect;
     @FXML
@@ -195,6 +181,509 @@ public class FXMLDocumentController implements Initializable {
     BufferedImage PicWithNumbers;
     ArrayList <String> PathToNumbersFolder;
     
+    //Ustawianie klasyfikatora
+    @FXML
+    Label KlasLabelFileXML;
+    @FXML 
+    Label LabelYCord;
+    @FXML 
+    Label LabelXCord;
+    @FXML
+    Canvas KlasifImageView;
+    @FXML
+    Label PathToCurrentImage;
+    @FXML 
+    Label KlasifChooseFolder;
+    @FXML
+    Label KlasifLabelPercent;
+    @FXML 
+    Label KlasifLabelLoadPic;
+    @FXML
+    ProgressBar KlasifProgressbarLoadImages;
+    @FXML 
+    TextField KlasifWidth;
+    @FXML
+    TextField KlasifHeight;        
+    @FXML 
+    CheckBox KlasifChakcboxOriginal;
+    @FXML
+    Label klassifFolderOutSave;
+    
+    
+    ArrayList <String> PathToImages = new ArrayList<>();
+    ArrayList <TrainingPictures> LoadedImage = new ArrayList<>();
+    double MousePressX;
+    double MousePressY;
+    double MouseReleaseX;
+    double MouseReleaseY;
+    ArrayList <Rectangle> MarketExamples = new ArrayList<>();
+    int CurrentKlasifImage = 0 ;
+    GraphicsContext gc;
+    
+    
+    
+    @FXML 
+    public void KlasifSaveChoosenFragments() throws IOException{
+        
+       new Thread (()->{
+            if(ArrayUtils.isNumeric(KlasifWidth.getText())&&ArrayUtils.isNumeric(KlasifHeight.getText())&&!KlasifChakcboxOriginal.isSelected())
+                    {
+                        Platform.runLater(() -> {  
+                        KlasifLabelPercent.setVisible(true);
+                        KlasifLabelLoadPic.setVisible(true);
+                        KlasifProgressbarLoadImages.setVisible(true);
+                        });
+                        int size = LoadedImage.size();
+                        
+                        for(int i = 0 ;i<size;i++)
+                            {   
+                              try 
+                              {
+                                LoadedImage.get(i).SetImage(new Picture().setPicture(ImageIO.read(new File(LoadedImage.get(i).PathToImage())), Integer.valueOf(KlasifWidth.getText()), Integer.valueOf(KlasifHeight.getText())));
+                                
+                              } catch (IOException ex) {
+                                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                              }
+                             
+                              final double percent = (double)i/size;
+                              
+                              Platform.runLater(() -> {
+                              KlasifProgressbarLoadImages.setProgress(percent);
+                              KlasifLabelPercent.setText(format("%.2f",percent*100.0)+" %");
+                              });
+                             
+                            }
+                              Platform.runLater(() -> {
+                              KlasifProgressbarLoadImages.setProgress(1);
+                              KlasifLabelPercent.setText(format("%.2f",1*100.0)+" %");
+                              }); 
+                              
+                               
+                        
+                             Platform.runLater(() -> {
+                              KlasifProgressbarLoadImages.setProgress(0);
+                              KlasifLabelPercent.setText(format("%.2f",0*100.0)+" %");
+                              KlasifLabelLoadPic.setText("Zapis fragmentów do folderu:");
+                              }); 
+                             
+                             
+                             
+                             
+                             
+                             int sizeSave = LoadedImage.size();
+                                    for(int currentImage = 0 ; currentImage< sizeSave;currentImage++){
+                                       int sizeExample = LoadedImage.get(currentImage).GetMarkedRect().size();
+                                        for(int currentExample = 0 ; currentExample<sizeExample;currentExample++){
+                                            LoadedImage.get(currentImage).GetMarkedRect().get(currentExample);
+                                            File outputfile = new File(klassifFolderOutSave.getText()+"\\"+currentExample+LoadedImage.get(currentImage).PathToImage().substring(LoadedImage.get(currentImage).PathToImage().lastIndexOf("\\")));
+                                           try {
+                                               ImageIO.write(new Picture().PobierzWycinekObrazu(LoadedImage.get(currentImage).GetImage(),
+                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).x,
+                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).y,
+                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).width,
+                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).height
+                                               ), "jpg", outputfile);
+                                                } catch (IOException ex) {
+                                                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                                                    }
+
+                                                       }
+                                        
+                                                    final double percent = (double)currentImage/sizeSave;
+                              
+                                                    Platform.runLater(() -> {
+                                                    KlasifProgressbarLoadImages.setProgress(percent);
+                                                    KlasifLabelPercent.setText(format("%.2f",percent*100.0)+" %");
+                                                    });
+                 
+                                             }
+                    
+                    }
+            
+            else if(KlasifChakcboxOriginal.isSelected()){
+                        
+                        Platform.runLater(() -> {  
+                                KlasifLabelPercent.setVisible(true);
+                                KlasifLabelLoadPic.setVisible(true);
+                                KlasifProgressbarLoadImages.setVisible(true);
+                        });
+                          
+                          
+                         
+                          int size =  PathToImages.size();
+                          for(int i = 0 ;i<size;i++)
+                            {   
+                              try {
+                      
+                                    BufferedImage Input = ImageIO.read(new File(LoadedImage.get(i).PathToImage())); 
+                                    LoadedImage.get(i).SetImage(Input);
+                                   } 
+                              catch (IOException ex) 
+                              {
+                                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                              }
+                             
+                              final double percent = (double)i/size;
+                              
+                              Platform.runLater(() -> {
+                              KlasifProgressbarLoadImages.setProgress(percent);
+                              KlasifLabelPercent.setText(format("%.2f",percent*100.0)+" %");
+                              });
+                             
+                            }
+                         
+                              Platform.runLater(() -> {
+                              KlasifProgressbarLoadImages.setProgress(1);
+                              KlasifLabelPercent.setText(format("%.2f",1*100.0)+" %");
+                              });  
+                              
+                              
+                             Platform.runLater(() -> {
+                              KlasifProgressbarLoadImages.setProgress(0);
+                              KlasifLabelPercent.setText(format("%.2f",0*100.0)+" %");
+                              KlasifLabelLoadPic.setText("Zapis fragmentów do folderu:");
+                              }); 
+                             
+                             
+                             
+                             int sizeSave = LoadedImage.size();
+                                    for(int currentImage = 0 ; currentImage< sizeSave;currentImage++){
+                                       int sizeExample = LoadedImage.get(currentImage).GetMarkedRect().size();
+                                        for(int currentExample = 0 ; currentExample<sizeExample;currentExample++){
+                                            LoadedImage.get(currentImage).GetMarkedRect().get(currentExample);
+                                            File outputfile = new File(klassifFolderOutSave.getText()+"\\"+currentExample+LoadedImage.get(currentImage).PathToImage().substring(LoadedImage.get(currentImage).PathToImage().lastIndexOf("\\")+2));
+                                           try {
+                                               ImageIO.write(new Picture().PobierzWycinekObrazu(LoadedImage.get(currentImage).GetImage(),
+                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).x,
+                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).y,
+                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).width,
+                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).height
+                                               ), "jpg", outputfile);
+                                           } catch (IOException ex) {
+                                               Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                                               }
+
+                                                  }
+                 
+                                        
+                                                 
+                                             }
+                             
+                             
+                    }
+                    else
+                    {
+                        new Warning(false,"Wprowadź liczbę całkowitą !").setVisible(true);
+                    } 
+       
+       
+       }).start();
+       
+       
+       
+       
+       
+    }
+    
+    @FXML
+    public void KlasidChooseFolderOut(){
+        Stage stage = new Stage();
+        FolderChooser FolderChooser = new FolderChooser(klassifFolderOutSave.getText());
+        FolderChooser.start(stage);
+        klassifFolderOutSave.setText(FolderChooser.getPobranaŚciezka());
+        
+    }
+    
+    @FXML
+    public void KlasifChooseFile(){
+        Stage stage = new Stage();
+        FileChooserFile FileChooserFile = new FileChooserFile(KlasLabelFileXML.getText(),true,"xml");
+        FileChooserFile.start(stage);
+        KlasLabelFileXML.setText(FileChooserFile.Sciezka);
+    }
+    
+    @FXML 
+    public void KlasifMouseClickStartRect(MouseEvent event){
+     
+     MouseReleaseX=0;    
+     MouseReleaseY=0;    
+     double H = LoadedImage.get(CurrentKlasifImage).getHeight();
+     double W = LoadedImage.get(CurrentKlasifImage).getWidth();
+     
+     MousePressX = event.getX();
+     MousePressY = event.getY();
+     double x1 = MousePressX/KlasifImageView.getWidth()*W;
+     double y1 = MousePressY/KlasifImageView.getHeight()*H;
+     
+     LabelXCord.setText(" "+format("%.2f",x1)+" "+format("%.2f",MouseReleaseX));
+     LabelYCord.setText(" "+format("%.2f",y1)+" "+format("%.2f",MouseReleaseY));
+     
+    }
+    
+    @FXML 
+    public void KlasifMouseClickEndRect(MouseEvent event){
+     double H = LoadedImage.get(CurrentKlasifImage).getHeight();
+     double W = LoadedImage.get(CurrentKlasifImage).getWidth();   
+     MouseReleaseX = event.getX();
+     MouseReleaseY = event.getY();
+    
+     double x1 = MousePressX/KlasifImageView.getWidth()*W;
+     double y1 = MousePressY/KlasifImageView.getHeight()*H;
+     double x2 = MouseReleaseX/KlasifImageView.getWidth()*W;
+     double y2 = MouseReleaseY/KlasifImageView.getHeight()*H;
+     
+     
+     LabelXCord.setText(" "+format("%.2f",x1)+" "+format("%.2f",x2));
+     LabelYCord.setText(" "+format("%.2f",y1)+" "+format("%.2f",y2));
+     
+     LoadedImage.get(CurrentKlasifImage).AddNewRect(new MarkedRect((int)x1,(int)y1,(int)(y2-y1),(int)(x2-x1)));
+    }
+    
+    public void DrawSetOfMarkedRect(TrainingPictures pic){
+            double H = LoadedImage.get(CurrentKlasifImage).getHeight();
+            double W = LoadedImage.get(CurrentKlasifImage).getWidth();
+            double WindowW = KlasifImageView.getWidth();
+            double WindowH = KlasifImageView.getHeight();
+       int size = pic.GetMarkedRect().size();
+        for(int i = 0 ; i<size;i++){
+            gc.strokeRect(
+            pic.GetMarkedRect().get(i).x*(WindowW/W),  
+            pic.GetMarkedRect().get(i).y*(WindowH/H),
+            pic.GetMarkedRect().get(i).width*(WindowW/W), 
+            pic.GetMarkedRect().get(i).height*(WindowH/H));
+        }
+         
+    }
+    
+    @FXML
+    public void KlasifMauseCoordinates(MouseEvent event){
+        double H = LoadedImage.get(CurrentKlasifImage).getHeight();
+        double W = LoadedImage.get(CurrentKlasifImage).getWidth(); 
+        double x1 = MousePressX/KlasifImageView.getWidth()*W;
+        double y1 = MousePressY/KlasifImageView.getHeight()*H;
+        double x2 = event.getX()/KlasifImageView.getWidth()*W;
+        double y2 = event.getY()/KlasifImageView.getHeight()*H;
+     
+       LabelXCord.setText(" "+format("%.2f",x1)+" "+format("%.2f",x2));
+       LabelYCord.setText(" "+format("%.2f",y1)+" "+format("%.2f",y2));
+       gc.clearRect(0, 0,gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+       gc.drawImage(SwingFXUtils.toFXImage(LoadedImage.get(CurrentKlasifImage).GetImage(), null), 0, 0);
+       DrawSetOfMarkedRect(LoadedImage.get(CurrentKlasifImage));
+       gc.strokeRect(MousePressX,MousePressY, event.getX()-MousePressX, event.getY()-MousePressY);
+       
+    }
+    
+    
+    @FXML 
+    public void KlasifChooseFolder(){
+        Stage stage = new Stage();
+        FolderChooser FolderChooser = new FolderChooser(KlasifChooseFolder.getText());
+        FolderChooser.start(stage);
+        KlasifChooseFolder.setText(FolderChooser.getPobranaŚciezka());
+        PathToImages.clear();
+        try 
+            { 
+                PathToImages = new ArrayUtils().ListaPlikówWFolderze(KlasifChooseFolder.getText());
+            } 
+        catch (IOException ex) 
+            {
+                KlasifChooseFolder.setText("Błąd podczas ładowania pliku");
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+        
+    }
+    
+    @FXML
+    public void KlasifNextImage(){
+        
+        if(CurrentKlasifImage+1<LoadedImage.size()&&CurrentKlasifImage+1>=0){
+            Image image = SwingFXUtils.toFXImage(LoadedImage.get(++CurrentKlasifImage).GetImage(),null);
+            gc.clearRect(0, 0,gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+            gc.drawImage(image, 0, 0);
+            DrawSetOfMarkedRect(LoadedImage.get(CurrentKlasifImage));
+            PathToCurrentImage.setText("Obraz nr: "+(CurrentKlasifImage+1)+" spośród: "+LoadedImage.size()+" "+PathToImages.get(CurrentKlasifImage));
+            
+        }
+        
+        else 
+        {   
+            CurrentKlasifImage=0;
+            Image image = SwingFXUtils.toFXImage(LoadedImage.get(CurrentKlasifImage).GetImage(),null);
+            gc.clearRect(0, 0,gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+            gc.drawImage(image, 0, 0);
+            DrawSetOfMarkedRect(LoadedImage.get(CurrentKlasifImage));
+            PathToCurrentImage.setText("Obraz nr: "+(CurrentKlasifImage+1)+" spośród: "+LoadedImage.size()+" "+PathToImages.get(CurrentKlasifImage));
+            
+           
+        }
+    }
+    
+    @FXML
+    @SuppressWarnings("empty-statement")
+    public void KlasifPreviousImage(){
+     if(CurrentKlasifImage-1<LoadedImage.size()&&CurrentKlasifImage-1>=0){
+         
+            Image image = SwingFXUtils.toFXImage(LoadedImage.get(--CurrentKlasifImage).GetImage(),null);
+            gc.clearRect(0, 0,gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+            gc.drawImage(image, 0, 0);
+            DrawSetOfMarkedRect(LoadedImage.get(CurrentKlasifImage));
+            PathToCurrentImage.setText("Obraz nr: "+(CurrentKlasifImage+1)+" spośród: "+LoadedImage.size()+" "+PathToImages.get(CurrentKlasifImage));
+            
+        }
+        else 
+        {   
+            CurrentKlasifImage=LoadedImage.size()-1;
+            Image image = SwingFXUtils.toFXImage(LoadedImage.get(CurrentKlasifImage).GetImage(),null);
+            gc.clearRect(0, 0,gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+            gc.drawImage(image, 0, 0);
+            DrawSetOfMarkedRect(LoadedImage.get(CurrentKlasifImage));
+            PathToCurrentImage.setText("Obraz nr: "+(CurrentKlasifImage+1)+" spośród: "+LoadedImage.size()+" "+PathToImages.get(CurrentKlasifImage));
+        }
+    }
+    
+    @FXML
+    public void KlasifSaveCurrentSettings(){
+     
+
+    }
+    
+    @FXML
+    public void KlasifLoadImages() {
+        
+             new Thread (()->{
+              
+              if(ArrayUtils.isNumeric(KlasifWidth.getText())&&ArrayUtils.isNumeric(KlasifHeight.getText())&&!KlasifChakcboxOriginal.isSelected())
+                    {  
+                        Platform.runLater(() -> {  
+                        KlasifLabelPercent.setVisible(true);
+                        KlasifLabelLoadPic.setVisible(true);
+                        KlasifProgressbarLoadImages.setVisible(true);
+                        });
+                          CurrentKlasifImage=0;
+                          LoadedImage.clear();
+                          int size =  LoadedImage.size();
+                          for(int i = 0 ;i<size;i++)
+                            {   
+                              try 
+                              {
+                                BufferedImage Input = ImageIO.read(new File(PathToImages.get(i)));
+                                LoadedImage.add(new TrainingPictures(new Picture().setPicture(Input, (int)KlasifImageView.getWidth(), (int) KlasifImageView.getHeight()),PathToImages.get(i), Integer.valueOf(KlasifWidth.getText()), Integer.valueOf(KlasifHeight.getText())));
+                              } catch (IOException ex) {
+                                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                              }
+                             
+                              final double percent = (double)i/size;
+                              
+                              Platform.runLater(() -> {
+                              KlasifProgressbarLoadImages.setProgress(percent);
+                              KlasifLabelPercent.setText(format("%.2f",percent*100.0)+" %");
+                              });
+                             
+                            }
+                          
+                              Platform.runLater(() -> {
+                              KlasifProgressbarLoadImages.setProgress(1);
+                              KlasifLabelPercent.setText(format("%.2f",1*100.0)+" %");
+                              });  
+                          
+                          
+                            Platform.runLater(() -> {
+                                
+                           // KlasifImageView.setFitHeight(size);
+                            Image image = SwingFXUtils.toFXImage(LoadedImage.get(CurrentKlasifImage).GetImage(),null);
+                            gc.drawImage(image,0,0);
+                            PathToCurrentImage.setText("Obraz nr: "+(CurrentKlasifImage+1)+" spośród: "+LoadedImage.size()+" "+PathToImages.get(CurrentKlasifImage));
+                            });
+                        
+                            Platform.runLater(() -> {  
+                            KlasifLabelPercent.setVisible(false);
+                            KlasifLabelLoadPic.setVisible(false);
+                            KlasifProgressbarLoadImages.setVisible(false);
+                            });
+                        
+                             Platform.runLater(() -> {
+                              KlasifProgressbarLoadImages.setProgress(0);
+                              KlasifLabelPercent.setText(format("%.2f",0*100.0)+" %");
+                              });  
+                    }
+              
+                    else if(KlasifChakcboxOriginal.isSelected()){
+                        
+                        Platform.runLater(() -> {  
+                                KlasifLabelPercent.setVisible(true);
+                                KlasifLabelLoadPic.setVisible(true);
+                                KlasifProgressbarLoadImages.setVisible(true);
+                        });
+                          CurrentKlasifImage=0;
+                          
+                          LoadedImage.clear();
+                          int size =  PathToImages.size();
+                          for(int i = 0 ;i<size;i++)
+                            {   
+                              try {
+                                    BufferedImage Input = ImageIO.read(new File(PathToImages.get(i)));   
+                                    LoadedImage.add(new TrainingPictures(new Picture().setPicture(Input, (int)KlasifImageView.getWidth(),(int)KlasifImageView.getHeight()),PathToImages.get(i),Input.getWidth(),Input.getHeight()));
+                                   } 
+                              catch (IOException ex) 
+                              {
+                                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                              }
+                             
+                              final double percent = (double)i/size;
+                              
+                              Platform.runLater(() -> {
+                              KlasifProgressbarLoadImages.setProgress(percent);
+                              KlasifLabelPercent.setText(format("%.2f",percent*100.0)+" %");
+                              });
+                             
+                            }
+                         
+                              Platform.runLater(() -> {
+                              KlasifProgressbarLoadImages.setProgress(1);
+                              KlasifLabelPercent.setText(format("%.2f",1*100.0)+" %");
+                              });  
+                          
+                          
+                            Platform.runLater(() -> { 
+                                    Image image = SwingFXUtils.toFXImage(LoadedImage.get(CurrentKlasifImage).GetImage(), null);
+                                    gc.clearRect(0, 0,gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+                                    gc.drawImage(image, 0, 0);
+                                    DrawSetOfMarkedRect(LoadedImage.get(CurrentKlasifImage));
+                                    PathToCurrentImage.setText("Obraz nr: "+(CurrentKlasifImage+1)+" spośród: "+LoadedImage.size()+" "+PathToImages.get(CurrentKlasifImage));
+                                    
+                            });
+                        
+                            Platform.runLater(() -> {  
+                            KlasifLabelPercent.setVisible(false);
+                            KlasifLabelLoadPic.setVisible(false);
+                            KlasifProgressbarLoadImages.setVisible(false);
+                            });
+                        
+                             Platform.runLater(() -> {
+                              KlasifProgressbarLoadImages.setProgress(0);
+                              KlasifLabelPercent.setText(format("%.2f",0*100.0)+" %");
+                              });  
+                    }
+                    else
+                    {
+                        new Warning(false,"Wprowadź liczbę całkowitą !").setVisible(true);
+                    } 
+              
+                 
+              }).start();
+            
+          }
+    
+    @FXML
+    public void KlasifTrainingClassifier(){
+        
+        
+        
+    }
+    
+    
+    
     @FXML
     public void LoadFolderWithNumbers(){
         Stage stage = new Stage();
@@ -203,10 +692,11 @@ public class FXMLDocumentController implements Initializable {
         ChoosePicture.setText(FolderChooser.getPobranaŚciezka());
     
         try {
-             
+          
             PathToNumbersFolder = new ArrayUtils().ListaPlikówWFolderze(ChoosePicture.getText());
          
-        } catch (IOException ex) {
+        } catch (IOException ex) 
+        {
             ChoosePicture.setText("Błąd podczas ładowania pliku");
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -520,6 +1010,13 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        
+        
+        
+       KlasifLabelPercent.setVisible(false);
+       KlasifLabelLoadPic.setVisible(false);
+       KlasifProgressbarLoadImages.setVisible(false);
        WybórWykrycia.getSelectionModel().selectFirst();
        type = TypeOfDetect.HUMANOID_DETECT;
        @SuppressWarnings("LocalVariableHidesMemberVariable")
@@ -542,6 +1039,7 @@ public class FXMLDocumentController implements Initializable {
        ChartNumbersDetect.getData().add(series1);
        ChartNumbersDetect.setAnimated(true);
        
+        gc = KlasifImageView.getGraphicsContext2D();
     }    
     
 }

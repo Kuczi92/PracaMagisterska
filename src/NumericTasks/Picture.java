@@ -25,6 +25,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.ml.CvSVM;
 
 /**
  *
@@ -33,7 +34,11 @@ import org.opencv.imgproc.Imgproc;
 public final class Picture   {
     
     //////////////////////////// VARIABLES /////////////////////////////////////
+    public double stosunekDługościOryginału = 1.0;
+    public double ProcentXWzględemOryginału = 1.0;
+    public double ProcentYWzględemOryginału = 1.0;
     
+    public ArrayList<MarkedRect> MarkedRect = new ArrayList<>();
     /** Store the Image reference */
     private  BufferedImage image;
     
@@ -45,6 +50,7 @@ public final class Picture   {
     
     /** Total number of pixel in an image*/
     private int totalPixels;
+  
 
     public Picture(int[] pixels, int width, int height) {
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
@@ -72,11 +78,7 @@ public final class Picture   {
    }
     
     
-    private enum ImageType{
-        JPG, PNG
-    };
-    
-    private ImageType imgType;
+  
     
     ////////////////////////////////// CONSTRUCTORS ////////////////////////////
     
@@ -109,7 +111,6 @@ public final class Picture   {
         this.totalPixels = this.width * this.height;
         this.pixels = new int[this.totalPixels];
         image = new BufferedImage(this.width, this.height, BufferedImage.TYPE_3BYTE_BGR);
-        this.imgType = ImageType.PNG;
         initPixelArray();
     }
     
@@ -124,13 +125,7 @@ public final class Picture   {
         this.totalPixels = this.width * this.height;
         this.pixels = new int[this.totalPixels];
         
-        this.imgType = img.imgType;
-        if(this.imgType == ImageType.PNG){
-            this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        }else{
-            this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        }
-        
+     
         //copy original image pixels value to new image and pixels array
         for(int y = 0; y < this.height; y++){
             for(int x = 0; x < this.width; x++){
@@ -174,11 +169,8 @@ public final class Picture   {
             image = ImageIO.read(Files.newInputStream(Paths.get(filePath)));
             String fileType = filePath.substring(filePath.lastIndexOf('.')+1);
             if("jpg".equals(fileType)){
-                imgType = ImageType.JPG;
-            }else{
-                imgType = ImageType.PNG;
-                
-                
+            }else
+            {
             BufferedImage newBufferedImage = new BufferedImage(image.getWidth(),image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 	    newBufferedImage.createGraphics().drawImage(image, 0, 0, Color.WHITE, null);
             setImage(newBufferedImage);     
@@ -825,5 +817,61 @@ public final class Picture   {
             }
          }
       return ListOfRGBValues;
-   } 
+   }
+    
+    public void train(){
+        
+        CvSVM CvSVM = new CvSVM();
+       
+    }
+
+   public  BufferedImage  setPicture(BufferedImage img,int width ,int height){
+    BufferedImage Out = null;
+         
+         if(img.getWidth()<=width&&img.getHeight()<=height){
+            stosunekDługościOryginału = 1.0;
+            ProcentXWzględemOryginału = 1.0;
+            ProcentYWzględemOryginału =1.0;
+            Out = img;
+        }
+        else if(img.getWidth()>=img.getHeight())
+                {
+                    stosunekDługościOryginału =(double) img.getHeight()/img.getWidth();
+                    int NowyY = (int) (width*stosunekDługościOryginału);
+
+                    if(NowyY>height){
+
+                        int NowyX =  (int) (height*stosunekDługościOryginału);   
+                        Out = resize(img,NowyX,height);
+                        ProcentXWzględemOryginału =(double) NowyX/img.getWidth();
+                        ProcentYWzględemOryginału =(double) height/img.getHeight();
+                        stosunekDługościOryginału= ProcentYWzględemOryginału;
+                        }
+                    else{
+                        Out = resize(img,width,NowyY);
+                        ProcentXWzględemOryginału =(double) width/img.getWidth();
+                        ProcentYWzględemOryginału =(double) NowyY/img.getHeight();
+                    }
+           
+        }
+        
+        else if(img.getHeight()>=img.getWidth())
+                {
+                    stosunekDługościOryginału =(double) img.getWidth()/img.getHeight();
+                    int NowyX =  (int) (height*stosunekDługościOryginału);
+                        if(NowyX>width){
+                            int NowyY = (int) (width*stosunekDługościOryginału);
+                            Out = resize(img,width,NowyY);
+                            ProcentXWzględemOryginału =(double) width/img.getWidth();
+                            ProcentYWzględemOryginału =(double) NowyY/img.getHeight();
+                        }
+                        else{
+                             Out = resize(img,NowyX,height);
+                             ProcentXWzględemOryginału =(double) NowyX/img.getWidth();
+                             ProcentYWzględemOryginału =(double) height/img.getHeight();
+                        }
+           
+        }
+         return Out;
+     }
 }

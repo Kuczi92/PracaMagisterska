@@ -33,7 +33,18 @@ public final class ArrayUtils {
     }
     
     
-    
+    public static boolean isNumeric(String str)  
+        {  
+          try  
+          {  
+             Double.parseDouble(str);  
+          }  
+          catch(NumberFormatException nfe)  
+          {  
+            return false;  
+          }  
+          return true;  
+        }
     
     
     public int[] argsort(final int[] a,boolean g) {
@@ -378,14 +389,12 @@ public final class ArrayUtils {
         ArrayList<String> ListaPlików = new ArrayList<>();
         try(Stream<Path> paths = Files.walk(Paths.get(Ściezka))) {
           paths.forEach((Path filePath) -> {
-        if (Files.isRegularFile(filePath)) {
-            
+           if (Files.isRegularFile(filePath)) {
             String temp = filePath.toString();
-            if((temp.endsWith("jpg")||temp.endsWith("png")||temp.endsWith("jpeg")||temp.endsWith("JPEG")||temp.endsWith("JPG")||temp.endsWith("BMP")||temp.endsWith("bmp")))
-            {
-                ListaPlików.add(filePath.toString());
-            }
-
+                if((temp.endsWith("jpg")||temp.endsWith("png")||temp.endsWith("jpeg")||temp.endsWith("JPEG")||temp.endsWith("JPG")||temp.endsWith("BMP")||temp.endsWith("bmp")))
+                {
+                    ListaPlików.add(filePath.toString());
+                }
            }
           });
          }

@@ -23,6 +23,7 @@ public class FileChooserFile extends Application{
     private final Desktop desktop = Desktop.getDesktop();
     String Sciezka;
     boolean createFile = true;
+    String extension;
     
     FileChooserFile(String pobranaścieszka) {
         if(pobranaścieszka==null){
@@ -36,6 +37,12 @@ public class FileChooserFile extends Application{
     FileChooserFile(String text, boolean b) {
       this.pobranaścieszka = text;
       this.createFile = b;
+    }
+
+    FileChooserFile(String text, boolean b, String xml) {
+        this.pobranaścieszka = text;
+        this.createFile = b;
+        this.extension = xml;
     }
     
     public String getPobranaŚciezka(){
@@ -80,8 +87,18 @@ public class FileChooserFile extends Application{
             else
             {   
                 if(createFile){
-                    fileChooser.setTitle("Stwórz plik txt z siecia neuronową ");
-                    fileChooser.setInitialFileName("Nowa sieć neuronowa.txt");
+                   
+                    
+                    if(extension==null){
+                        fileChooser.setTitle("Stwórz plik txt z siecia neuronową ");
+                        fileChooser.setInitialFileName("Nowa sieć neuronowa.txt");
+                    }
+                    else{
+                        fileChooser.setTitle("Stwórz plik" + extension);
+                        fileChooser.setInitialFileName("Nowa klasyfikator."+extension);
+                        
+                    }
+                    
                 }
                 
                 fileChooser.setInitialDirectory(                
@@ -89,12 +106,12 @@ public class FileChooserFile extends Application{
                 );
             }
             
-                            
-            fileChooser.getExtensionFilters().addAll(
-               
-                new FileChooser.ExtensionFilter("TXT", "*.txt")
-         
-            );
+            if(extension==null){                
+             fileChooser.getExtensionFilters().addAll( new FileChooser.ExtensionFilter("TXT", "*.txt"));
+            }
+            else{
+                  fileChooser.getExtensionFilters().addAll( new FileChooser.ExtensionFilter(extension.toUpperCase(), "*."+extension));
+            }
     }
  
     private void openFile(File file) {
