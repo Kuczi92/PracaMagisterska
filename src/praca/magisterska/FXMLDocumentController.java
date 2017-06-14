@@ -13,6 +13,7 @@ import NewWidnows.Warning;
 import NumericTasks.ArrayUtils;
 import NumericTasks.MarkedRect;
 import NumericTasks.Picture;
+import NumericTasks.Training;
 import NumericTasks.TrainingPictures;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -182,8 +183,7 @@ public class FXMLDocumentController implements Initializable {
     ArrayList <String> PathToNumbersFolder;
     
     //Ustawianie klasyfikatora
-    @FXML
-    Label KlasLabelFileXML;
+    
     @FXML 
     Label LabelYCord;
     @FXML 
@@ -221,8 +221,65 @@ public class FXMLDocumentController implements Initializable {
     GraphicsContext gc;
     
     
+    //dla zakładki tworzenie klasyfikatora
+    
+    @FXML
+    Label KlasLabelFileXML;
+    
+    @FXML
+    ProgressBar ProgressBarTrainingCassifier;
+    
+    @FXML
+    Label KlassifTrainingPercent;
     
     @FXML 
+    Label KlasssifTrainingTitle;
+    
+    @FXML
+    Label KlassifPosPath;
+    @FXML
+    Label KlassifNegPath;
+    @FXML
+    Label KlassifChooseTestFile;
+    
+    @FXML
+    TextField KlasifPosSizeX;
+    
+    @FXML
+    TextField KlasifPosSizeY;
+    
+    @FXML
+    TextField KlasifNegSizeX;
+    
+    @FXML
+    TextField KlasifNegSizeY;
+    
+    
+    @FXML
+    public void KlasifChooseFileTestPath(){
+        Stage stage = new Stage();
+        FileChooserSample FileChooserFile = new FileChooserSample(KlassifChooseTestFile.getText());
+        FileChooserFile.start(stage);
+        KlassifChooseTestFile.setText(FileChooserFile.Sciezka);
+    }
+    
+    
+    @FXML
+    public void KlasifChooseFolderPosPath(){
+        Stage stage = new Stage();
+        FolderChooser FolderChooser = new FolderChooser(KlassifPosPath.getText());
+        FolderChooser.start(stage);
+        KlassifPosPath.setText(FolderChooser.getPobranaŚciezka());
+    }
+    
+    @FXML
+    public void KlasifChooseFolderNegPath(){
+        Stage stage = new Stage();
+        FolderChooser FolderChooser = new FolderChooser(KlassifNegPath.getText());
+        FolderChooser.start(stage);
+        KlassifNegPath.setText(FolderChooser.getPobranaŚciezka());
+    }
+    
     public void KlasifSaveChoosenFragments() throws IOException{
         
        new Thread (()->{
@@ -679,6 +736,13 @@ public class FXMLDocumentController implements Initializable {
     public void KlasifTrainingClassifier(){
         
         
+        
+      Training train = new Training(KlassifPosPath.getText(),KlassifNegPath.getText(),KlasLabelFileXML.getText(),
+              KlassifChooseTestFile.getText(),KlassifTrainingPercent,KlasssifTrainingTitle,ProgressBarTrainingCassifier,
+              Integer.valueOf(KlasifPosSizeX.getText()),Integer.valueOf(KlasifPosSizeY.getText()),Integer.valueOf(KlasifNegSizeX.getText()),
+              Integer.valueOf(KlasifNegSizeY.getText()));
+      
+      new Thread(()->train.run()).start();
         
     }
     

@@ -26,10 +26,10 @@ public final class FileChooserSample extends Application {
     FileChooserSample(String pobranaścieszka) {
         if(pobranaścieszka==null){
             this.pobranaścieszka = " ";
-        }else{
+        }
+        else{
             this.pobranaścieszka = pobranaścieszka;
         }
-       
     }
     
     public String getPobranaŚciezka(){
@@ -42,7 +42,8 @@ public final class FileChooserSample extends Application {
         final FileChooser fileChooser = new FileChooser();
             configureFileChooser(fileChooser);
             File file = fileChooser.showOpenDialog(stage);
-            if (file != null) {
+            if (file != null) 
+            {
                 openFile(file);
             }
             stage.close();
@@ -53,9 +54,10 @@ public final class FileChooserSample extends Application {
     {      
              
             fileChooser.setTitle("Wybierz obraz");
-             if(pobranaścieszka==null){
+            if(pobranaścieszka==null){
                 pobranaścieszka = Sciezka.substring(0,Sciezka.lastIndexOf("\\"));
             }
+            
             if(pobranaścieszka.endsWith(".jpg")||pobranaścieszka.endsWith(".png")||pobranaścieszka.endsWith(".bmp")){
                 pobranaścieszka = pobranaścieszka.substring(0,pobranaścieszka.lastIndexOf("\\"));
                 fileChooser.setInitialDirectory(new File(pobranaścieszka));   
