@@ -31,10 +31,12 @@ public class DrawOnCanvas  extends Application {
    BufferedImage ObrazWynik;
    int liczbabiegaczy; 
     GraphicsContext gc;
+    
     DrawOnCanvas(BufferedImage ObrazWynik,int liczbaBiegaczy){
       this.ObrazWynik = ObrazWynik; 
       this.liczbabiegaczy = liczbaBiegaczy;
     }
+    
     class ResizableCanvas extends Canvas {
     Image Image;
     public ResizableCanvas(Image Image ) {

@@ -13,7 +13,7 @@ import NewWidnows.Warning;
 import NumericTasks.ArrayUtils;
 import NumericTasks.MarkedRect;
 import NumericTasks.Picture;
-import NumericTasks.Training;
+import NumericTasks.MLTraining;
 import NumericTasks.TrainingPictures;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -737,7 +737,7 @@ public class FXMLDocumentController implements Initializable {
         
         
         
-      Training train = new Training(KlassifPosPath.getText(),KlassifNegPath.getText(),KlasLabelFileXML.getText(),
+      MLTraining train = new MLTraining(KlassifPosPath.getText(),KlassifNegPath.getText(),KlasLabelFileXML.getText(),
               KlassifChooseTestFile.getText(),KlassifTrainingPercent,KlasssifTrainingTitle,ProgressBarTrainingCassifier,
               Integer.valueOf(KlasifPosSizeX.getText()),Integer.valueOf(KlasifPosSizeY.getText()),Integer.valueOf(KlasifNegSizeX.getText()),
               Integer.valueOf(KlasifNegSizeY.getText()));
@@ -970,9 +970,7 @@ public class FXMLDocumentController implements Initializable {
                                 StagePic.setScene(scene);
                                 StagePic.show();
                                 
-                                new Thread(()->{
-                                    TrainingNeuralNetController.Training.run();
-                                }).start();
+                                new Thread(TrainingNeuralNetController.Training::run).start();
                                 
                                 });
                                 

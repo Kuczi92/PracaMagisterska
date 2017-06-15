@@ -85,12 +85,29 @@ public final class Picture   {
     /** Default constructor
      * @param image Buffered image obraz*/
     public Picture(BufferedImage image){
+        
+        
+       
+        if(!(image.getType()==BufferedImage.TYPE_3BYTE_BGR)){
+             BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+             convertedImg.getGraphics().drawImage(image, 0, 0, null);
+             this.image=convertedImg;
+             this.width = convertedImg.getWidth();
+             this.height = convertedImg.getHeight();
+             this.totalPixels = this.width * this.height;
+             this.pixels = new int[this.totalPixels];
+             initPixelArray();
+       
+        }
+        else{
         this.width = image.getWidth();
         this.height = image.getHeight();
         this.totalPixels = this.width * this.height;
         this.pixels = new int[this.totalPixels];
         this.image=image;
         initPixelArray();
+        }
+        
     }
     
     public Picture(String filePath){
@@ -169,13 +186,13 @@ public final class Picture   {
             image = ImageIO.read(Files.newInputStream(Paths.get(filePath)));
             String fileType = filePath.substring(filePath.lastIndexOf('.')+1);
             if("jpg".equals(fileType)){
-            }else
+                
+            }
+            else
             {
             BufferedImage newBufferedImage = new BufferedImage(image.getWidth(),image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 	    newBufferedImage.createGraphics().drawImage(image, 0, 0, Color.WHITE, null);
             setImage(newBufferedImage);     
-                
-                
             }
            
             this.width = image.getWidth();
@@ -240,7 +257,28 @@ public final class Picture   {
         }
     }
     public void setImage(BufferedImage image){
+        
+        if(!(image.getType()==BufferedImage.TYPE_3BYTE_BGR)){
+             BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+             convertedImg.getGraphics().drawImage(image, 0, 0, null);
+             this.image=convertedImg;
+             this.width = convertedImg.getWidth();
+             this.height = convertedImg.getHeight();
+             this.totalPixels = this.width * this.height;
+             this.pixels = new int[this.totalPixels];
+             initPixelArray();
+       
+        }
+        else{
+        this.width = image.getWidth();
+        this.height = image.getHeight();
+        this.totalPixels = this.width * this.height;
+        this.pixels = new int[this.totalPixels];
         this.image=image;
+        initPixelArray();
+        }
+        
+        
     }
     /**
      * This method will check for equality of two images.
@@ -544,7 +582,7 @@ public final class Picture   {
     
     private static BufferedImage resize(BufferedImage img, int newW, int newH) { 
     Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
-    BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+    BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_3BYTE_BGR);
     Graphics2D g2d = dimg.createGraphics();
     g2d.drawImage(tmp, 0, 0, null);
     g2d.dispose();
@@ -613,17 +651,25 @@ public final class Picture   {
     public ArrayList<BufferedImage> FindContorous(int blurr,int threshold, int min_wielkoscx, int min_wielkoscy, int max_wielkoscy, int max_wielkoscx,
             boolean drawContorous,BufferedImage original,boolean originalview){
         
+         ArrayList<Double> PointX = new ArrayList<>();
+        
          ArrayList<MatOfPoint> contours = new ArrayList<>(); 
          Mat hierarchy = new Mat();
          BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
          convertedImg.getGraphics().drawImage(image, 0, 0, null);              
-         byte[] data = ((DataBufferByte) convertedImg.getRaster().getDataBuffer()).getData();                                                                   
+         byte[] data = ((DataBufferByte) convertedImg.getRaster().getDataBuffer()).getData();
+         
          Mat opencv = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
          opencv.put(0, 0, data);
-        //ładowanie oryginalu                    
-        data = ((DataBufferByte) original.getRaster().getDataBuffer()).getData();  
-        Mat originalImage = new Mat(original.getHeight(), original.getWidth(), CvType.CV_8UC3);  
-        originalImage.put(0, 0, data);
+        //ładowanie oryginalu   
+        Mat originalImage = null;
+         if(drawContorous&&originalview)
+            {
+                      data = ((DataBufferByte) original.getRaster().getDataBuffer()).getData();  
+                      originalImage = new Mat(original.getHeight(), original.getWidth(), CvType.CV_8UC3);  
+                      originalImage.put(0, 0, data);                                                           
+             }
+       
         
         
            if(!(blurr==0))
@@ -641,7 +687,7 @@ public final class Picture   {
                 // fuckja tresholde wykorzystywana do wyodrebnienia obiektow         
                 Imgproc.threshold(grayscaleMat,maskaobrazu , threshold,  threshold, Imgproc.THRESH_BINARY);
                  // funkcja find contours do znajodownia punktow oraz obiektow      
-                Imgproc.findContours(maskaobrazu, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);          
+                Imgproc.findContours(maskaobrazu, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);          
                                                                             int MinX = image.getWidth();
                                                                             int MinY = image.getHeight();
                                                                             int MaxX=0;
@@ -649,8 +695,6 @@ public final class Picture   {
                                                                           
                    
                                                                             int PoczatekX,PoczatekY,Wysokosc,Szerokosc;
-                                                                            
-                                                                            
                                                                             
                                                                             
                                                                             if(drawContorous){
@@ -705,12 +749,14 @@ public final class Picture   {
                                                        Scalar color = new Scalar(0,0,255);
                                                                      if(originalview)
                                                                       {
+                                                                       PointX.add((double)PoczatekX);
                                                                        Core.rectangle(originalImage, new Point(PoczatekX,PoczatekY), new Point(PoczatekX+Szerokosc,PoczatekY+Wysokosc), color);
                                                                        PicturesWithNumbers.add(PobierzWycinekObrazu(original,PoczatekX,PoczatekY,Szerokosc,Wysokosc));   
                                                                       
                                                                       }
                                                                        else
                                                                       {
+                                                                       PointX.add((double)PoczatekX);
                                                                        Core.rectangle(opencv, new Point(PoczatekX,PoczatekY), new Point(PoczatekX+Szerokosc,PoczatekY+Wysokosc), color);
                                                                        PicturesWithNumbers.add(PobierzWycinekObrazu(image,PoczatekX,PoczatekY,Szerokosc,Wysokosc));
                                                                       }
@@ -730,8 +776,31 @@ public final class Picture   {
         else{
             image = matToBufferedImage(opencv,new BufferedImage(image.getWidth(),image.getHeight(),image.getType()));
         }
+
+
+        ArrayList<BufferedImage> SortByX =  new ArrayList<>();
+        while(0<PicturesWithNumbers.size())
+        {
+            int smallestIMG = 0;
+            double min = image.getWidth();
+            for(int otherImg = 0 ;otherImg<PointX.size();otherImg++)
+              {
+                if(min>PointX.get(otherImg))
+                    {
+                      min =  PointX.get(otherImg);
+                      smallestIMG = otherImg;
+                    }
+              }
+            
+            SortByX.add(PicturesWithNumbers.get(smallestIMG));
+            PicturesWithNumbers.remove(smallestIMG);
+            PointX.remove(smallestIMG);
+        }
         
-        return PicturesWithNumbers;
+        
+        
+        
+        return SortByX;
     }
     
     public static BufferedImage matToBufferedImage(Mat matrix, BufferedImage bimg)
@@ -801,7 +870,7 @@ public final class Picture   {
             int  green = (argb & 0x0000ff00) >> 8;
             int  blue  =  argb & 0x000000ff;
             
-            double value = 0.2989 * red + 0.5870 * green + 0.1140 * blue;
+           // double value = 0.2989 * red + 0.5870 * green + 0.1140 * blue;
             if((red+green+blue)/3 <threshold){
                 ListOfRGBValues.add(1.0);
             }
