@@ -69,6 +69,10 @@ public class FXMLDetectedRunnersController implements Initializable {
     Label LabelMinimalnyX;
     
     @FXML 
+    CheckBox DrawContur;
+    
+    
+    @FXML 
     Slider SliderMaksymalnyX;
     @FXML 
     Slider SliderMaksymalnyY;
@@ -326,7 +330,7 @@ public class FXMLDetectedRunnersController implements Initializable {
                     (int)(SliderMinimalnyY.getValue()/100.0*Out.getImageHeight()), (int)(SliderMaksymalnyX.getValue()/100.0*Out.getImageWidth()),
                     (int)(SliderMaksymalnyY.getValue()/100.0*Out.getImageHeight()),
                     DrawContorous.isSelected(),new Picture(Images.get(currentImage)).Zoom(SliderZoom.getValue()/2),
-                    LoadOriginPic.isSelected());
+                    LoadOriginPic.isSelected(), DrawContur.isSelected());
             image = SwingFXUtils.toFXImage(Out.Image(), null);
             if(DetectedNumbers.size()>0){
                 ImageViewNumber.setImage(SwingFXUtils.toFXImage(DetectedNumbers.get(0), null));

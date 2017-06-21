@@ -43,7 +43,7 @@ public class GeneratedNewNeuralNet {
                     for(int input = 0 ; input <numberOfInputsPrevLayer;input++){
                      NeuronsWeights.get(Neuron).add(Random.nextGaussian());     
                     }
-                    NeuronsBias.add(Random.nextGaussian());
+                    NeuronsBias.add(-1.0);
                 }
             ListaUkosówPoszególnychNeuronów.add(NeuronsBias);
             ListaWagPoszególnychNeuronów.add(NeuronsWeights);

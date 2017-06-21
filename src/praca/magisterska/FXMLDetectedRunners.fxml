@@ -171,6 +171,7 @@
                                   </FXCollections>
                              </items>
                          </ComboBox>
+                        <CheckBox fx:id="DrawContur" layoutX="511.0" layoutY="267.0" mnemonicParsing="false" onMouseClicked="#changeValuesOfPicture" onMousePressed="#changeValuesOfPicture" onMouseReleased="#changeValuesOfPicture" text="Kontury" />
                      </children>
                   </AnchorPane>
               </content>

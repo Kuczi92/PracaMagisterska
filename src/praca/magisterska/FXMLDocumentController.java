@@ -14,7 +14,11 @@ import NumericTasks.ArrayUtils;
 import NumericTasks.MarkedRect;
 import NumericTasks.Picture;
 import NumericTasks.MLTraining;
+import NumericTasks.TestPictures;
 import NumericTasks.TrainingPictures;
+import NumericTasks.TypeOfThreshold;
+import static NumericTasks.TypeOfThreshold.BRAK_PROGROWANIA;
+import NumericTasks.ViewPicture;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -69,10 +73,9 @@ public class FXMLDocumentController implements Initializable {
     public int widthOriginImage;
     public int heightOriginImage;
     Numbers NumbersNeuralNet;
-   private final Image rootIcon = new Image("file:icontitle//neuralnet.jpg"); 
-   private final Image LayerIcon = new Image("file:icontitle//layers.png");
-   private final Image NeuronIcon = new Image("file:icontitle//neuron.png");
-   
+    private final Image rootIcon = new Image("file:icontitle//neuralnet.jpg"); 
+    private final Image LayerIcon = new Image("file:icontitle//layers.png");
+    private final Image NeuronIcon = new Image("file:icontitle//neuron.png");
     //Pre processing
     @FXML
     private Label Sciezka;
@@ -182,6 +185,9 @@ public class FXMLDocumentController implements Initializable {
     BufferedImage PicWithNumbers;
     ArrayList <String> PathToNumbersFolder;
     
+    
+    @FXML
+    CheckBox SetNegative;
     //Ustawianie klasyfikatora
     
     @FXML 
@@ -255,6 +261,324 @@ public class FXMLDocumentController implements Initializable {
     TextField KlasifNegSizeY;
     
     
+    
+    //testowanie sieci neuronowej
+    @FXML 
+    Label FolderWithTestImages;
+    @FXML
+    Label FileWithNeuralNet;
+    @FXML
+    Label LabelProgressReadFileTest;
+    @FXML
+    ProgressBar ProgressFileRead;
+    @FXML 
+    Label TitleLoadTest;
+    @FXML
+    Label LabelAccuaracyRecognizeNumber;
+    @FXML 
+    Label ReadedNumberFromFile;
+    @FXML
+    Label RecognizedNumberFromImage;
+    @FXML
+    ImageView ViewCurrentNumber;
+    @FXML
+    Label CorrectNumber;
+    @FXML
+    Label RecognizeNumberTest;
+    @FXML
+    Label AccuracyOFRecognizing;
+    
+    @FXML
+    Label CurrentValueRed;
+    @FXML
+    Slider SliderCurrentValueRed;
+    @FXML
+    public void ChangeValueRed(){
+       CurrentValueRed.setText(format("%.2f",SliderCurrentValueRed.getValue()));
+       if(Test==null){
+       }
+       else{
+         changeValuesOfPicture();
+       }
+       
+    }
+    
+    
+    @FXML
+    Label CurrentValueGreen;
+    @FXML
+    Slider SliderCurrentValueGreen;
+    @FXML
+    public void ChangeValueGreen(){
+        CurrentValueGreen.setText(format("%.2f",SliderCurrentValueGreen.getValue())); 
+        if(Test==null){
+       }
+       else{
+         changeValuesOfPicture();
+       }
+    }
+    
+    
+    @FXML
+    Label CurrentValueBlue;
+    @FXML
+    Slider SliderCurrentValueBlue;
+    @FXML
+    public void ChangeValueBlue(){
+        CurrentValueBlue.setText(format("%.2f",SliderCurrentValueBlue.getValue())); 
+        if(Test==null){
+       }
+       else{
+         changeValuesOfPicture();
+       }
+    }
+    
+    
+    
+    @FXML
+    Label CurrentValueBrightness;
+    @FXML
+    Slider SliderCurrentValueBrightness;
+    @FXML
+    public void ChangeValueBrightness(){
+         CurrentValueBrightness.setText(format("%.2f",SliderCurrentValueBrightness.getValue())); 
+           if(Test==null){
+       }
+       else{
+         changeValuesOfPicture();
+       }
+    }
+    
+    @FXML
+    Label CurrentValueContrast;
+    @FXML
+    Slider SliderCurrentValueContrast;
+    @FXML
+    public void ChangeValueContrast(){
+      CurrentValueContrast.setText(format("%.2f",SliderCurrentValueContrast.getValue()/1000)); 
+         if(Test==null){
+       }
+       else{
+         changeValuesOfPicture();
+       }
+    }
+    
+    
+    
+    @FXML
+    Label CurrentValueThreshold;
+    @FXML
+    Slider SliderCurrentValueThreshold;
+    @FXML
+    public void ChangeValueThreshold(){
+              CurrentValueThreshold.setText(format("%.2f",SliderCurrentValueThreshold.getValue())); 
+       if(Test==null){
+       }
+       else{
+         changeValuesOfPicture();
+       }
+    }
+    
+    
+    
+    @FXML
+    Label CurrentValueBlurr;
+    @FXML
+    Slider SliderCurrentValueBlurr;
+    @FXML
+    public void ChangeValueBlurr(){
+        CurrentValueBlurr.setText(format("%.2f",SliderCurrentValueBlurr.getValue()));
+        if(Test==null){
+       }
+       else{
+         changeValuesOfPicture();
+       }
+    }
+    
+    @FXML
+    Label CurrentValueThresholdRecognize;
+    @FXML
+    Slider SliderCurrentThresholdRecognize;
+    @FXML
+    public void ChangeValueThresholdRecognize(){
+        CurrentValueThresholdRecognize.setText(format("%.2f",SliderCurrentThresholdRecognize.getValue()));
+        if(Test==null){
+       }
+       else{
+         changeValuesOfPicture();
+       }
+    }
+    
+    
+    @FXML
+    CheckBox UseNegative;
+    
+    @FXML 
+    ComboBox ThresholdType;
+    
+    @FXML
+    public void ReloadTestImages(){
+        if(Test==null){
+            
+        }
+        else{
+            Test.Reload();
+        }
+        
+    }
+    
+    TestPictures Test; 
+    @FXML
+    public void ChooseFolderWithTestImages(){
+        Stage stage = new Stage();
+        FolderChooser FolderChooser = new FolderChooser(FolderWithTestImages.getText());
+        FolderChooser.start(stage);
+        FolderWithTestImages.setText(FolderChooser.getPobranaŚciezka());
+        
+    }
+    
+    @FXML
+    public void ChooseFileWithNeuralNetTest(){
+        try {
+            Stage stage = new Stage();
+            FileChooserFile FileChooserFile = new FileChooserFile(FileWithNeuralNet.getText(),false);
+            FileChooserFile.start(stage);
+            FileWithNeuralNet.setText(FileChooserFile.Sciezka);
+            NumbersNeuralNet = new Numbers(FileWithNeuralNet.getText());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String Text = FileWithNeuralNet.getText();
+        if(Text.length()>50){
+        Text =  Text.substring(0,Text.length()/2)+"\n"+Text.substring(Text.length()/2,Text.length());
+        }
+        FileWithNeuralNet.setText(Text);
+    }
+    
+    
+    public String Cut(String Input){
+        
+        if(Input.indexOf("\n")>50){
+          String Output = Input.substring(Input.length()-51, Input.length()-1);
+        }
+        return null;
+    }
+    
+    int CurrentImageTest = 0;
+    
+    @FXML
+    public void NextTestImage(){
+        if(CurrentImageTest+1<Test.NumberOfPictures()&&CurrentImageTest+1>=0){
+            Image image = SwingFXUtils.toFXImage(Test.GetPicOfTestImage().get(++CurrentImageTest),null);
+            ViewCurrentNumber.setImage(image);
+            CorrectNumber.setText(String.valueOf(Test.GetCorrectNumbers().get(CurrentImageTest)));
+            RecognizeNumberTest.setText(String.valueOf(Test.GetRecognizedNumbers().get(CurrentImageTest)));
+            changeValuesOfPicture();
+        }
+        
+        else 
+        {   
+            CurrentImageTest=0;
+            Image image = SwingFXUtils.toFXImage(Test.GetPicOfTestImage().get(CurrentImageTest),null);
+            ViewCurrentNumber.setImage(image);
+            CorrectNumber.setText(String.valueOf(Test.GetCorrectNumbers().get(CurrentImageTest)));
+            RecognizeNumberTest.setText(String.valueOf(Test.GetRecognizedNumbers().get(CurrentImageTest)));
+            changeValuesOfPicture();       
+        }
+    }
+    
+    @FXML
+    public void PreviousTestImage(){
+        if(CurrentImageTest-1<Test.NumberOfPictures()&&CurrentImageTest-1>=0){
+            Image image = SwingFXUtils.toFXImage(Test.GetPicOfTestImage().get(--CurrentImageTest),null);
+            ViewCurrentNumber.setImage(image);
+            CorrectNumber.setText(String.valueOf(Test.GetCorrectNumbers().get(CurrentImageTest)));
+            RecognizeNumberTest.setText(String.valueOf(Test.GetRecognizedNumbers().get(CurrentImageTest)));
+            changeValuesOfPicture();        
+        }
+        else 
+        {   
+            CurrentImageTest=Test.NumberOfPictures()-1;
+            Image image = SwingFXUtils.toFXImage(Test.GetPicOfTestImage().get(CurrentImageTest),null);
+            ViewCurrentNumber.setImage(image);
+            CorrectNumber.setText(String.valueOf(Test.GetCorrectNumbers().get(CurrentImageTest)));
+            RecognizeNumberTest.setText(String.valueOf(Test.GetRecognizedNumbers().get(CurrentImageTest)));
+            changeValuesOfPicture();
+        }
+    
+    }
+    
+    @FXML
+    private void changeValuesOfPicture() {
+      ViewPicture Pic = new ViewPicture(new Picture().setPicture(Test.GetPicOfTestImage().get(CurrentImageTest),Test.RecognizeTool.sizeX,Test.RecognizeTool.sizeY));
+            int[] pixels = Pic.ModyfikujKoloryWKanaleRGB(
+             SliderCurrentValueRed.getValue()+SliderCurrentValueBrightness.getValue(),
+             SliderCurrentValueGreen.getValue()+SliderCurrentValueBrightness.getValue(),
+             SliderCurrentValueBlue.getValue()+SliderCurrentValueBrightness.getValue(),
+             SliderCurrentValueContrast.getValue()/1000,TypeOfThreshold,
+             (int) SliderCurrentValueThreshold.getValue());
+            Picture Out = new Picture(pixels,Pic.pobierzX(),Pic.pobierzY());
+            
+            if(UseNegative.isSelected()){
+               Out.setImage(Out.Negative(Out.Image()));
+            }
+            
+            if(SliderCurrentValueBlurr.getValue()>0.0){
+                Out.setImage(Out.changeBlurr((int)SliderCurrentValueBlurr.getValue(), (int)SliderCurrentValueBlurr.getValue()));
+            }
+            
+            
+            ViewCurrentNumber.setImage(SwingFXUtils.toFXImage(Out.Image(), null));
+            
+            
+    }
+    
+    public TypeOfThreshold TypeOfThreshold = BRAK_PROGROWANIA; 
+    @FXML
+    public void ChangeTypeOfThreshold(){
+        switch(ThresholdType.getSelectionModel().getSelectedIndex())
+        {
+            case 0:
+            TypeOfThreshold = TypeOfThreshold.BRAK_PROGROWANIA;
+            changeValuesOfPicture();
+            break;
+            
+            case 1:
+            TypeOfThreshold = TypeOfThreshold.PROGOWANIE;
+            changeValuesOfPicture();
+            break;
+            
+            case 2:
+            TypeOfThreshold = TypeOfThreshold.EFEKT_ROZJASNIAJACY;   
+            changeValuesOfPicture();
+            break;
+            
+            case 3:
+            TypeOfThreshold = TypeOfThreshold.EFEKT_PRZYCIEMNAJACY;   
+            changeValuesOfPicture();
+            break;
+        }
+    }
+    
+    ArrayList<Integer> Correct;
+    ArrayList<Integer> Recognized;
+    
+    @FXML
+    public void BeginTest(){
+        CurrentImageTest = 0;
+        Test = new TestPictures(FolderWithTestImages.getText(),NumbersNeuralNet,ProgressFileRead
+                ,LabelProgressReadFileTest,LabelProgressReadFileTest);
+        Test.SetParametersPicture(
+                SliderCurrentValueRed.getValue()+SliderCurrentValueBrightness.getValue(),
+                SliderCurrentValueGreen.getValue()+SliderCurrentValueBrightness.getValue(), 
+                SliderCurrentValueBlue.getValue()+SliderCurrentValueBrightness.getValue(), 
+                SliderCurrentValueContrast.getValue(),TypeOfThreshold, (int) SliderCurrentValueThreshold.getValue(), UseNegative.isSelected(),
+                SliderCurrentValueBlurr.getValue(), (int) SliderCurrentThresholdRecognize.getValue(),AccuracyOFRecognizing,
+                ViewCurrentNumber,RecognizeNumberTest,CorrectNumber);
+        new Thread(()->Test.run()).start();
+        
+    }
+    
     @FXML
     public void KlasifChooseFileTestPath(){
         Stage stage = new Stage();
@@ -294,13 +618,7 @@ public class FXMLDocumentController implements Initializable {
                         
                         for(int i = 0 ;i<size;i++)
                             {   
-                              try 
-                              {
-                                LoadedImage.get(i).SetImage(new Picture().setPicture(ImageIO.read(new File(LoadedImage.get(i).PathToImage())), Integer.valueOf(KlasifWidth.getText()), Integer.valueOf(KlasifHeight.getText())));
-                                
-                              } catch (IOException ex) {
-                                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                              }
+
                              
                               final double percent = (double)i/size;
                               
@@ -330,20 +648,29 @@ public class FXMLDocumentController implements Initializable {
                              int sizeSave = LoadedImage.size();
                                     for(int currentImage = 0 ; currentImage< sizeSave;currentImage++){
                                        int sizeExample = LoadedImage.get(currentImage).GetMarkedRect().size();
-                                        for(int currentExample = 0 ; currentExample<sizeExample;currentExample++){
-                                            LoadedImage.get(currentImage).GetMarkedRect().get(currentExample);
-                                            File outputfile = new File(klassifFolderOutSave.getText()+"\\"+currentExample+LoadedImage.get(currentImage).PathToImage().substring(LoadedImage.get(currentImage).PathToImage().lastIndexOf("\\")));
-                                           try {
-                                               ImageIO.write(new Picture().PobierzWycinekObrazu(LoadedImage.get(currentImage).GetImage(),
-                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).x,
-                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).y,
-                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).width,
-                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).height
-                                               ), "jpg", outputfile);
-                                                } catch (IOException ex) {
-                                                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                                                    }
-
+                                        for(int currentExample = 0 ; currentExample<sizeExample;currentExample++)
+                                                       {
+                                                        LoadedImage.get(currentImage).GetMarkedRect().get(currentExample);
+                                                        File outputfile = new File(klassifFolderOutSave.getText()+"\\"+currentExample+LoadedImage.get(currentImage).PathToImage().substring(LoadedImage.get(currentImage).PathToImage().lastIndexOf("\\")+2));
+                                                        try {
+                                                           ImageIO.write(new Picture().PobierzWycinekObrazu(
+                                                                   new Picture().setPicture(ImageIO.read(new File(LoadedImage.get(currentImage).PathToImage())), Integer.valueOf(KlasifWidth.getText()), Integer.valueOf(KlasifHeight.getText())),
+                                                                   LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).x,
+                                                                   LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).y,
+                                                                   LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).width,
+                                                                   LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).height
+                                                           ), "jpg", outputfile);
+                                                            } catch (IOException ex) {
+                                                                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                                                                }
+                                                        
+                                                        
+                                                            final double percent = (double)currentExample/sizeExample;
+                              
+                                                            Platform.runLater(() -> {
+                                                            KlasifProgressbarLoadImages.setProgress(percent);
+                                                            KlasifLabelPercent.setText(format("%.2f",percent*100.0)+" %");
+                                                            });
                                                        }
                                         
                                                     final double percent = (double)currentImage/sizeSave;
@@ -354,6 +681,18 @@ public class FXMLDocumentController implements Initializable {
                                                     });
                  
                                              }
+                                    
+                                    
+                                    Platform.runLater(() -> {
+                                                    KlasifProgressbarLoadImages.setProgress(1);
+                                                    KlasifLabelPercent.setText(format("%.2f",1*100.0)+" %");
+                                                    });
+                                    
+                        Platform.runLater(() -> {  
+                                KlasifLabelPercent.setVisible(false);
+                                KlasifLabelLoadPic.setVisible(false);
+                                KlasifProgressbarLoadImages.setVisible(false);
+                        });
                     
                     }
             
@@ -370,15 +709,7 @@ public class FXMLDocumentController implements Initializable {
                           int size =  PathToImages.size();
                           for(int i = 0 ;i<size;i++)
                             {   
-                              try {
-                      
-                                    BufferedImage Input = ImageIO.read(new File(LoadedImage.get(i).PathToImage())); 
-                                    LoadedImage.get(i).SetImage(Input);
-                                   } 
-                              catch (IOException ex) 
-                              {
-                                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                              }
+
                              
                               final double percent = (double)i/size;
                               
@@ -387,7 +718,7 @@ public class FXMLDocumentController implements Initializable {
                               KlasifLabelPercent.setText(format("%.2f",percent*100.0)+" %");
                               });
                              
-                            }
+                              }
                          
                               Platform.runLater(() -> {
                               KlasifProgressbarLoadImages.setProgress(1);
@@ -407,27 +738,65 @@ public class FXMLDocumentController implements Initializable {
                                     for(int currentImage = 0 ; currentImage< sizeSave;currentImage++){
                                        int sizeExample = LoadedImage.get(currentImage).GetMarkedRect().size();
                                         for(int currentExample = 0 ; currentExample<sizeExample;currentExample++){
-                                            LoadedImage.get(currentImage).GetMarkedRect().get(currentExample);
+                                            
                                             File outputfile = new File(klassifFolderOutSave.getText()+"\\"+currentExample+LoadedImage.get(currentImage).PathToImage().substring(LoadedImage.get(currentImage).PathToImage().lastIndexOf("\\")+2));
-                                           try {
-                                               ImageIO.write(new Picture().PobierzWycinekObrazu(LoadedImage.get(currentImage).GetImage(),
-                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).x,
-                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).y,
-                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).width,
-                                                       LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).height
-                                               ), "jpg", outputfile);
-                                           } catch (IOException ex) {
-                                               Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                                               }
+                                                        try {
+                                                            
+                                                            
+                                                            ImageIO.write(new Picture().PobierzWycinekObrazu(
+
+                                                                    ImageIO.read(new File(LoadedImage.get(currentImage).PathToImage())),
+                                                                    LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).x,
+                                                                    LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).y,
+                                                                    LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).width,
+                                                                    LoadedImage.get(currentImage).GetMarkedRect().get(currentExample).height
+                                                            ), "jpg", outputfile);
+                                                            } 
+                                                        catch (IOException ex) 
+                                                            {
+                                                            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                                                            }
+                                                        catch(IllegalArgumentException | NullPointerException ex){
+                                                            continue;
+                                                            }
+                                                        
+                                                        final double percent = (double)currentExample/sizeExample;
+                              
+                                                            Platform.runLater(() -> {
+                                                            KlasifProgressbarLoadImages.setProgress(percent);
+                                                            KlasifLabelPercent.setText(format("%.2f",percent*100.0)+" %");
+                                                            });
+                                                        
+                                                        
 
                                                   }
-                 
+                                        
+                                        
+                                                    final double percent = (double)currentImage/sizeSave;
+                              
+                                                    Platform.runLater(() -> {
+                                                    KlasifProgressbarLoadImages.setProgress(percent);
+                                                    KlasifLabelPercent.setText(format("%.2f",percent*100.0)+" %");
+                                                    });
                                         
                                                  
                                              }
+                                    Platform.runLater(() -> {
+                                                    KlasifProgressbarLoadImages.setProgress(1);
+                                                    KlasifLabelPercent.setText(format("%.2f",1*100.0)+" %");
+                                                    });
                              
-                             
+                             Platform.runLater(() -> {  
+                                KlasifLabelPercent.setVisible(false);
+                                KlasifLabelLoadPic.setVisible(false);
+                                KlasifProgressbarLoadImages.setVisible(false);
+                        });
                     }
+            
+            
+            
+            
+            
                     else
                     {
                         new Warning(false,"Wprowadź liczbę całkowitą !").setVisible(true);
@@ -467,10 +836,12 @@ public class FXMLDocumentController implements Initializable {
      double H = LoadedImage.get(CurrentKlasifImage).getHeight();
      double W = LoadedImage.get(CurrentKlasifImage).getWidth();
      
+     int HeightImg = LoadedImage.get(CurrentKlasifImage).GetImage().getHeight();
+     int WidthImg = LoadedImage.get(CurrentKlasifImage).GetImage().getWidth();
      MousePressX = event.getX();
      MousePressY = event.getY();
-     double x1 = MousePressX/KlasifImageView.getWidth()*W;
-     double y1 = MousePressY/KlasifImageView.getHeight()*H;
+     double x1 = MousePressX/WidthImg*W;
+     double y1 = MousePressY/HeightImg*H;
      
      LabelXCord.setText(" "+format("%.2f",x1)+" "+format("%.2f",MouseReleaseX));
      LabelYCord.setText(" "+format("%.2f",y1)+" "+format("%.2f",MouseReleaseY));
@@ -483,11 +854,13 @@ public class FXMLDocumentController implements Initializable {
      double W = LoadedImage.get(CurrentKlasifImage).getWidth();   
      MouseReleaseX = event.getX();
      MouseReleaseY = event.getY();
-    
-     double x1 = MousePressX/KlasifImageView.getWidth()*W;
-     double y1 = MousePressY/KlasifImageView.getHeight()*H;
-     double x2 = MouseReleaseX/KlasifImageView.getWidth()*W;
-     double y2 = MouseReleaseY/KlasifImageView.getHeight()*H;
+     int HeightImg = LoadedImage.get(CurrentKlasifImage).GetImage().getHeight();
+     int WidthImg = LoadedImage.get(CurrentKlasifImage).GetImage().getWidth();
+     
+     double x1 = MousePressX/WidthImg*W;
+     double y1 = MousePressY/HeightImg*H;
+     double x2 = MouseReleaseX/WidthImg*W;
+     double y2 = MouseReleaseY/HeightImg*H;
      
      
      LabelXCord.setText(" "+format("%.2f",x1)+" "+format("%.2f",x2));
@@ -499,8 +872,8 @@ public class FXMLDocumentController implements Initializable {
     public void DrawSetOfMarkedRect(TrainingPictures pic){
             double H = LoadedImage.get(CurrentKlasifImage).getHeight();
             double W = LoadedImage.get(CurrentKlasifImage).getWidth();
-            double WindowW = KlasifImageView.getWidth();
-            double WindowH = KlasifImageView.getHeight();
+            double WindowW = LoadedImage.get(CurrentKlasifImage).GetImage().getWidth();
+            double WindowH = LoadedImage.get(CurrentKlasifImage).GetImage().getHeight();
        int size = pic.GetMarkedRect().size();
         for(int i = 0 ; i<size;i++){
             gc.strokeRect(
@@ -516,10 +889,15 @@ public class FXMLDocumentController implements Initializable {
     public void KlasifMauseCoordinates(MouseEvent event){
         double H = LoadedImage.get(CurrentKlasifImage).getHeight();
         double W = LoadedImage.get(CurrentKlasifImage).getWidth(); 
-        double x1 = MousePressX/KlasifImageView.getWidth()*W;
-        double y1 = MousePressY/KlasifImageView.getHeight()*H;
-        double x2 = event.getX()/KlasifImageView.getWidth()*W;
-        double y2 = event.getY()/KlasifImageView.getHeight()*H;
+        
+        int HeightImg = LoadedImage.get(CurrentKlasifImage).GetImage().getHeight();
+        int WidthImg = LoadedImage.get(CurrentKlasifImage).GetImage().getWidth();
+        
+        
+        double x1 = MousePressX/WidthImg*W;
+        double y1 = MousePressY/HeightImg*H;
+        double x2 = event.getX()/WidthImg*W;
+        double y2 = event.getY()/HeightImg*H;
      
        LabelXCord.setText(" "+format("%.2f",x1)+" "+format("%.2f",x2));
        LabelYCord.setText(" "+format("%.2f",y1)+" "+format("%.2f",y2));
@@ -619,13 +997,18 @@ public class FXMLDocumentController implements Initializable {
                         });
                           CurrentKlasifImage=0;
                           LoadedImage.clear();
-                          int size =  LoadedImage.size();
+                          int size =  PathToImages.size();
                           for(int i = 0 ;i<size;i++)
                             {   
                               try 
                               {
                                 BufferedImage Input = ImageIO.read(new File(PathToImages.get(i)));
-                                LoadedImage.add(new TrainingPictures(new Picture().setPicture(Input, (int)KlasifImageView.getWidth(), (int) KlasifImageView.getHeight()),PathToImages.get(i), Integer.valueOf(KlasifWidth.getText()), Integer.valueOf(KlasifHeight.getText())));
+                                
+                                Picture pic = new Picture();
+                                pic.setPicture(Input.getWidth(), Input.getHeight(), Integer.valueOf(KlasifWidth.getText()), Integer.valueOf(KlasifHeight.getText()));
+                                LoadedImage.add(new TrainingPictures(
+                                        new Picture().setPicture(Input, (int)KlasifImageView.getWidth(), (int) KlasifImageView.getHeight()),
+                                        PathToImages.get(i), (int) pic.ProcentXWzględemOryginału, (int) pic.ProcentYWzględemOryginału));
                               } catch (IOException ex) {
                                  Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                               }
@@ -837,17 +1220,33 @@ public class FXMLDocumentController implements Initializable {
             LabelFileWithNeuralNet.setText("Błąd w odczytywaniu pliku,  bądź nie został poprawnie wybrany");
         }
     }
+    @FXML
+    public void  SetNegative() throws IOException{
+        
+        Image Image = ImageViewRecognizedNumber.getImage();
+        BufferedImage image = SwingFXUtils.fromFXImage(Image, null);
+        Picture pic;
+        
+         if(SetNegative.isSelected()){
+            pic = new Picture(image);
+            Image = SwingFXUtils.toFXImage(pic.Negative(pic.Image()), null);
+        }
+        
+         
+         ImageViewRecognizedNumber.setImage(Image);
+    }
+    
+    
     
     @FXML 
     public void RecognizeNumberWithNeuralNet(){
         
-        try {
-            int i = NumbersNeuralNet.RecognizeNumber(new Picture(ImageIO.read(new File(LabelPicWithNumber.getText()))), (int) SliderThreszholdrecognize.getValue());
-            LabelRecognizedNumber.setText(" "+i);
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-            LabelRecognizedNumber.setText("Błąd podczas ładowania pliku!");
-        }
+  
+            
+       Image Image = ImageViewRecognizedNumber.getImage();
+       int Rec = NumbersNeuralNet.RecognizeNumber(new Picture( SwingFXUtils.fromFXImage(Image, null)), (int) SliderThreszholdrecognize.getValue());
+       LabelRecognizedNumber.setText(" "+Rec);
+       
         XYChart.Series series1 = (XYChart.Series) ChartNumbersDetect.getData().get(0);
        int size =  series1.getData().size();
        for(int i = 0 ; i<size ; i++){
@@ -866,7 +1265,14 @@ public class FXMLDocumentController implements Initializable {
         LabelPicWithNumber.setText(FileChooserSample.Sciezka);
         Image Pic = null;
         try {
-         Pic = SwingFXUtils.toFXImage(ImageIO.read(new File(LabelPicWithNumber.getText())), null);
+         if(SetNegative.isSelected()){
+            Picture pic = new Picture(LabelPicWithNumber.getText());
+            Pic = SwingFXUtils.toFXImage(pic.Negative(pic.Image()), null);
+        }
+        else{
+            Pic = SwingFXUtils.toFXImage(ImageIO.read(new File(LabelPicWithNumber.getText())), null);
+        }   
+         
         } catch (IOException ex) {
             LabelPicWithNumber.setText("Błąd podczas ładowania pliku");
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
@@ -1084,7 +1490,7 @@ public class FXMLDocumentController implements Initializable {
        @SuppressWarnings("LocalVariableHidesMemberVariable")
        TreeItem<String> root = new TreeItem<>("Sieć Neuronowa");
        LayersAndNumbersOfNeuralNet.setRoot(root);
-       
+       ThresholdType.getSelectionModel().selectFirst();
        XYChart.Series series1 = new XYChart.Series();
         series1.setName("Stopień podobieństwa");
         series1.getData().add(new XYChart.Data(NUMBERS[0], 0.0));
@@ -1103,5 +1509,7 @@ public class FXMLDocumentController implements Initializable {
        
         gc = KlasifImageView.getGraphicsContext2D();
     }    
+
+   
     
 }

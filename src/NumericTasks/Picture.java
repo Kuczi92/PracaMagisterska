@@ -606,6 +606,8 @@ public final class Picture   {
                                                             return matToBufferedImage(opencv,new BufferedImage(image.getWidth(),image.getHeight(),image.getType()));
                                                       }
     }
+    
+    
     public BufferedImage Zoom(double procent){
         if(!(procent==0)){
         BufferedImage Output =  PobierzWycinekObrazu(image,(int)(procent/100*image.getWidth()),(int)(procent/100*image.getHeight()),(int)(image.getWidth()-(procent/100*image.getWidth())*2),(int)(image.getHeight()-(procent/100*image.getHeight())*2));  
@@ -623,12 +625,48 @@ public final class Picture   {
     
     
     
-    public BufferedImage PobierzWycinekObrazu(BufferedImage Obraz ,int startX, int startY, int endX,int  endY){
-       BufferedImage img = Obraz.getSubimage(startX, startY, endX, endY); //fill in the corners of the desired crop location here
-       BufferedImage copyOfImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-       Graphics g = copyOfImage.createGraphics();
-       g.drawImage(img, 0, 0, null);
-       return copyOfImage;
+    public BufferedImage PobierzWycinekObrazu(BufferedImage Obraz ,int startX, int startY, int Width,int  Height){
+        
+        int WidthImg = Obraz.getWidth();
+        int HeightImg = Obraz.getHeight();
+        if(Width>0&&Height>0&&WidthImg>=startX+Width&&HeightImg>=startY+Height){
+            BufferedImage img = Obraz.getSubimage(startX, startY, Width, Height); //fill in the corners of the desired crop location here
+            BufferedImage copyOfImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+            Graphics g = copyOfImage.createGraphics();
+            g.drawImage(img, 0, 0, null);
+            return copyOfImage;
+        }
+        
+        else if (WidthImg<startX+Width&&HeightImg<startY+Height){
+            int newSizeWidth = WidthImg - startX;
+            int newSizeHeight = HeightImg - startY;
+            BufferedImage img = Obraz.getSubimage(startX, startY, newSizeWidth, newSizeHeight); //fill in the corners of the desired crop location here
+            BufferedImage copyOfImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+            Graphics g = copyOfImage.createGraphics();
+            g.drawImage(img, 0, 0, null);
+            return copyOfImage;
+        }
+        else if(WidthImg<startX+Width){
+            int newSizeWidth = WidthImg - startX;
+            BufferedImage img = Obraz.getSubimage(startX, startY, newSizeWidth, Height); //fill in the corners of the desired crop location here
+            BufferedImage copyOfImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+            Graphics g = copyOfImage.createGraphics();
+            g.drawImage(img, 0, 0, null);
+            return copyOfImage;
+        }
+        else if(HeightImg<startY+Height){
+            int newSizeHeight = HeightImg - startY;
+            BufferedImage img = Obraz.getSubimage(startX, startY, Width, newSizeHeight); //fill in the corners of the desired crop location here
+            BufferedImage copyOfImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+            Graphics g = copyOfImage.createGraphics();
+            g.drawImage(img, 0, 0, null);
+            return copyOfImage;
+        }
+        else{
+            return null; 
+        }
+        
+       
    }
     
     public BufferedImage Negative(BufferedImage Input){
@@ -649,7 +687,7 @@ public final class Picture   {
     
     
     public ArrayList<BufferedImage> FindContorous(int blurr,int threshold, int min_wielkoscx, int min_wielkoscy, int max_wielkoscy, int max_wielkoscx,
-            boolean drawContorous,BufferedImage original,boolean originalview){
+            boolean drawContorous,BufferedImage original,boolean originalview, boolean Zoom){
         
          ArrayList<Double> PointX = new ArrayList<>();
         
@@ -751,14 +789,24 @@ public final class Picture   {
                                                                       {
                                                                        PointX.add((double)PoczatekX);
                                                                        Core.rectangle(originalImage, new Point(PoczatekX,PoczatekY), new Point(PoczatekX+Szerokosc,PoczatekY+Wysokosc), color);
-                                                                       PicturesWithNumbers.add(PobierzWycinekObrazu(original,PoczatekX,PoczatekY,Szerokosc,Wysokosc));   
-                                                                      
+                                                                       if(Zoom){
+                                                                           PicturesWithNumbers.add(PobierzWycinekObrazu(image,PoczatekX+1,PoczatekY+1,Szerokosc-1,Wysokosc-1)); 
+                                                                       }
+                                                                       else{
+                                                                           PicturesWithNumbers.add(PobierzWycinekObrazu(image,PoczatekX,PoczatekY,Szerokosc,Wysokosc)); 
+                                                                       }
+                                                                       
                                                                       }
                                                                        else
                                                                       {
                                                                        PointX.add((double)PoczatekX);
                                                                        Core.rectangle(opencv, new Point(PoczatekX,PoczatekY), new Point(PoczatekX+Szerokosc,PoczatekY+Wysokosc), color);
-                                                                       PicturesWithNumbers.add(PobierzWycinekObrazu(image,PoczatekX,PoczatekY,Szerokosc,Wysokosc));
+                                                                       if(Zoom){
+                                                                           PicturesWithNumbers.add(PobierzWycinekObrazu(image,PoczatekX+1,PoczatekY+1,Szerokosc-1,Wysokosc-1)); 
+                                                                       }
+                                                                       else{
+                                                                           PicturesWithNumbers.add(PobierzWycinekObrazu(image,PoczatekX,PoczatekY,Szerokosc,Wysokosc)); 
+                                                                       }
                                                                       }
                                                                     
                                                                      
@@ -871,7 +919,7 @@ public final class Picture   {
             int  blue  =  argb & 0x000000ff;
             
            // double value = 0.2989 * red + 0.5870 * green + 0.1140 * blue;
-            if((red+green+blue)/3 <threshold){
+            if((red+green+blue)/3 >threshold){
                 ListOfRGBValues.add(1.0);
             }
             
@@ -893,16 +941,61 @@ public final class Picture   {
         CvSVM CvSVM = new CvSVM();
        
     }
+  public void  setPicture(int widthStart,int heightStart,int width ,int height){
+       if(widthStart<=width&&heightStart<=height){
+            stosunekDługościOryginału = 1.0;
+            ProcentXWzględemOryginału = widthStart;
+            ProcentYWzględemOryginału =heightStart;
+           
+         }
+        else if(widthStart>=heightStart)
+                {
+                    stosunekDługościOryginału =(double) heightStart/widthStart;
+                    int NowyY = (int) (width*stosunekDługościOryginału);
 
+                    if(NowyY>height){
+
+                        int NowyX =  (int) (height*stosunekDługościOryginału);   
+                        
+                        ProcentXWzględemOryginału =NowyX;
+                        ProcentYWzględemOryginału =height;
+                        stosunekDługościOryginału= ProcentYWzględemOryginału;
+                        }
+                    else{
+                       
+                        ProcentXWzględemOryginału = width;
+                        ProcentYWzględemOryginału =NowyY;
+                    }
+           
+        }
+        
+        else if(heightStart>=widthStart)
+                {
+                    stosunekDługościOryginału =(double) widthStart/heightStart;
+                    int NowyX =  (int) (height*stosunekDługościOryginału);
+                        if(NowyX>width){
+                            int NowyY = (int) (width*stosunekDługościOryginału);
+                            
+                            ProcentXWzględemOryginału =width;
+                            ProcentYWzględemOryginału =NowyY;
+                        }
+                        else{
+                            
+                             ProcentXWzględemOryginału =NowyX;
+                             ProcentYWzględemOryginału =height;
+                        }
+           
+        }
+  }
    public  BufferedImage  setPicture(BufferedImage img,int width ,int height){
     BufferedImage Out = null;
          
          if(img.getWidth()<=width&&img.getHeight()<=height){
             stosunekDługościOryginału = 1.0;
-            ProcentXWzględemOryginału = 1.0;
-            ProcentYWzględemOryginału =1.0;
+            ProcentXWzględemOryginału = img.getWidth();
+            ProcentYWzględemOryginału =img.getHeight();
             Out = img;
-        }
+         }
         else if(img.getWidth()>=img.getHeight())
                 {
                     stosunekDługościOryginału =(double) img.getHeight()/img.getWidth();
@@ -912,14 +1005,14 @@ public final class Picture   {
 
                         int NowyX =  (int) (height*stosunekDługościOryginału);   
                         Out = resize(img,NowyX,height);
-                        ProcentXWzględemOryginału =(double) NowyX/img.getWidth();
-                        ProcentYWzględemOryginału =(double) height/img.getHeight();
+                        ProcentXWzględemOryginału =NowyX;
+                        ProcentYWzględemOryginału =height;
                         stosunekDługościOryginału= ProcentYWzględemOryginału;
                         }
                     else{
                         Out = resize(img,width,NowyY);
-                        ProcentXWzględemOryginału =(double) width/img.getWidth();
-                        ProcentYWzględemOryginału =(double) NowyY/img.getHeight();
+                        ProcentXWzględemOryginału = width;
+                        ProcentYWzględemOryginału =NowyY;
                     }
            
         }
@@ -931,13 +1024,13 @@ public final class Picture   {
                         if(NowyX>width){
                             int NowyY = (int) (width*stosunekDługościOryginału);
                             Out = resize(img,width,NowyY);
-                            ProcentXWzględemOryginału =(double) width/img.getWidth();
-                            ProcentYWzględemOryginału =(double) NowyY/img.getHeight();
+                            ProcentXWzględemOryginału =width;
+                            ProcentYWzględemOryginału =NowyY;
                         }
                         else{
                              Out = resize(img,NowyX,height);
-                             ProcentXWzględemOryginału =(double) NowyX/img.getWidth();
-                             ProcentYWzględemOryginału =(double) height/img.getHeight();
+                             ProcentXWzględemOryginału =NowyX;
+                             ProcentYWzględemOryginału =height;
                         }
            
         }

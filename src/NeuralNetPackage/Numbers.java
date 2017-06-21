@@ -37,8 +37,8 @@ public class Numbers {
     public int CurrentCoutLearn = 0;
     public double powerOfLearn = 1.0;
     double[] ErrorsNeuralNets = new double[10];
-    int sizeX;
-    int sizeY;
+    public int sizeX;
+    public int sizeY;
     
     private ArrayList<Double> CalculatedValues;
     
@@ -134,7 +134,7 @@ public class Numbers {
            CurrentCoutLearn++;
            Random whichNumberToTrain = new Random();
            int Number = whichNumberToTrain.nextInt(10);
-           Picture Picture;
+           //Picture Picture;
           
            switch(Number){
                     case 0:     
@@ -310,83 +310,79 @@ public class Numbers {
                 
                 String FileName =ListOfNumbers.get(i).substring(ListOfNumbers.get(i).lastIndexOf("\\")+1);
                 String[] split = FileName.split("_");
+                boolean Zoom = false;
                 
+                if("NumerkiZoom".equals(split[1].substring(0, split[1].indexOf(".")))){
+                    Zoom = true;
+                }
                 Picture Picture = new Picture(ListOfNumbers.get(i));
                 
                 Picture.setImage(Picture.Negative(Picture.Image()));
-                ArrayList<BufferedImage> DetectedNumbers = Picture.FindContorous(0, 1, 0, 40/100*Picture.getImageHeight(), 100/100*Picture.getImageHeight(), 100/100*Picture.getImageWidth(), true, Picture.Negative(Picture.Image()), false);
+                ArrayList<BufferedImage> DetectedNumbers = Picture.FindContorous(0, 1, 0, 40/100*Picture.getImageHeight(), 100/100*Picture.getImageHeight(), 100/100*Picture.getImageWidth(), true, Picture.Negative(Picture.Image()), false,Zoom);
                
                 
-                
+                int threshold = 127;
                 for(int currentNum = 0 ; currentNum<DetectedNumbers.size(); currentNum++ ){
+                int NumberOnPicture;
+               
+                      NumberOnPicture = Integer.valueOf(String.valueOf(split[0].charAt(currentNum))); 
+                      Picture.setImage(DetectedNumbers.get(currentNum));
+                
+               
                     
-                    
-                int NumberOnPicture = Integer.valueOf(String.valueOf(split[0].charAt(currentNum))); 
-                Picture.setImage(DetectedNumbers.get(currentNum));
+               
                 
                 
                 switch (NumberOnPicture){
                     
                     case 0:
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
-                    Picture.convertTo2DWithoutUsingGetRGB(127);
-                    Number0Array.add(Picture.convertTo2DWithoutUsingGetRGB(127));
+                    Number0Array.add(Picture.convertTo2DWithoutUsingGetRGB(threshold));
                     break;
                     
                     case 1:   
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
-                    Picture.convertTo2DWithoutUsingGetRGB(127);
-                    Number1Array.add(Picture.convertTo2DWithoutUsingGetRGB(127));
+                    Number1Array.add(Picture.convertTo2DWithoutUsingGetRGB(threshold));
                     break;
                     
                     case 2:
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
-                    Picture.convertTo2DWithoutUsingGetRGB(127);
-                    Number2Array.add(Picture.convertTo2DWithoutUsingGetRGB(127));
+                    Number2Array.add(Picture.convertTo2DWithoutUsingGetRGB(threshold));
                     break;
                     
                     case 3:
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
-                    Picture.convertTo2DWithoutUsingGetRGB(127);
-                    Number3Array.add(Picture.convertTo2DWithoutUsingGetRGB(127));
+                    Number3Array.add(Picture.convertTo2DWithoutUsingGetRGB(threshold));
                     break; 
                     
                     case 4:
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
-                    Picture.convertTo2DWithoutUsingGetRGB(127);
-                    Number4Array.add(Picture.convertTo2DWithoutUsingGetRGB(127));
+                    Number4Array.add(Picture.convertTo2DWithoutUsingGetRGB(threshold));
                     break;
                     
                     case 5:
-                 
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
-                    Picture.convertTo2DWithoutUsingGetRGB(127);
-                    Number5Array.add(Picture.convertTo2DWithoutUsingGetRGB(127));
+                    Number5Array.add(Picture.convertTo2DWithoutUsingGetRGB(threshold));
                     break;
                     
                     case 6:
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
-                    Picture.convertTo2DWithoutUsingGetRGB(127);
-                    Number6Array.add(Picture.convertTo2DWithoutUsingGetRGB(127));
+                    Number6Array.add(Picture.convertTo2DWithoutUsingGetRGB(threshold));
                     break;
                     
                     case 7:
-                    
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
-                    Picture.convertTo2DWithoutUsingGetRGB(127);
-                    Number7Array.add(Picture.convertTo2DWithoutUsingGetRGB(127));
+                    Number7Array.add(Picture.convertTo2DWithoutUsingGetRGB(threshold));
                     break;
                     
                     case 8:
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
-                    Picture.convertTo2DWithoutUsingGetRGB(127);
-                    Number8Array.add(Picture.convertTo2DWithoutUsingGetRGB(127));
+                    Number8Array.add(Picture.convertTo2DWithoutUsingGetRGB(threshold));
                     break;
                     
                     case 9:
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
-                    Picture.convertTo2DWithoutUsingGetRGB(127);
-                    Number9Array.add(Picture.convertTo2DWithoutUsingGetRGB(127));
+                    Number9Array.add(Picture.convertTo2DWithoutUsingGetRGB(threshold));
                     break;
                     
                 }
