@@ -19,6 +19,7 @@ import NumericTasks.TrainingPictures;
 import NumericTasks.TypeOfThreshold;
 import static NumericTasks.TypeOfThreshold.BRAK_PROGROWANIA;
 import NumericTasks.ViewPicture;
+import NumericTasks.WriteToFile;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -129,25 +130,18 @@ public class FXMLDocumentController implements Initializable {
     public ComboBox ChoooseLayer;
     @FXML 
     public TextField NumbersOfNeuoronforLayer;
-    
     @FXML 
     public Button Confirm3;
-    
     @FXML 
     public Label PathToNeuralNet;
-    
     @FXML 
     public Label PathToTrainingSet;
-    
     @FXML 
     public Label NormalizeWidth;
-    
     @FXML 
     public Label NormalizeHeight;
-    
     @FXML
     public Label NumbersOfCount;
-    
     @FXML
     public TreeView LayersAndNumbersOfNeuralNet;
     
@@ -227,39 +221,54 @@ public class FXMLDocumentController implements Initializable {
     GraphicsContext gc;
     
     
-    //dla zakładki tworzenie klasyfikatora
+    //dla zakładki tworzenie klasyfikatora i pobranie próbek 
     
     @FXML
     Label KlasLabelFileXML;
-    
     @FXML
     ProgressBar ProgressBarTrainingCassifier;
-    
     @FXML
     Label KlassifTrainingPercent;
-    
     @FXML 
     Label KlasssifTrainingTitle;
-    
     @FXML
     Label KlassifPosPath;
     @FXML
     Label KlassifNegPath;
     @FXML
     Label KlassifChooseTestFile;
-    
     @FXML
     TextField KlasifPosSizeX;
-    
     @FXML
     TextField KlasifPosSizeY;
-    
     @FXML
     TextField KlasifNegSizeX;
-    
     @FXML
     TextField KlasifNegSizeY;
     
+    @FXML 
+    Label KlassifChooseFilesSelectedAreas;
+    
+    @FXML 
+    CheckBox KlassifSaveChangedSizePic;
+    
+    @FXML
+    public void KlassifLoadFileSelectedAreas(){
+            Stage stage = new Stage();
+            FileChooserFile FileChooserFile = new FileChooserFile(KlassifChooseFilesSelectedAreas.getText(),true,"txt","ListaObrazówiObiektów");
+            FileChooserFile.start(stage);
+            KlassifChooseFilesSelectedAreas.setText(FileChooserFile.Sciezka);
+            
+    }
+    
+    @FXML 
+    public void KlassifSaveSelectedAreasFiles(){
+        try {
+            new WriteToFile(KlassifChooseFilesSelectedAreas.getText(),LoadedImage).Wrtite();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     
     //testowanie sieci neuronowej
@@ -412,10 +421,8 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     CheckBox UseNegative;
-    
     @FXML 
     ComboBox ThresholdType;
-    
     @FXML
     public void ReloadTestImages(){
         if(Test==null){
@@ -454,15 +461,7 @@ public class FXMLDocumentController implements Initializable {
         }
         FileWithNeuralNet.setText(Text);
     }
-    
-    
-    public String Cut(String Input){
-        
-        if(Input.indexOf("\n")>50){
-          String Output = Input.substring(Input.length()-51, Input.length()-1);
-        }
-        return null;
-    }
+
     
     int CurrentImageTest = 0;
     
@@ -587,7 +586,6 @@ public class FXMLDocumentController implements Initializable {
         KlassifChooseTestFile.setText(FileChooserFile.Sciezka);
     }
     
-    
     @FXML
     public void KlasifChooseFolderPosPath(){
         Stage stage = new Stage();
@@ -647,7 +645,17 @@ public class FXMLDocumentController implements Initializable {
                              
                              int sizeSave = LoadedImage.size();
                                     for(int currentImage = 0 ; currentImage< sizeSave;currentImage++){
-                                       int sizeExample = LoadedImage.get(currentImage).GetMarkedRect().size();
+                                       
+                                        if(KlassifSaveChangedSizePic.isSelected()){
+                                            File outputfile = new File(klassifFolderOutSave.getText()+"\\"+LoadedImage.get(currentImage).PathToImage().substring(LoadedImage.get(currentImage).PathToImage().lastIndexOf("\\")+2));
+                                            try {
+                                                ImageIO.write(new Picture().setPicture(ImageIO.read(new File(LoadedImage.get(currentImage).PathToImage())), Integer.valueOf(KlasifWidth.getText()), Integer.valueOf(KlasifHeight.getText())),"jpg",outputfile);
+                                            } catch (IOException ex) {
+                                                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                        }
+                                        else{
+                                            int sizeExample = LoadedImage.get(currentImage).GetMarkedRect().size();
                                         for(int currentExample = 0 ; currentExample<sizeExample;currentExample++)
                                                        {
                                                         LoadedImage.get(currentImage).GetMarkedRect().get(currentExample);
@@ -672,6 +680,10 @@ public class FXMLDocumentController implements Initializable {
                                                             KlasifLabelPercent.setText(format("%.2f",percent*100.0)+" %");
                                                             });
                                                        }
+                                        }
+                                        
+                                        
+                                        
                                         
                                                     final double percent = (double)currentImage/sizeSave;
                               
@@ -736,7 +748,16 @@ public class FXMLDocumentController implements Initializable {
                              
                              int sizeSave = LoadedImage.size();
                                     for(int currentImage = 0 ; currentImage< sizeSave;currentImage++){
-                                       int sizeExample = LoadedImage.get(currentImage).GetMarkedRect().size();
+                                       if(KlassifSaveChangedSizePic.isSelected()){
+                                            File outputfile = new File(klassifFolderOutSave.getText()+"\\"+LoadedImage.get(currentImage).PathToImage().substring(LoadedImage.get(currentImage).PathToImage().lastIndexOf("\\")+2));
+                                            try {
+                                                ImageIO.write(new Picture().setPicture(ImageIO.read(new File(LoadedImage.get(currentImage).PathToImage())), Integer.valueOf(KlasifWidth.getText()), Integer.valueOf(KlasifHeight.getText())),"jpg",outputfile);
+                                            } catch (IOException ex) {
+                                                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                        }
+                                        else{
+                                            int sizeExample = LoadedImage.get(currentImage).GetMarkedRect().size();
                                         for(int currentExample = 0 ; currentExample<sizeExample;currentExample++){
                                             
                                             File outputfile = new File(klassifFolderOutSave.getText()+"\\"+currentExample+LoadedImage.get(currentImage).PathToImage().substring(LoadedImage.get(currentImage).PathToImage().lastIndexOf("\\")+2));
@@ -770,6 +791,10 @@ public class FXMLDocumentController implements Initializable {
                                                         
 
                                                   }
+                                        } 
+                                        
+                                        
+                                        
                                         
                                         
                                                     final double percent = (double)currentImage/sizeSave;
@@ -826,6 +851,14 @@ public class FXMLDocumentController implements Initializable {
         FileChooserFile FileChooserFile = new FileChooserFile(KlasLabelFileXML.getText(),true,"xml");
         FileChooserFile.start(stage);
         KlasLabelFileXML.setText(FileChooserFile.Sciezka);
+    }
+    
+    @FXML
+    public void KlasifDeleteLastRect(){
+        LoadedImage.get(CurrentKlasifImage).deleteLastRect();
+        gc.clearRect(0, 0,gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        gc.drawImage(SwingFXUtils.toFXImage(LoadedImage.get(CurrentKlasifImage).GetImage(), null), 0, 0);
+        DrawSetOfMarkedRect(LoadedImage.get(CurrentKlasifImage));
     }
     
     @FXML 

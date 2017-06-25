@@ -70,6 +70,7 @@ public class HumanoidDetecion extends Detector {
               {
                     Core.rectangle(image, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),new Scalar(0, 255, 0),10);
                     Out.add(this.GetFragmentOfPicture(rect.x, rect.y,rect.width, rect.height));
+                    ListaPunktów.add(new ArrayList<>());
                     ListaPunktów.get(ListaPunktów.size()-1).add(rect.x);
                     ListaPunktów.get(ListaPunktów.size()-1).add(rect.y);
                     ListaPunktów.get(ListaPunktów.size()-1).add(rect.x+rect.width);

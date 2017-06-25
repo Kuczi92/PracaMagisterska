@@ -37,6 +37,10 @@ public class TrainingPictures {
         MarkedRect = new ArrayList<>();
     }
    
+   public void deleteLastRect(){
+       MarkedRect.remove(MarkedRect.size()-1);
+   }
+   
    public String PathToImage(){
        return this.PathToFile;
    }

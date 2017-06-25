@@ -24,7 +24,7 @@ public class FileChooserFile extends Application{
     String Sciezka;
     boolean createFile = true;
     String extension;
-    
+    String FileName;
     FileChooserFile(String pobranaścieszka) {
         if(pobranaścieszka==null){
             this.pobranaścieszka = "Brak";
@@ -43,6 +43,13 @@ public class FileChooserFile extends Application{
         this.pobranaścieszka = text;
         this.createFile = b;
         this.extension = xml;
+    }
+
+    FileChooserFile(String text, boolean b, String txt, String listaObrazówiObiektów) {
+     this.pobranaścieszka = text;
+        this.createFile = b;
+        this.extension = txt;
+        this.FileName = listaObrazówiObiektów;
     }
     
     public String getPobranaŚciezka(){
@@ -89,13 +96,17 @@ public class FileChooserFile extends Application{
                 if(createFile){
                    
                     
-                    if(extension==null){
+                    if(extension==null&&FileName==null){
                         fileChooser.setTitle("Stwórz plik txt z siecia neuronową ");
                         fileChooser.setInitialFileName("Nowa sieć neuronowa.txt");
                     }
+                    else if(FileName!=null&&extension!=null){
+                        fileChooser.setTitle("Stwórz plik "+extension);
+                        fileChooser.setInitialFileName(FileName+"."+extension);
+                    }
                     else{
                         fileChooser.setTitle("Stwórz plik" + extension);
-                        fileChooser.setInitialFileName("Nowa klasyfikator."+extension);
+                        fileChooser.setInitialFileName("Nowy klasyfikator."+extension);
                         
                     }
                     
