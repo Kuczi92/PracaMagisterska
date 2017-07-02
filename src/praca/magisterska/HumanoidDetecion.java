@@ -37,24 +37,24 @@ public class HumanoidDetecion extends Detector {
        ArrayList<BufferedImage> ListaBiegaczy = new ArrayList();
        
        if(null == Type){
-       ListaBiegaczy = DetectUpperBody(x,y,max_X,max_Y,min_X,min_Y);
+       ListaBiegaczy = DetectUpperBody(x,y,max_X,max_Y,min_X,min_Y,overlapFailedbox);
        }
        else switch (Type) {
            case HUMANOID_DETECT:
               ListaBiegaczy = DetectFullBody(x,y,max_X,max_Y,min_X,min_Y,overlapFailedbox);   
                break;
            case UPPER_BODY_DETECT:
-              ListaBiegaczy = DetectUpperBody(x,y,max_X,max_Y,min_X,min_Y);
+              ListaBiegaczy = DetectUpperBody(x,y,max_X,max_Y,min_X,min_Y,overlapFailedbox);
                break;
            default:
-              ListaBiegaczy = DetectUpperBody(x,y,max_X,max_Y,min_X,min_Y);
+              ListaBiegaczy = DetectUpperBody(x,y,max_X,max_Y,min_X,min_Y,overlapFailedbox);
                break;
        }
 
        return ListaBiegaczy;
    }
    
-   public ArrayList<BufferedImage> DetectUpperBody(int x , int y,int max_X, int max_Y, int min_X,int min_Y){
+   public ArrayList<BufferedImage> DetectUpperBody(int x , int y,int max_X, int max_Y, int min_X,int min_Y,double overlapFailedbox){
                 CascadeClassifier HumanoidsDetector;
                 HumanoidsDetector = new CascadeClassifier("haarcascade_upperbody.xml");
                 MatOfRect faceDetections = new MatOfRect();
@@ -62,7 +62,7 @@ public class HumanoidDetecion extends Detector {
                 Mat image = bufferedImageToMat(ObrazWejsciowy);
                 HumanoidsDetector.detectMultiScale(image, faceDetections, 1.1, 3,0, new Size(), new Size()); 
         
-        
+                 faceDetections = deleteFailedBoxes(faceDetections,overlapFailedbox);
                 System.out.println(String.format("Detected %s faces", faceDetections.toArray().length));
                 ArrayList<BufferedImage> Out = new ArrayList<>();
                 
@@ -95,7 +95,7 @@ public class HumanoidDetecion extends Detector {
                                      final Size winStride = new Size(4, 4);
                                      final Size padding = new Size(8, 8);
                                      // Pobaw się parametrami
-                                     hog.detectMultiScale(image, HumanoidsDetections, foundWeights, 0, winStride, padding, 1.05, 0, true);
+                                      hog.detectMultiScale(image, HumanoidsDetections, foundWeights, 0, winStride, padding, 1.05, 0, true);
                                     // tu zaimplementuj non maxima suspression by nie powtarzały sie dotekcje w określonym obszarze
                                     
                                     // HumanoidsDetections  = non_max_suppression_slow(HumanoidsDetections,0.65);

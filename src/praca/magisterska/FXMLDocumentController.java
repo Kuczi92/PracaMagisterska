@@ -11,6 +11,9 @@ import NeuralNetPackage.Numbers;
 import NeuralNetPackage.SiećNeuronowa;
 import NewWidnows.Warning;
 import NumericTasks.ArrayUtils;
+import static NumericTasks.ArrayUtils.ChooseOneRadiobutton;
+import NumericTasks.CreateSamples;
+import NumericTasks.HaarCascadeTraining;
 import NumericTasks.MarkedRect;
 import NumericTasks.Picture;
 import NumericTasks.MLTraining;
@@ -49,12 +52,16 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -77,35 +84,7 @@ public class FXMLDocumentController implements Initializable {
     private final Image rootIcon = new Image("file:icontitle//neuralnet.jpg"); 
     private final Image LayerIcon = new Image("file:icontitle//layers.png");
     private final Image NeuronIcon = new Image("file:icontitle//neuron.png");
-    //Pre processing
-    @FXML
-    private Label Sciezka;
-    @FXML
-    private ComboBox WybórWykrycia; 
-    @FXML
-    public TextField TextFieldRozdzielczonscMAX_X;
-    @FXML
-    public TextField TextFieldRozdzielczonscMAX_Y;
-    @FXML 
-    public Slider SliderRozmiarMinX;
-    @FXML 
-    public Slider SliderRozmiarMinY;
-    @FXML 
-    public Slider SliderRozmiarMaxX;
-    @FXML 
-    public Slider SliderRozmiarMaxY;
-    @FXML
-    public Slider SliderFailedBoxes;
-    @FXML
-    public Label LabelFailedBoxes;
-    @FXML
-    public Label LabelValueRozmiarMinX;
-    @FXML
-    public Label LabelValueRozmiarMinY;
-    @FXML
-    public Label LabelValueRozmiarMaxX;
-    @FXML
-    public Label LabelValueRozmiarMaxY;
+    
     
     //Ustawienia sieci neuronowej
     
@@ -1431,8 +1410,561 @@ public class FXMLDocumentController implements Initializable {
          }
            
     }
+
+    //Pre processing
     @FXML
-    private void handleButtonAction(ActionEvent event) throws Exception {
+    private Label Sciezka;
+    @FXML
+    private ComboBox WybórWykrycia; 
+    @FXML
+    public TextField TextFieldRozdzielczonscMAX_X;
+    @FXML
+    public TextField TextFieldRozdzielczonscMAX_Y;
+    @FXML 
+    public Slider SliderRozmiarMinX;
+    @FXML 
+    public Slider SliderRozmiarMinY;
+    @FXML 
+    public Slider SliderRozmiarMaxX;
+    @FXML 
+    public Slider SliderRozmiarMaxY;
+    @FXML
+    public Slider SliderFailedBoxes;
+    @FXML
+    public Label LabelFailedBoxes;
+    @FXML
+    public Label LabelValueRozmiarMinX;
+    @FXML
+    public Label LabelValueRozmiarMinY;
+    @FXML
+    public Label LabelValueRozmiarMaxX;
+    @FXML
+    public Label LabelValueRozmiarMaxY;
+    @FXML
+    public CheckBox PreprocLoadChoosenclassif;
+    @FXML
+    public Label PreprocLoaedPathToClassifier;
+    
+    //Fragment odpowiedzialny za zakładkę Haar klasyfikator
+    
+    //Fragment opdowiedzialny za zakładkę Create samples 
+    
+    //Fragment odpowiedzialny za zakładkę załadowanie odpowiednich fragmentów do pliku vec 
+    @FXML public Tab CSloadfromImages;
+    
+    @FXML 
+    public Label CSinfotxtfile;
+     
+    @FXML
+    public void CSloadinfofile(){
+        Stage stage = new Stage();
+            FileChooserFile FileChooserFile = new FileChooserFile(CSinfotxtfile.getText(),false,"txt");
+            FileChooserFile.start(stage);
+            CSinfotxtfile.setText(FileChooserFile.Sciezka);
+    }
+    
+    @FXML
+    public Label CSvecfile;
+     @FXML
+    public Label CSvecfile1;
+    @FXML
+    public void CScreatevecFile(){
+        Stage stage = new Stage();
+        FileChooserFile FileChooserFile = new FileChooserFile(CSvecfile.getText(),true,"vec");
+        FileChooserFile.start(stage);
+        CSvecfile.setText(FileChooserFile.Sciezka);
+        CSvecfile1.setText(FileChooserFile.Sciezka);
+    }
+    
+    @FXML
+    public Label CSnum;
+    
+    @FXML
+    public TextField CSinputnum;
+    
+    public void CSEnterNumbers(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          CSnum.setText(CSinputnum.getText());
+          CSinputnum.clear();
+      }
+      
+    }
+    
+    @FXML
+    public Label CSw;
+    
+    @FXML
+    public TextField CSinputw;
+    public void CSEnterW(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          CSw.setText(CSinputw.getText());
+          SCIw.setText(CSinputw.getText());
+          CSinputw.clear();
+      }
+      
+    }
+    
+    @FXML
+    public Label CSh;
+    @FXML
+    public TextField CSinputh;
+    public void CSEnterH(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          CSh.setText(CSinputh.getText());
+          SCIh.setText(CSinputh.getText());
+          CSinputh.clear();
+      }
+      
+    }
+    
+    @FXML
+    public Label CSShow;
+    @FXML
+    public CheckBox CSShowOut;
+    public void SCSetShowOption(){
+        if(CSShowOut.isSelected()){
+            SCIshowt.setSelected(true);
+            CSShow.setText("TRUE");
+            SCIshow.setText("TRUE");
+        }
+        else{
+            SCIshowt.setSelected(true);
+            CSShow.setText("FALSE");
+            SCIshow.setText("FALSE");
+        }
+    }
+    
+    
+   //Fragment odpowiedzialny za Załadowanie kontretnego zdjęcia zawierający model który należy szukać 
+    @FXML public Tab CSloadfromImage;
+    
+    @FXML
+    public Label SCIChoosenImage;
+    @FXML
+    public void CSILchooseImage(){
+        Stage stage = new Stage();
+            FileChooserSample FileChooserSample = new FileChooserSample(SCIChoosenImage.getText());
+            FileChooserSample.start(stage); 
+            SCIChoosenImage.setText(FileChooserSample.Sciezka);
+    }
+    
+    @FXML Label SCIChoosenBGfile;
+    @FXML
+    public void CSILchooseBGfile(){
+        Stage stage = new Stage();
+            FileChooserFile FileChooserFile = new FileChooserFile(SCIChoosenBGfile.getText(),false,"txt");
+            FileChooserFile.start(stage); 
+            SCIChoosenBGfile.setText(FileChooserFile.Sciezka);
+    }
+    
+    @FXML Label SCInum;
+    @FXML TextField SCInumInput;
+     public void SCIEnterNum(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          SCInum.setText(SCInumInput.getText());
+          SCInumInput.clear();
+          CSnum.setText(SCInumInput.getText());
+          SCInumInput.clear();
+      }
+      
+    }
+    
+    @FXML Label SCIbgcolor;
+    @FXML TextField SCIbgcolorInput;
+     public void SCIEnterbgcolor(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          SCIbgcolor.setText(SCIbgcolorInput.getText());
+          SCIbgcolorInput.clear();
+      }
+      
+    }
+     
+    @FXML Label SCIbgthresh;
+    @FXML TextField SCIbgthreshInput;
+     public void SCIEnterbgthresh(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          SCIbgthresh.setText(SCIbgthreshInput.getText());
+          SCIbgthreshInput.clear();
+      }
+      
+    } 
+    
+    @FXML Label SCImaxidev;
+    @FXML TextField SCImaxidevInput;
+     public void SCIEntermaxidev(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          SCImaxidev.setText(SCImaxidevInput.getText());
+          SCImaxidevInput.clear();
+      }
+      
+    }  
+    
+     
+    @FXML Label SCImaxxangle;
+    @FXML TextField SCImaxxangleInput;
+     public void SCIEntermaxxangle(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          SCImaxxangle.setText(SCImaxxangleInput.getText());
+          SCImaxxangleInput.clear();
+      }
+      
+    } 
+    
+    @FXML Label SCImaxyangle;
+    @FXML TextField SCImaxyangleInput;
+     public void SCIEntermaxyangle(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          SCImaxyangle.setText(SCImaxyangleInput.getText());
+          SCImaxyangleInput.clear();
+      }
+      
+    } 
+    
+    @FXML Label SCImaxzangle;
+    @FXML TextField SCImaxzangleInput;
+     public void SCIEntermaxzangle(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          SCImaxzangle.setText(SCImaxzangleInput.getText());
+          SCImaxzangleInput.clear();
+      }
+      
+    }  
+     
+    @FXML Label SCIw;
+    @FXML TextField SCIwInput;
+     public void SCIEnterw(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          SCIw.setText(SCIwInput.getText());
+          CSw.setText(SCIwInput.getText());
+          SCIwInput.clear();
+      }
+      
+    } 
+    
+    @FXML Label SCIh;
+    @FXML TextField SCIhInput;
+    public void SCIEnterh(KeyEvent e){
+      if(e.getCode() == KeyCode.ENTER){
+          SCIh.setText(SCIhInput.getText());
+          CSh.setText(SCIhInput.getText());
+          SCIhInput.clear();
+      }
+      
+    } 
+    
+    @FXML
+    public Label SCIinv;
+    @FXML
+    public CheckBox SCIinvSet;
+    @FXML
+    public void SCISetInv(){
+        if(SCIinvSet.isSelected()){
+            SCIinv.setText("TRUE");
+        }
+        else{
+            SCIinv.setText("FALSE");
+        }
+    }  
+    
+    @FXML
+    public Label SCIrandinv;
+    @FXML
+    public CheckBox SCIrandinvSet;
+    @FXML
+    public void SCIRandSetInv(){
+        if(SCIrandinvSet.isSelected()){
+            SCIrandinv.setText("TRUE");
+        }
+        else{
+            SCIrandinv.setText("FALSE");
+        }
+    } 
+    
+    @FXML
+    public Label SCIshow;
+    @FXML
+    public CheckBox SCIshowt;
+    @FXML
+    public void SCIRandSetShow(){
+        if(SCIshowt.isSelected()){
+            CSShowOut.setSelected(true);
+            SCIshow.setText("TRUE");
+            CSShow.setText("TRUE");
+        }
+        else{
+            CSShowOut.setSelected(false);
+            SCIshow.setText("FALSE");
+            CSShow.setText("FALSE");
+        }
+    }
+     
+    //Fragment opdowiedzialny za zakładkę Haar Training  
+    @FXML public Tab HTsetTraining;
+    
+    @FXML Label HTPathtoXml;
+    public void HTChoosePathToXML(){
+        Stage stage = new Stage();
+            FileChooserFile FileChooserFile = new FileChooserFile(HTPathtoXml.getText(),true,"xml"," ");
+            FileChooserFile.start(stage);
+            HTPathtoXml.setText(FileChooserFile.Sciezka);
+    }
+
+    @FXML Label HTPathToVecFile;
+    public void HTChoosePathToVec(){
+        Stage stage = new Stage();
+        FileChooserFile FileChooserFile = new FileChooserFile(HTPathToVecFile.getText(),false,"vec"," ");
+            FileChooserFile.start(stage);
+            HTPathToVecFile.setText(FileChooserFile.Sciezka);
+    }
+    
+    @FXML Label HTPathtoBGtxt;
+    public void HTChooseBGtxtFile(){
+        Stage stage = new Stage();
+        FileChooserFile FileChooserFile = new FileChooserFile(HTPathtoBGtxt.getText(),false,"txt"," ");
+            FileChooserFile.start(stage);
+            HTPathtoBGtxt.setText(FileChooserFile.Sciezka);
+    }
+    
+    @FXML Label HTnpos;
+    @FXML TextField HTnposInput;
+     public void HTnposEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTnpos.setText(HTnposInput.getText());
+          HTnposInput.clear();
+      }
+      
+    }
+    
+    @FXML Label HTnneg;
+    @FXML TextField HTnnegInput;
+     public void HTnnegEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTnneg.setText(HTnnegInput.getText());
+          HTnnegInput.clear();
+      }
+      
+    } 
+    
+    @FXML Label HTnstages;
+    @FXML TextField HTnstagesInput;
+     public void HTnstagesEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTnstages.setText(HTnstagesInput.getText());
+          HTnstagesInput.clear();
+      }
+      
+    }  
+    
+    @FXML Label HTprecalcValBufSize;
+    @FXML TextField HTprecalcValBufSizeInput;
+     public void HTprecalcValBufSizeEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTprecalcValBufSize.setText(HTprecalcValBufSizeInput.getText());
+          HTprecalcValBufSizeInput.clear();
+      }
+      
+    }
+     
+    @FXML Label HTprecalcIdxBufSize;
+    @FXML TextField HTprecalcIdxBufSizeInput;
+     public void HTprecalcIdxBufSizeEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTprecalcIdxBufSize.setText(HTprecalcIdxBufSizeInput.getText());
+          HTprecalcIdxBufSizeInput.clear();
+      }
+      
+    } 
+    
+    @FXML Label HTnumThreads;
+    @FXML TextField HTnumThreadsInput;
+     public void HTnumThreadsEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTnumThreads.setText(HTnumThreadsInput.getText());
+          HTnumThreadsInput.clear();
+      }
+      
+    }  
+   
+    @FXML Label HTacceptanceRatioBreakValue ;
+    @FXML TextField HTacceptanceRatioBreakValueInput;
+     public void HTacceptanceRatioBreakValueEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTacceptanceRatioBreakValue.setText(HTacceptanceRatioBreakValueInput.getText());
+          HTacceptanceRatioBreakValueInput.clear();
+      }
+      
+    }  
+    
+    @FXML
+    public Label HTbaseFormatSave ;
+    @FXML
+    public CheckBox HTbaseFormatSaveCheck;
+    @FXML
+    public void HTbaseFormatSaveSet(){
+        if(HTbaseFormatSaveCheck.isSelected()){
+            HTbaseFormatSave.setText("TRUE");
+        }
+        else{
+            HTbaseFormatSave.setText("FALSE");
+        }
+    } 
+     
+    @FXML Label HTw ;
+    @FXML TextField HTwInput;
+     public void HTwEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTw.setText(HTwInput.getText());
+          HTwInput.clear();
+      }
+    } 
+    
+    @FXML Label HTh ;
+    @FXML TextField HThInput;
+     public void HThEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTh.setText(HThInput.getText());
+          HThInput.clear();
+      }
+    }
+     
+     
+    @FXML Label HTfeaturetype;
+    @FXML RadioButton HTHaar;
+    @FXML RadioButton HTLBP;
+    @FXML public void HTChooseHaar(){
+        ChooseOneRadiobutton(HTHaar,HTfeaturetype,HTLBP);
+    }
+    @FXML public void HTChooseLBP(){
+        ChooseOneRadiobutton(HTLBP,HTfeaturetype,HTHaar);
+    }
+    
+    @FXML Label HTmode;
+    @FXML RadioButton HTBASIC;
+    @FXML RadioButton HTCORE;
+    @FXML RadioButton HTALL;
+    @FXML public void HTChooseBASIC(){
+        ChooseOneRadiobutton(HTBASIC,HTmode,HTCORE,HTALL);
+    }
+    @FXML public void HTChooseCORE(){
+        ChooseOneRadiobutton(HTCORE,HTmode,HTBASIC,HTALL);
+    }
+    @FXML public void HTChooseALL(){
+        ChooseOneRadiobutton(HTALL,HTmode,HTBASIC,HTCORE);
+    }
+    
+    @FXML Label HTbt;
+    @FXML RadioButton HTDAB;
+    @FXML RadioButton HTRAB;
+    @FXML RadioButton HTLB;
+    @FXML RadioButton HTGAB;
+    @FXML public void HTChooseDAB(){
+        ChooseOneRadiobutton(HTDAB,HTbt,HTRAB,HTLB,HTGAB);
+    }
+    @FXML public void HTChooseRAB(){
+        ChooseOneRadiobutton(HTRAB,HTbt,HTLB,HTDAB,HTGAB);
+    }
+    @FXML public void HTChooseLB(){
+        ChooseOneRadiobutton(HTLB,HTbt,HTDAB,HTRAB,HTGAB);
+    }
+    @FXML public void HTChooseGAB(){
+        ChooseOneRadiobutton(HTGAB,HTbt,HTDAB,HTRAB,HTLB);
+    }
+    
+    @FXML Label HTminHitRate ;
+    @FXML TextField HTminHitRateInput;
+     public void HTminHitRateEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTminHitRate.setText(HTminHitRateInput.getText());
+          HTminHitRateInput.clear();
+      }
+      
+    }
+    
+    @FXML Label HTmaxFalseAlarmRate ;
+    @FXML TextField HTmaxFalseAlarmRateInput;
+     public void HTmaxFalseAlarmRateEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTmaxFalseAlarmRate.setText(HTmaxFalseAlarmRateInput.getText());
+          HTmaxFalseAlarmRateInput.clear();
+      }
+      
+    } 
+    
+    @FXML Label HTweightTrimRate;
+    @FXML TextField HTweightTrimRateInput;
+     public void HTweightTrimRateEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTweightTrimRate.setText(HTweightTrimRateInput.getText());
+          HTweightTrimRateInput.clear();
+      }
+      
+    } 
+     
+    @FXML Label HTmaxDepth;
+    @FXML TextField HTmaxDepthInput;
+     public void HTmaxDepthEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTmaxDepth.setText(HTmaxDepthInput.getText());
+          HTmaxDepthInput.clear();
+      }
+    } 
+    
+    @FXML Label HTmaxWeakCount ;
+    @FXML TextField HTmaxWeakCountInput;
+     public void HTmaxWeakCountEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTmaxWeakCount.setText(HTmaxWeakCountInput.getText());
+          HTmaxWeakCountInput.clear();
+      }
+    } 
+     
+    // koniec fragmentów odpowiedzialnych za kontrolę parametrów skrytpu
+    // fragment odpowiedzialny za tworzenie oraz uruchomienie skryptu
+    //referencja do tworzenia / odtworzenia skryptu CreateSample 
+    CreateSamples CreateSamples;
+    
+    //Referencja do tworzenia/odtworzenia skrytpu HaarCascade
+    HaarCascadeTraining Cascade;
+     @FXML public void SaveScript(){
+         if(CSloadfromImages.isSelected()){
+             CreateSamples.SaveScript(true);
+         }
+         else if(CSloadfromImage.isSelected()){
+             CreateSamples.SaveScript(false);
+         }
+         else if(HTsetTraining.isSelected()){
+             Cascade.SaveScript();
+         }
+     }
+
+     @FXML public void OpenScript(){
+         if(CSloadfromImages.isSelected()){
+            CreateSamples.RunScript();
+         }
+         else if(CSloadfromImage.isSelected()){
+            CreateSamples.RunScript(); 
+         }
+         else if(HTsetTraining.isSelected()){
+            Cascade.RunScript();
+         }
+     }
+     
+     
+    @FXML
+    public void preprocSlider(){
+        LabelFailedBoxes.setText(format("%.2f",SliderFailedBoxes.getValue())); 
+    }
+    
+    @FXML 
+    public void preprocLoadClassifier(){
+        Stage stage = new Stage();
+            FileChooserFile FileChooserFile = new FileChooserFile(PreprocLoaedPathToClassifier.getText(),false,"xml"," ");
+            FileChooserFile.start(stage);
+            PreprocLoaedPathToClassifier.setText(FileChooserFile.Sciezka);
+    }
+    
+    @FXML
+    private void handleButtonAction() throws Exception {
             Stage stage = new Stage();
             FileChooserSample FileChooserSample = new FileChooserSample(pobranaścieszka);
             FileChooserSample.start(stage); 
@@ -1474,9 +2006,12 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML
-    private void handleButtonWykrywanieAction(ActionEvent event) throws Exception {
-        RunnersDetection RunnersDetection = new RunnersDetection(type,Sciezka.getText(),Integer.valueOf(TextFieldRozdzielczonscMAX_X.getCharacters().toString()),Integer.valueOf(TextFieldRozdzielczonscMAX_Y.getCharacters().toString()),
-        (int) (SliderRozmiarMaxX.getValue()),(int)(SliderRozmiarMaxY.getValue()),(int)(SliderRozmiarMinX.getValue()),(int)(SliderRozmiarMinY.getValue()),SliderFailedBoxes.getValue()/100.0);
+    private void handleButtonWykrywanieAction() throws Exception {
+        RunnersDetection RunnersDetection = new RunnersDetection(type,Sciezka.getText(),Integer.valueOf(TextFieldRozdzielczonscMAX_X.getCharacters().toString()),
+        Integer.valueOf(TextFieldRozdzielczonscMAX_Y.getCharacters().toString()),(int) (SliderRozmiarMaxX.getValue()),(int)(SliderRozmiarMaxY.getValue()),
+        (int)(SliderRozmiarMinX.getValue()),(int)(SliderRozmiarMinY.getValue()),SliderFailedBoxes.getValue()/100.0,
+        PreprocLoadChoosenclassif.isSelected(),PreprocLoaedPathToClassifier.getText());
+        
         DetectedRunners = RunnersDetection.DetectedRunners();
         DrawOnCanvas DrawOnCanvas = new DrawOnCanvas(RunnersDetection.PicWithRunners(),RunnersDetection.ListaPunktów.size());
         Stage stage = new Stage();
@@ -1508,7 +2043,7 @@ public class FXMLDocumentController implements Initializable {
         StagePic.show();
         
     }
-
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
@@ -1541,6 +2076,15 @@ public class FXMLDocumentController implements Initializable {
        ChartNumbersDetect.setAnimated(true);
        
         gc = KlasifImageView.getGraphicsContext2D();
+        
+        CreateSamples = new CreateSamples(CSinfotxtfile,CSvecfile,CSnum,CSw,CSh,CSShow,
+        SCIChoosenImage,SCIChoosenBGfile,SCIbgcolor,SCIbgthresh,SCIinv,SCIrandinv,SCImaxidev,
+        SCImaxxangle,SCImaxyangle,SCImaxzangle);
+        
+        Cascade = new HaarCascadeTraining(HTPathtoXml,HTPathToVecFile,HTPathtoBGtxt,HTnpos,HTnneg,HTnstages,
+        HTprecalcValBufSize,HTprecalcIdxBufSize,HTbaseFormatSave,HTnumThreads,HTacceptanceRatioBreakValue,
+        HTw,HTh,HTfeaturetype,HTmode,HTbt,HTminHitRate,HTmaxFalseAlarmRate,HTweightTrimRate,
+        HTmaxDepth,HTmaxWeakCount);
     }    
 
    

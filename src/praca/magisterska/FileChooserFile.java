@@ -105,11 +105,26 @@ public class FileChooserFile extends Application{
                         fileChooser.setInitialFileName(FileName+"."+extension);
                     }
                     else{
-                        fileChooser.setTitle("Stwórz plik" + extension);
+                        fileChooser.setTitle("Stwórz plik " + extension);
                         fileChooser.setInitialFileName("Nowy klasyfikator."+extension);
                         
                     }
                     
+                }
+                else{
+                     if(extension==null&&FileName==null){
+                        fileChooser.setTitle("Wybierz plik z siecią neuronową ");
+                        fileChooser.setInitialFileName("Nowa sieć neuronowa.txt");
+                    }
+                    else if(FileName!=null&&extension!=null){
+                        fileChooser.setTitle("Wybierz plik "+extension);
+                        fileChooser.setInitialFileName(FileName+"."+extension);
+                    }
+                    else{
+                        fileChooser.setTitle("Wybierz plik " + extension);
+                        fileChooser.setInitialFileName("Nowy klasyfikator."+extension);
+                        
+                    }
                 }
                 
                 fileChooser.setInitialDirectory(                

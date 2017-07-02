@@ -10,5 +10,5 @@ package praca.magisterska;
  * @author Quchi
  */
 public enum TypeOfDetect {
-    FACE_DETECT,HUMANOID_DETECT,UPPER_BODY_DETECT
+    FACE_DETECT,HUMANOID_DETECT,UPPER_BODY_DETECT,SELECTED_XML
 }

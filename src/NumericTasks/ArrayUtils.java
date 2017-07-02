@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.Stream;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Rect;
 /**
@@ -342,6 +344,7 @@ public final class ArrayUtils {
         System.arraycopy(table, 0, out, 0, index);
         return out;
     }
+    
     public int MAX(int[] a , int[] b){
         int max = 0;
         for(int i = 0 ; i< a.length;i++){
@@ -400,4 +403,11 @@ public final class ArrayUtils {
          }
         return ListaPlików;
     }
+     
+     public static void ChooseOneRadiobutton(RadioButton t,Label output, RadioButton ... s){
+         for(RadioButton Current:s){
+             Current.setSelected(false);
+         }
+         output.setText(t.getText());
+     }
 }

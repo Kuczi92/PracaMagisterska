@@ -18,10 +18,15 @@ public class RunnersDetection  {
     ArrayList<ArrayList<Integer>> ListaPunktów = new ArrayList();
     ArrayList<BufferedImage> ListaBiegaczy = new ArrayList();
     BufferedImage Image;
-    RunnersDetection(TypeOfDetect Type,String path,int x, int y, int max_X, int max_Y, int min_X,int min_Y,double overlapFailedbox)
+    RunnersDetection(TypeOfDetect Type,String path,int x, int y, int max_X, int max_Y, int min_X,int min_Y,double overlapFailedbox,boolean loadXML, String XML)
     {
         this.Type = Type;
         this.Path = path;
+        
+        if(loadXML){
+        Type = TypeOfDetect.SELECTED_XML;
+        }
+        
         switch (Type)
                     {
                         case FACE_DETECT:
@@ -41,6 +46,13 @@ public class RunnersDetection  {
                             ListaBiegaczy =  HumanoidDetecionUpper.DetectHumanoids(x,y,max_X,max_Y,min_X,min_Y,overlapFailedbox);
                             Image = HumanoidDetecionUpper.GetObrazWynikowy();
                             ListaPunktów = HumanoidDetecionUpper.ListaPunktów;
+                            break;
+                            
+                        case SELECTED_XML:
+                            SelectedXmlDetection DetectXML = new SelectedXmlDetection(Path,XML);
+                            ListaBiegaczy =  DetectXML.Detect(x,y,max_X,max_Y,min_X,min_Y,overlapFailedbox);
+                            Image = DetectXML.GetObrazWynikowy();
+                            ListaPunktów = DetectXML.ListaPunktów;
                             break;
                         default:
                             throw new AssertionError(Type.name());    
