@@ -23,21 +23,22 @@ import static praca.magisterska.Detector.bufferedImageToMat;
  */
 public class SelectedXmlDetection extends Detector {
     private final String loadedXML;
-    public SelectedXmlDetection(String SciezkaPliku,String XML) {
-        super(SciezkaPliku);
+    public SelectedXmlDetection(BufferedImage InputImage,String XML) {
+        super(InputImage);
         this.loadedXML = XML;
     }
     public ArrayList<BufferedImage> Detect(int x , int y,int max_X, int max_Y, int min_X,int min_Y,double overlapFailedbox){
                 CascadeClassifier HumanoidsDetector;
                 HumanoidsDetector = new CascadeClassifier(loadedXML);
                 MatOfRect faceDetections = new MatOfRect();
-                ObrazWejsciowy =  setPicture(ObrazWejsciowy,x,y);
+                //ObrazWejsciowy =  setPicture(ObrazWejsciowy,x,y);
                 Mat image = bufferedImageToMat(ObrazWejsciowy);
                 HumanoidsDetector.detectMultiScale(image, faceDetections, 1.1, 3,0, new Size(), new Size()); 
         
-                 faceDetections = deleteFailedBoxes(faceDetections,overlapFailedbox);
+                faceDetections = deleteFailedBoxes(faceDetections,overlapFailedbox);
                 System.out.println(String.format("Detected %s faces", faceDetections.toArray().length));
                 ArrayList<BufferedImage> Out = new ArrayList<>();
+                
                 
              for (Rect rect : faceDetections.toArray()) 
               {

@@ -21,6 +21,9 @@ import NumericTasks.TestPictures;
 import NumericTasks.TrainingPictures;
 import NumericTasks.TypeOfThreshold;
 import static NumericTasks.TypeOfThreshold.BRAK_PROGROWANIA;
+import static NumericTasks.TypeOfThreshold.EFEKT_PRZYCIEMNAJACY;
+import static NumericTasks.TypeOfThreshold.EFEKT_ROZJASNIAJACY;
+import static NumericTasks.TypeOfThreshold.PROGOWANIE;
 import NumericTasks.ViewPicture;
 import NumericTasks.WriteToFile;
 import java.awt.image.BufferedImage;
@@ -1445,6 +1448,193 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public Label PreprocLoaedPathToClassifier;
     
+    @FXML Slider PreProcRedSlider;
+    @FXML Label PreprocRedValue;
+    @FXML public void PreprocChangeSliderRedValue(){
+      PreprocRedValue.setText(format("%.2f",PreProcRedSlider.getValue()));  
+      PreProcchangeValuesOfPicture();
+    }
+    
+    @FXML Slider PreProcGreenSlider;
+    @FXML Label PreprocGreenValue;
+    @FXML public void PreprocChangeSliderGreenValue(){
+      PreprocGreenValue.setText(format("%.2f",PreProcGreenSlider.getValue()));  
+      PreProcchangeValuesOfPicture();
+    }
+    
+    @FXML Slider PreProcBlueSlider;
+    @FXML Label PreprocBlueValue;
+    @FXML public void PreprocChangeSliderBlueValue(){
+      PreprocBlueValue.setText(format("%.2f",PreProcBlueSlider.getValue()));  
+      PreProcchangeValuesOfPicture();
+    }
+    
+    @FXML Slider PreProcBrightnessSlider;
+    @FXML Label PreprocBrightnessValue;
+    @FXML public void PreprocChangeSliderBrightnessValue(){
+      PreprocBrightnessValue.setText(format("%.2f",PreProcBrightnessSlider.getValue()));
+      PreProcchangeValuesOfPicture();
+    }
+    
+    @FXML Slider PreProcContrastSlider;
+    @FXML Label PreprocContrastValue;
+    @FXML public void PreprocChangeSliderContrastValue(){
+      PreprocContrastValue.setText(format("%.2f",PreProcContrastSlider.getValue()/1000));
+      PreProcchangeValuesOfPicture();
+    }
+    
+    @FXML Slider PreProcBlurrSlider;
+    @FXML Label PreprocBlurrValue;
+    @FXML public void PreprocChangeBlurrContrastValue(){
+      PreprocBlurrValue.setText(format("%.2f",PreProcBlurrSlider.getValue())); 
+      PreProcchangeValuesOfPicture();
+    }
+    
+    @FXML Slider PreProcThresholdSlider;
+    @FXML Label PreprocThresholdValue;
+    @FXML public void PreprocChangeThresholdContrastValue(){
+      PreprocThresholdValue.setText(format("%.2f",PreProcThresholdSlider.getValue()));
+      PreProcchangeValuesOfPicture();
+    }
+    
+    
+    TypeOfThreshold PreprocTypeOfThreshold = BRAK_PROGROWANIA;
+    @FXML ComboBox PreprocThresholdType;
+    
+    @FXML
+    public void PreProcChangeTypeOfThreshold(){
+        switch(PreprocThresholdType.getSelectionModel().getSelectedIndex())
+        {
+            case 0:
+            PreprocTypeOfThreshold = BRAK_PROGROWANIA;
+            PreProcchangeValuesOfPicture();
+            break;
+            
+            case 1:
+            PreprocTypeOfThreshold = PROGOWANIE;
+            PreProcchangeValuesOfPicture();
+            break;
+            
+            case 2:
+            PreprocTypeOfThreshold = EFEKT_ROZJASNIAJACY;   
+            PreProcchangeValuesOfPicture();
+            break;
+            
+            case 3:
+            PreprocTypeOfThreshold = EFEKT_PRZYCIEMNAJACY;   
+            PreProcchangeValuesOfPicture();
+            break;
+        }
+    }
+    
+    
+    ViewPicture Pic;
+    Picture PreprocOut = new Picture();
+    @FXML ImageView PreprocImageLoad;
+    @FXML
+    private void PreProcchangeValuesOfPicture() {
+
+            int[] pixels = Pic.ModyfikujKoloryWKanaleRGB(
+             PreProcRedSlider.getValue()+PreProcBrightnessSlider.getValue(),
+             PreProcGreenSlider.getValue()+PreProcBrightnessSlider.getValue(),
+             PreProcBlueSlider.getValue()+PreProcBrightnessSlider.getValue(),
+             PreProcContrastSlider.getValue()/1000,PreprocTypeOfThreshold,
+            (int) PreProcThresholdSlider.getValue());
+            PreprocOut.SetPicture(pixels,Pic.pobierzX(),Pic.pobierzY());
+            
+            if(PreprocUseNegative.isSelected()){
+               PreprocOut.setImage(PreprocOut.Negative(PreprocOut.Image()));
+            }
+            
+            if(PreProcBlurrSlider.getValue()>0.0){
+                PreprocOut.setImage(PreprocOut.changeBlurr((int)PreProcBlurrSlider.getValue(), (int)PreProcBlurrSlider.getValue()));
+            }
+            
+            PreprocImageLoad.setImage(SwingFXUtils.toFXImage(PreprocOut.Image(), null));
+            
+            
+    }
+    
+    @FXML CheckBox PreprocUseResizeImage;
+    @FXML public void PreprocReloadImage(){
+        if(PreprocUseResizeImage.isSelected()){
+           try {
+                Pic = new ViewPicture(new Picture().setPicture(ImageIO.read(new File(Sciezka.getText())), Integer.valueOf(TextFieldRozdzielczonscMAX_X.getText()), Integer.valueOf(TextFieldRozdzielczonscMAX_Y.getText())));
+                PreProcchangeValuesOfPicture();
+                
+               } 
+           catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         
+        }
+        else{
+            try 
+            {  
+                Pic = new ViewPicture(ImageIO.read(new File(Sciezka.getText())));
+                PreProcchangeValuesOfPicture();
+               
+            } 
+            catch (IOException ex) {
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    
+    
+    @FXML CheckBox PreprocUseNegative;
+    
+    
+    //Fragment odpowiedzialny za ustawienia wycięć fragmentów zawierające interesujące nas obiekty
+    //Dokładniej skalowanie i przesunięcie wyciętych obrazów
+    @FXML Slider PreprocMovePointAX;
+    @FXML Label PreprocCurrentMovePointAX;
+    @FXML public void PreprocChangeCurrentMovePointAXtValue(){
+      PreprocCurrentMovePointAX.setText(format("%.2f",PreprocMovePointAX.getValue()));
+    }
+    
+    @FXML Slider PreprocMovePointAY;
+    @FXML Label PreprocCurrentMovePointAY;
+    @FXML public void PreprocChangeCurrentMovePointAYtValue(){
+      PreprocCurrentMovePointAY.setText(format("%.2f",PreprocMovePointAY.getValue()));
+    }
+    
+    @FXML Slider PreprocMovePointBX;
+    @FXML Label PreprocCurrentMovePointBX;
+    @FXML public void PreprocChangeCurrentMovePointBXtValue(){
+      PreprocCurrentMovePointBX.setText(format("%.2f",PreprocMovePointBX.getValue()));
+    }
+    
+    @FXML Slider PreprocMovePointBY;
+    @FXML Label PreprocCurrentMovePointBY;
+    @FXML public void PreprocChangeCurrentMovePointBYtValue(){
+      PreprocCurrentMovePointBY.setText(format("%.2f",PreprocMovePointBY.getValue()));
+    }
+    
+    @FXML Slider PreprocMovePointCX;
+    @FXML Label PreprocCurrentMovePointCX;
+    @FXML public void PreprocChangeCurrentMovePointCXtValue(){
+      PreprocCurrentMovePointCX.setText(format("%.2f",PreprocMovePointCX.getValue()));
+    }
+    
+    @FXML Slider PreprocMovePointCY;
+    @FXML Label PreprocCurrentMovePointCY;
+    @FXML public void PreprocChangeCurrentMovePointCYtValue(){
+      PreprocCurrentMovePointCY.setText(format("%.2f",PreprocMovePointCY.getValue()));
+    }
+    
+    @FXML Slider PreprocMovePointDX;
+    @FXML Label PreprocCurrentMovePointDX;
+    @FXML public void PreprocChangeCurrentMovePointDXtValue(){
+      PreprocCurrentMovePointDX.setText(format("%.2f",PreprocMovePointDX.getValue()));
+    }
+    
+    @FXML Slider PreprocMovePointDY;
+    @FXML Label PreprocCurrentMovePointDY;
+    @FXML public void PreprocChangeCurrentMovePointDYtValue(){
+      PreprocCurrentMovePointDY.setText(format("%.2f",PreprocMovePointDY.getValue()));
+    }
     //Fragment odpowiedzialny za zakładkę Haar klasyfikator
     
     //Fragment opdowiedzialny za zakładkę Create samples 
@@ -1704,9 +1894,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML Label HTPathtoXml;
     public void HTChoosePathToXML(){
         Stage stage = new Stage();
-            FileChooserFile FileChooserFile = new FileChooserFile(HTPathtoXml.getText(),true,"xml"," ");
-            FileChooserFile.start(stage);
-            HTPathtoXml.setText(FileChooserFile.Sciezka);
+            FolderChooser FolderChooser = new FolderChooser(HTPathtoXml.getText());
+            FolderChooser.start(stage);
+            HTPathtoXml.setText(FolderChooser.getPobranaŚciezka());
     }
 
     @FXML Label HTPathToVecFile;
@@ -1917,6 +2107,19 @@ public class FXMLDocumentController implements Initializable {
           HTmaxWeakCountInput.clear();
       }
     } 
+     @FXML Label HTChoosenXMLFile;
+     
+     @FXML public void HTLoadChoosenXMLFile(){
+         Stage Stage = new Stage();
+         FileChooserFile FileChooserFile = new FileChooserFile(HTChoosenXMLFile.getText(),true,"xml");
+         FileChooserFile.start(Stage);
+         HTChoosenXMLFile.setText(FileChooserFile.Sciezka);
+     }
+     
+     @FXML public void HTSaveDataFromCascadeFolder(){
+        Cascade.DataToCascadeXmlSave(HTPathtoXml, HTChoosenXMLFile);
+        HaarCascadeTraining.DataToCascadeXmlOpen();
+     }
      
     // koniec fragmentów odpowiedzialnych za kontrolę parametrów skrytpu
     // fragment odpowiedzialny za tworzenie oraz uruchomienie skryptu
@@ -1970,6 +2173,7 @@ public class FXMLDocumentController implements Initializable {
             FileChooserSample.start(stage); 
             pobranaścieszka = FileChooserSample.getPobranaŚciezka();
             Sciezka.setText(FileChooserSample.Sciezka);
+            PreprocReloadImage(); 
     }
     
     @FXML
@@ -2007,7 +2211,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void handleButtonWykrywanieAction() throws Exception {
-        RunnersDetection RunnersDetection = new RunnersDetection(type,Sciezka.getText(),Integer.valueOf(TextFieldRozdzielczonscMAX_X.getCharacters().toString()),
+        RunnersDetection RunnersDetection = new RunnersDetection(type,SwingFXUtils.fromFXImage(PreprocImageLoad.getImage(),null),Integer.valueOf(TextFieldRozdzielczonscMAX_X.getCharacters().toString()),
         Integer.valueOf(TextFieldRozdzielczonscMAX_Y.getCharacters().toString()),(int) (SliderRozmiarMaxX.getValue()),(int)(SliderRozmiarMaxY.getValue()),
         (int)(SliderRozmiarMinX.getValue()),(int)(SliderRozmiarMinY.getValue()),SliderFailedBoxes.getValue()/100.0,
         PreprocLoadChoosenclassif.isSelected(),PreprocLoaedPathToClassifier.getText());

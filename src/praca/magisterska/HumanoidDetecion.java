@@ -29,8 +29,8 @@ public class HumanoidDetecion extends Detector {
    TypeOfDetect Type;
    
    
-   public HumanoidDetecion(String SciezkaPliku,TypeOfDetect Type){
-        super(SciezkaPliku);
+   public HumanoidDetecion(BufferedImage InputImage,TypeOfDetect Type){
+        super(InputImage);
         this.Type = Type;
    }
    public ArrayList<BufferedImage> DetectHumanoids(int x , int y,int max_X, int max_Y, int min_X,int min_Y,double overlapFailedbox) {
@@ -58,7 +58,7 @@ public class HumanoidDetecion extends Detector {
                 CascadeClassifier HumanoidsDetector;
                 HumanoidsDetector = new CascadeClassifier("haarcascade_upperbody.xml");
                 MatOfRect faceDetections = new MatOfRect();
-                ObrazWejsciowy =  setPicture(ObrazWejsciowy,x,y);
+                //ObrazWejsciowy =  setPicture(ObrazWejsciowy,x,y);
                 Mat image = bufferedImageToMat(ObrazWejsciowy);
                 HumanoidsDetector.detectMultiScale(image, faceDetections, 1.1, 3,0, new Size(), new Size()); 
         
@@ -86,7 +86,7 @@ public class HumanoidDetecion extends Detector {
                                      final MatOfFloat descriptors = HOGDescriptor.getDefaultPeopleDetector();
                                      hog.setSVMDetector(descriptors);
 
-                                     ObrazWejsciowy =  setPicture(ObrazWejsciowy,x,y);
+                                    // ObrazWejsciowy =  setPicture(ObrazWejsciowy,x,y);
                                      
                                      Mat image = bufferedImageToMat(ObrazWejsciowy);
 

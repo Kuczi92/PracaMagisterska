@@ -12,18 +12,17 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.collections.*?>
 
-<AnchorPane id="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="praca.magisterska.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="605.0" prefWidth="965.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="praca.magisterska.FXMLDocumentController">
    <children>
         <Button fx:id="button" layoutX="14.0" layoutY="16.0" onAction="#handleButtonAction" text="Wybierz Obraz" />
-        <Label fx:id="Sciezka" layoutX="117.0" layoutY="20.0" minHeight="16" minWidth="69" text="Dokonaj wyboru pliku" />
-        <Button fx:id="Wykrywanie" layoutX="14.0" layoutY="49.0" mnemonicParsing="false" onAction="#handleButtonWykrywanieAction" prefHeight="25.0" prefWidth="157.0" text="Wykryj Biegaczy" />
+        <Button fx:id="Wykrywanie" layoutX="14.0" layoutY="54.0" mnemonicParsing="false" onAction="#handleButtonWykrywanieAction" prefHeight="25.0" prefWidth="157.0" text="Wykryj Biegaczy" />
       <TabPane layoutX="14.0" layoutY="85.0" prefHeight="514.0" prefWidth="935.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Pre - processing">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="209.0" prefWidth="935.0">
                      <children>
-                        <ComboBox fx:id="WybórWykrycia" layoutX="14.0" layoutY="103.0" onAction="#handleComboBoxWybórWykryciaAction" prefHeight="25.0" prefWidth="247.0" promptText="Wybierz po czym rozpoznać biegacza">
+                        <ComboBox fx:id="WybórWykrycia" layoutX="268.0" layoutY="14.0" onAction="#handleComboBoxWybórWykryciaAction" prefHeight="25.0" prefWidth="247.0" promptText="Wybierz po czym rozpoznać biegacza">
                              <items>
                                   <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="Wykryj po Sylwetce" />
@@ -38,31 +37,128 @@
                         <Label layoutX="14.0" layoutY="71.0" text="Rozdzielczość y:" />
                         <Label layoutX="14.0" layoutY="16.0" text="Ustawienie rozdzielczości:" />
                         <Button layoutX="14.0" layoutY="446.0" mnemonicParsing="false" text="Zapisz ustawienia" />
-                        <Slider fx:id="SliderFailedBoxes" layoutX="282.0" layoutY="38.0" onMouseDragged="#preprocSlider" onMousePressed="#preprocSlider" onMouseReleased="#preprocSlider" prefHeight="14.0" prefWidth="310.0" value="65.0" />
-                        <Label fx:id="LabelFailedBoxes" layoutX="610.0" layoutY="37.0" text="65,00" />
-                        <Label layoutX="282.0" layoutY="8.0" prefHeight="25.0" prefWidth="353.0" text="Parametr dopuszczalnej części wspólnej dla wykrytych biegaczy:" />
-                        <Slider fx:id="SliderRozmiarMinX" layoutX="282.0" layoutY="96.0" onMouseDragged="#changeValueMinX" onMousePressed="#changeValueMinX" onMouseReleased="#changeValueMinX" value="12.0" />
-                        <Slider fx:id="SliderRozmiarMinY" layoutX="282.0" layoutY="113.0" onMouseDragged="#changeValueMinY" onMousePressed="#changeValueMinY" onMouseReleased="#changeValueMinY" value="30.0" />
-                        <Label fx:id="LabelValueRozmiarMinX" layoutX="432.0" layoutY="95.0" text="12,00" />
-                        <Label fx:id="LabelValueRozmiarMinY" layoutX="432.0" layoutY="112.0" text="30,00" />
-                        <Label layoutX="282.0" layoutY="69.0" text="Dopuszczalne rozmiary biegaczy:" />
-                        <Label layoutX="473.0" layoutY="95.0" text="\%" />
-                        <Label layoutX="473.0" layoutY="112.0" text="\%" />
-                        <Label layoutX="497.0" layoutY="95.0" text="Minimalny rozmiar X" />
-                        <Label layoutX="497.0" layoutY="112.0" text="Minimalny rozmiar Y" />
-                        <Slider fx:id="SliderRozmiarMaxX" layoutX="282.0" layoutY="130.0" onMouseDragged="#changeValueMaxX" onMousePressed="#changeValueMaxX" onMouseReleased="#changeValueMaxX" value="100.0" />
-                        <Label fx:id="LabelValueRozmiarMaxX" layoutX="432.0" layoutY="129.0" text="100,00" />
-                        <Label layoutX="473.0" layoutY="129.0" text="\%" />
-                        <Label layoutX="497.0" layoutY="129.0" text="Maksymalny rozmiar Y" />
-                        <Slider fx:id="SliderRozmiarMaxY" layoutX="282.0" layoutY="146.0" onMouseDragged="#changeValueMaxY" onMousePressed="#changeValueMaxY" onMouseReleased="#changeValueMaxY" value="100.0" />
-                        <Label fx:id="LabelValueRozmiarMaxY" layoutX="432.0" layoutY="145.0" text="100,00" />
-                        <Label layoutX="473.0" layoutY="145.0" text="\%" />
-                        <Label layoutX="497.0" layoutY="145.0" text="Maksymalny rozmiar Y" />
-                        <Label layoutX="655.0" layoutY="37.0" text="\%" />
-                        <Button layoutX="14.0" layoutY="193.0" mnemonicParsing="false" onAction="#preprocLoadClassifier" prefHeight="25.0" prefWidth="94.0" text="Wybierz plik" />
-                        <CheckBox fx:id="PreprocLoadChoosenclassif" layoutX="14.0" layoutY="144.0" mnemonicParsing="false" text="Załaduj wybrany klasyfikator" />
-                        <Label layoutX="14.0" layoutY="177.0" text="Wybór własnego klasyfikatora:" />
-                        <Label fx:id="PreprocLoaedPathToClassifier" layoutX="118.0" layoutY="197.0" text="Wybierz plik" />
+                        <Slider fx:id="SliderFailedBoxes" layoutX="569.0" layoutY="30.0" onMouseDragged="#preprocSlider" onMousePressed="#preprocSlider" onMouseReleased="#preprocSlider" prefHeight="14.0" prefWidth="310.0" value="65.0" />
+                        <Label fx:id="LabelFailedBoxes" layoutX="879.0" layoutY="29.0" text="65,00" />
+                        <Label layoutX="569.0" layoutY="12.0" prefHeight="17.0" prefWidth="353.0" text="Parametr dopuszczalnej części wspólnej dla wykrytych biegaczy:" />
+                        <Slider fx:id="SliderRozmiarMinX" layoutX="569.0" layoutY="69.0" onMouseDragged="#changeValueMinX" onMousePressed="#changeValueMinX" onMouseReleased="#changeValueMinX" value="12.0" />
+                        <Slider fx:id="SliderRozmiarMinY" layoutX="569.0" layoutY="86.0" onMouseDragged="#changeValueMinY" onMousePressed="#changeValueMinY" onMouseReleased="#changeValueMinY" value="30.0" />
+                        <Label fx:id="LabelValueRozmiarMinX" layoutX="719.0" layoutY="68.0" text="12,00" />
+                        <Label fx:id="LabelValueRozmiarMinY" layoutX="719.0" layoutY="85.0" text="30,00" />
+                        <Label layoutX="569.0" layoutY="50.0" text="Dopuszczalne rozmiary biegaczy:" />
+                        <Label layoutX="760.0" layoutY="68.0" text="\%" />
+                        <Label layoutX="760.0" layoutY="85.0" text="\%" />
+                        <Label layoutX="784.0" layoutY="68.0" text="Minimalny rozmiar X" />
+                        <Label layoutX="784.0" layoutY="85.0" text="Minimalny rozmiar Y" />
+                        <Slider fx:id="SliderRozmiarMaxX" layoutX="569.0" layoutY="103.0" onMouseDragged="#changeValueMaxX" onMousePressed="#changeValueMaxX" onMouseReleased="#changeValueMaxX" value="100.0" />
+                        <Label fx:id="LabelValueRozmiarMaxX" layoutX="719.0" layoutY="102.0" text="100,00" />
+                        <Label layoutX="760.0" layoutY="102.0" text="\%" />
+                        <Label layoutX="784.0" layoutY="102.0" text="Maksymalny rozmiar Y" />
+                        <Slider fx:id="SliderRozmiarMaxY" layoutX="569.0" layoutY="119.0" onMouseDragged="#changeValueMaxY" onMousePressed="#changeValueMaxY" onMouseReleased="#changeValueMaxY" value="100.0" />
+                        <Label fx:id="LabelValueRozmiarMaxY" layoutX="719.0" layoutY="118.0" text="100,00" />
+                        <Label layoutX="762.0" layoutY="118.0" text="\%" />
+                        <Label layoutX="784.0" layoutY="118.0" text="Maksymalny rozmiar Y" />
+                        <Label layoutX="916.0" layoutY="29.0" text="\%" />
+                        <Button layoutX="268.0" layoutY="97.0" mnemonicParsing="false" onAction="#preprocLoadClassifier" prefHeight="25.0" prefWidth="94.0" text="Wybierz plik" />
+                        <CheckBox fx:id="PreprocLoadChoosenclassif" layoutX="268.0" layoutY="48.0" mnemonicParsing="false" text="Załaduj wybrany klasyfikator" />
+                        <Label layoutX="268.0" layoutY="72.0" text="Wybór własnego klasyfikatora:" />
+                        <ImageView fx:id="PreprocImageLoad" fitHeight="324.0" fitWidth="574.0" layoutX="361.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label layoutX="361.0" layoutY="136.0" text="Wybrany obraz:" />
+                        <Separator layoutX="358.0" layoutY="163.0" orientation="VERTICAL" prefHeight="321.0" prefWidth="5.0" />
+                        <Separator layoutX="358.0" layoutY="158.0" prefHeight="2.0" prefWidth="574.0" />
+                        <Label layoutX="40.0" layoutY="128.0" text="Ustawienia ogólne obrazu oraz wykrycia biegaczy:" />
+                        <CheckBox fx:id="PreprocUseResizeImage" layoutX="22.0" layoutY="101.0" mnemonicParsing="false" onAction="#PreprocReloadImage" text="Zastosuj ograniczenie rozdzielczości." />
+                        <ScrollPane layoutX="368.0" layoutY="94.0" prefHeight="41.0" prefWidth="163.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="23.0" prefWidth="642.0">
+                                 <children>
+                                    <Label fx:id="PreprocLoaedPathToClassifier" layoutX="14.0" layoutY="6.0" text="Wybierz plik" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                        <ScrollPane layoutX="-2.0" layoutY="144.0" prefHeight="283.0" prefWidth="347.0">
+                           <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="669.0" prefWidth="331.0">
+                                 <children>
+                                    <Slider fx:id="PreProcRedSlider" layoutX="83.0" layoutY="14.0" max="255.0" onMouseDragged="#PreprocChangeSliderRedValue" onMousePressed="#PreprocChangeSliderRedValue" onMouseReleased="#PreprocChangeSliderRedValue" prefHeight="14.0" prefWidth="205.0" />
+                                    <Slider fx:id="PreProcGreenSlider" layoutX="83.0" layoutY="37.0" max="255.0" onMouseDragged="#PreprocChangeSliderGreenValue" onMousePressed="#PreprocChangeSliderGreenValue" onMouseReleased="#PreprocChangeSliderGreenValue" prefHeight="14.0" prefWidth="205.0" />
+                                    <Slider fx:id="PreProcBlueSlider" layoutX="83.0" layoutY="60.0" max="255.0" onMouseDragged="#PreprocChangeSliderBlueValue" onMousePressed="#PreprocChangeSliderBlueValue" onMouseReleased="#PreprocChangeSliderBlueValue" prefHeight="14.0" prefWidth="205.0" />
+                                    <Slider fx:id="PreProcBrightnessSlider" layoutX="83.0" layoutY="82.0" max="255.0" min="-255.0" onMouseDragged="#PreprocChangeSliderBrightnessValue" onMousePressed="#PreprocChangeSliderBrightnessValue" onMouseReleased="#PreprocChangeSliderBrightnessValue" prefHeight="14.0" prefWidth="205.0" />
+                                    <Slider fx:id="PreProcContrastSlider" layoutX="83.0" layoutY="104.0" max="7000.0" onMouseDragged="#PreprocChangeSliderContrastValue" onMousePressed="#PreprocChangeSliderContrastValue" onMouseReleased="#PreprocChangeSliderContrastValue" prefHeight="14.0" prefWidth="205.0" value="1000.0" />
+                                    <Slider fx:id="PreProcBlurrSlider" layoutX="83.0" layoutY="128.0" max="255.0" onMouseDragged="#PreprocChangeBlurrContrastValue" onMousePressed="#PreprocChangeBlurrContrastValue" onMouseReleased="#PreprocChangeBlurrContrastValue" prefHeight="14.0" prefWidth="205.0" />
+                                    <Label layoutX="21.0" layoutY="11.0" text="Czerwony" />
+                                    <Label layoutX="27.0" layoutY="35.0" text="Zielony" />
+                                    <Label layoutX="22.0" layoutY="58.0" text="Niebieski" />
+                                    <Slider fx:id="PreProcThresholdSlider" layoutX="83.0" layoutY="178.0" max="255.0" onMouseDragged="#PreprocChangeThresholdContrastValue" onMousePressed="#PreprocChangeThresholdContrastValue" onMouseReleased="#PreprocChangeThresholdContrastValue" prefHeight="14.0" prefWidth="205.0" />
+                                    <Label layoutX="27.0" layoutY="80.0" text="Jasność" />
+                                    <Label layoutX="24.0" layoutY="102.0" text="Kontrast" />
+                                    <Label layoutX="34.0" layoutY="179.0" text="Próg" />
+                                    <Label layoutX="21.0" layoutY="126.0" text="Rozmycie" />
+                                    <ComboBox fx:id="PreprocThresholdType" layoutX="20.0" layoutY="150.0" onAction="#PreProcChangeTypeOfThreshold" prefHeight="25.0" prefWidth="309.0" promptText="Rodzaj Progowania">
+                                       <items>
+                                          <FXCollections fx:factory="observableArrayList">
+                                             <String fx:value="Brak progowania" />
+                                             <String fx:value="Progowanie zwykłe" />
+                                             <String fx:value="Efekt rozjaśniający" />
+                                             <String fx:value="Efekt przyciemniający" />
+                                          </FXCollections>
+                                       </items>
+                                    </ComboBox>
+                                    <Label fx:id="PreprocRedValue" layoutX="298.0" layoutY="11.0" text="0,00" />
+                                    <Label fx:id="PreprocGreenValue" layoutX="298.0" layoutY="35.0" text="0,00" />
+                                    <Label fx:id="PreprocBlueValue" layoutX="298.0" layoutY="58.0" text="0,00" />
+                                    <Label fx:id="PreprocBrightnessValue" layoutX="298.0" layoutY="80.0" text="0,00" />
+                                    <Label fx:id="PreprocContrastValue" layoutX="298.0" layoutY="102.0" text="1,00" />
+                                    <Label fx:id="PreprocBlurrValue" layoutX="298.0" layoutY="126.0" text="0,00" />
+                                    <Label fx:id="PreprocThresholdValue" layoutX="298.0" layoutY="177.0" text="0,00" />
+                                    <CheckBox fx:id="PreprocUseNegative" layoutX="20.0" layoutY="202.0" mnemonicParsing="false" onMouseClicked="#PreProcchangeValuesOfPicture" text="Zastosuj negatyw" />
+                                    <Label layoutX="26.0" layoutY="227.0" text="Ustawienia obszaru wycięcia fragmentu z biegaczem:" />
+                                    <Slider fx:id="PreprocMovePointAX" layoutX="32.0" layoutY="276.0" min="-100.0" onMouseDragged="#PreprocChangeCurrentMovePointAXtValue" onMousePressed="#PreprocChangeCurrentMovePointAXtValue" onMouseReleased="#PreprocChangeCurrentMovePointAXtValue" prefHeight="14.0" prefWidth="236.0" />
+                                    <Label layoutX="13.0" layoutY="257.0" text="Przesunięcie punktu A:" />
+                                    <Label fx:id="PreprocCurrentMovePointAX" layoutX="272.0" layoutY="275.0" text="0,00" />
+                                    <Label layoutX="16.0" layoutY="274.0" text="X" />
+                                    <Label layoutX="17.0" layoutY="298.0" text="Y" />
+                                    <Label fx:id="PreprocCurrentMovePointAY" layoutX="272.0" layoutY="298.0" prefHeight="17.0" prefWidth="23.0" text="0,00" />
+                                    <Slider fx:id="PreprocMovePointAY" layoutX="33.0" layoutY="300.0" min="-100.0" onMouseDragged="#PreprocChangeCurrentMovePointAYtValue" onMousePressed="#PreprocChangeCurrentMovePointAYtValue" onMouseReleased="#PreprocChangeCurrentMovePointAYtValue" prefHeight="14.0" prefWidth="236.0" />
+                                    <Slider fx:id="PreprocMovePointBY" layoutX="35.0" layoutY="367.0" min="-100.0" onMouseDragged="#PreprocChangeCurrentMovePointBYtValue" onMousePressed="#PreprocChangeCurrentMovePointBYtValue" onMouseReleased="#PreprocChangeCurrentMovePointBYtValue" prefHeight="14.0" prefWidth="236.0" />
+                                    <Label fx:id="PreprocCurrentMovePointBY" layoutX="272.0" layoutY="365.0" text="0,00" />
+                                    <Label layoutX="19.0" layoutY="365.0" text="Y" />
+                                    <Label layoutX="18.0" layoutY="341.0" text="X" />
+                                    <Label fx:id="PreprocCurrentMovePointBX" layoutX="272.0" layoutY="341.0" text="0,00" />
+                                    <Label layoutX="15.0" layoutY="324.0" text="Przesunięcie punktu B:" />
+                                    <Slider fx:id="PreprocMovePointBX" layoutX="34.0" layoutY="343.0" min="-100.0" onMouseDragged="#PreprocChangeCurrentMovePointBXtValue" onMousePressed="#PreprocChangeCurrentMovePointBXtValue" onMouseReleased="#PreprocChangeCurrentMovePointBXtValue" prefHeight="14.0" prefWidth="236.0" />
+                                    <Slider fx:id="PreprocMovePointCX" layoutX="33.0" layoutY="411.0" min="-100.0" onMouseDragged="#PreprocChangeCurrentMovePointCXtValue" onMousePressed="#PreprocChangeCurrentMovePointCXtValue" onMouseReleased="#PreprocChangeCurrentMovePointCXtValue" prefHeight="14.0" prefWidth="236.0" />
+                                    <Label layoutX="14.0" layoutY="392.0" text="Przesunięcie punktu C:" />
+                                    <Label fx:id="PreprocCurrentMovePointCX" layoutX="272.0" layoutY="409.0" text="0,00" />
+                                    <Label layoutX="17.0" layoutY="409.0" text="X" />
+                                    <Label layoutX="18.0" layoutY="433.0" text="Y" />
+                                    <Label fx:id="PreprocCurrentMovePointCY" layoutX="272.0" layoutY="433.0" text="0,00" />
+                                    <Slider fx:id="PreprocMovePointCY" layoutX="34.0" layoutY="435.0" min="-100.0" onMouseDragged="#PreprocChangeCurrentMovePointCYtValue" onMousePressed="#PreprocChangeCurrentMovePointCYtValue" onMouseReleased="#PreprocChangeCurrentMovePointCYtValue" prefHeight="14.0" prefWidth="236.0" />
+                                    <Slider fx:id="PreprocMovePointDY" layoutX="34.0" layoutY="499.0" min="-100.0" onMouseDragged="#PreprocChangeCurrentMovePointDYtValue" onMousePressed="#PreprocChangeCurrentMovePointDYtValue" onMouseReleased="#PreprocChangeCurrentMovePointDYtValue" prefHeight="14.0" prefWidth="236.0" />
+                                    <Label layoutX="18.0" layoutY="497.0" text="Y" />
+                                    <Label layoutX="17.0" layoutY="473.0" text="X" />
+                                    <Label fx:id="PreprocCurrentMovePointDX" layoutX="272.0" layoutY="473.0" text="0,00" />
+                                    <Label layoutX="14.0" layoutY="456.0" text="Przesunięcie punktu D:" />
+                                    <Slider fx:id="PreprocMovePointDX" layoutX="33.0" layoutY="475.0" min="-100.0" onMouseDragged="#PreprocChangeCurrentMovePointDXtValue" onMousePressed="#PreprocChangeCurrentMovePointDXtValue" onMouseReleased="#PreprocChangeCurrentMovePointDXtValue" prefHeight="14.0" prefWidth="236.0" />
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" layoutX="85.0" layoutY="552.0" stroke="BLACK" strokeType="INSIDE" width="148.0" />
+                                    <Label layoutX="313.0" layoutY="274.0" text="\%" />
+                                    <Label layoutX="313.0" layoutY="298.0" text="\%" />
+                                    <Label layoutX="313.0" layoutY="341.0" text="\%" />
+                                    <Label layoutX="313.0" layoutY="365.0" text="\%" />
+                                    <Label layoutX="313.0" layoutY="409.0" text="\%" />
+                                    <Label layoutX="313.0" layoutY="433.0" text="\%" />
+                                    <Label layoutX="313.0" layoutY="473.0" text="\%" />
+                                    <Label layoutX="313.0" layoutY="498.0" text="\%" />
+                                    <Label layoutX="91.0" layoutY="523.0" text="Rozmieszczenie punktów:" />
+                                    <Label layoutX="73.0" layoutY="532.0" text="A" />
+                                    <Label layoutX="239.0" layoutY="532.0" text="B" />
+                                    <Label layoutX="74.0" layoutY="632.0" text="C" />
+                                    <Label layoutX="239.0" layoutY="632.0" text="D" />
+                                    <Label fx:id="PreprocCurrentMovePointDY" layoutX="272.0" layoutY="498.0" text="0,00" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
                      </children>
                   </AnchorPane>
             </content>
@@ -333,7 +429,7 @@
                                        <children>
                                           <TabPane layoutX="-3.0" layoutY="-2.0" prefHeight="322.0" prefWidth="947.0" tabClosingPolicy="UNAVAILABLE">
                                             <tabs>
-                                              <Tab fx:id="CSloadfromImage" text="Skrypt - Stworzenie pliku z przykładami trenującymi (CreateSamples.bat) ">
+                                              <Tab text="Skrypt - Stworzenie pliku z przykładami trenującymi (CreateSamples.bat) ">
                                                 <content>
                                                       <AnchorPane prefHeight="277.0" prefWidth="901.0">
                                                          <children>
@@ -377,7 +473,7 @@
                                                                               </AnchorPane>
                                                                         </content>
                                                                       </Tab>
-                                                                      <Tab text="Załadowanie konkretnego zdjęcia z modelem do wykrywania">
+                                                                      <Tab fx:id="CSloadfromImage" text="Załadowanie konkretnego zdjęcia z modelem do wykrywania">
                                                                         <content>
                                                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="219.0" prefWidth="865.0">
                                                                                  <children>
@@ -471,29 +567,29 @@
                                                                         <Label layoutX="2.0" layoutY="14.0" text="Parametr:" />
                                                                         <Label layoutX="83.0" layoutY="14.0" text="Wartośc parametru:" />
                                                                         <Label layoutX="2.0" layoutY="39.0" text="-data" />
-                                                                        <Button layoutX="198.0" layoutY="35.0" mnemonicParsing="false" onAction="#HTChoosePathToXML" text="Wybierz plik" />
+                                                                        <Button layoutX="198.0" layoutY="35.0" mnemonicParsing="false" onAction="#HTChoosePathToXML" text="Wybierz folder" />
                                                                         <Label layoutX="3.0" layoutY="70.0" text="-vec " />
-                                                                        <Button layoutX="198.0" layoutY="66.0" mnemonicParsing="false" onAction="#HTChoosePathToVec" text="Wybierz plik" />
+                                                                        <Button layoutX="198.0" layoutY="66.0" mnemonicParsing="false" onAction="#HTChoosePathToVec" prefHeight="25.0" prefWidth="94.0" text="Wybierz plik" />
                                                                         <Label layoutX="3.0" layoutY="102.0" text="-bg" />
-                                                                        <Label fx:id="HTnpos" layoutX="84.0" layoutY="138.0" text="Wprowadź liczbę." />
-                                                                        <Label layoutX="3.0" layoutY="138.0" text="-npos" />
-                                                                        <TextField fx:id="HTnposInput" layoutX="198.0" layoutY="134.0" onKeyPressed="#HTnposEnter" prefHeight="25.0" prefWidth="98.0" />
+                                                                        <Label fx:id="HTnpos" layoutX="469.0" layoutY="173.0" text="Wprowadź liczbę." />
+                                                                        <Label layoutX="309.0" layoutY="173.0" text="-npos" />
+                                                                        <TextField fx:id="HTnposInput" layoutX="576.0" layoutY="169.0" onKeyPressed="#HTnposEnter" prefHeight="25.0" prefWidth="148.0" />
                                                                         <TextField fx:id="HTnnegInput" layoutX="197.0" layoutY="169.0" onKeyPressed="#HTnnegEnter" prefHeight="25.0" prefWidth="98.0" />
                                                                         <Label layoutX="2.0" layoutY="173.0" text="-nneg" />
                                                                         <Label fx:id="HTnneg" layoutX="83.0" layoutY="173.0" text="Wprowadź liczbę." />
                                                                         <Label fx:id="HTnstages" layoutX="83.0" layoutY="207.0" text="Wprowadź liczbę." />
                                                                         <Label layoutX="2.0" layoutY="207.0" text="-nstages" />
                                                                         <TextField fx:id="HTnstagesInput" layoutX="197.0" layoutY="203.0" onKeyPressed="#HTnstagesEnter" prefHeight="25.0" prefWidth="98.0" />
-                                                                        <Button layoutX="198.0" layoutY="98.0" mnemonicParsing="false" onAction="#HTChooseBGtxtFile" text="Wybierz plik" />
-                                                                        <TextField fx:id="HTacceptanceRatioBreakValueInput" layoutX="577.0" layoutY="164.0" onKeyPressed="#HTacceptanceRatioBreakValueEnter" prefHeight="25.0" prefWidth="149.0" />
-                                                                        <Label layoutX="310.0" layoutY="168.0" text="-acceptanceRatioBreakValue " />
-                                                                        <Label fx:id="HTacceptanceRatioBreakValue" layoutX="470.0" layoutY="168.0" text="Wprowadź liczbę." />
+                                                                        <Button layoutX="198.0" layoutY="98.0" mnemonicParsing="false" onAction="#HTChooseBGtxtFile" prefHeight="25.0" prefWidth="94.0" text="Wybierz plik" />
+                                                                        <TextField fx:id="HTacceptanceRatioBreakValueInput" layoutX="1046.0" layoutY="195.0" onKeyPressed="#HTacceptanceRatioBreakValueEnter" prefHeight="25.0" prefWidth="149.0" />
+                                                                        <Label layoutX="779.0" layoutY="199.0" text="-acceptanceRatioBreakValue " />
+                                                                        <Label fx:id="HTacceptanceRatioBreakValue" layoutX="939.0" layoutY="199.0" text="Wprowadź liczbę." />
                                                                         <Label layoutX="310.0" layoutY="98.0" text="-baseFormatSave " />
                                                                         <Label fx:id="HTbaseFormatSave" layoutX="437.0" layoutY="97.0" text="Zaznacz/odznacz opcję." />
                                                                         <CheckBox fx:id="HTbaseFormatSaveCheck" layoutX="577.0" layoutY="97.0" mnemonicParsing="false" onMouseClicked="#HTbaseFormatSaveSet" text="Uzyj starszego formatu. " />
-                                                                        <Label fx:id="HTnumThreads" layoutX="470.0" layoutY="133.0" text="Wprowadź liczbę." />
-                                                                        <Label layoutX="310.0" layoutY="134.0" text="-numThreads" />
-                                                                        <TextField fx:id="HTnumThreadsInput" layoutX="577.0" layoutY="129.0" onKeyPressed="#HTnumThreadsEnter" prefHeight="25.0" prefWidth="148.0" />
+                                                                        <Label fx:id="HTnumThreads" layoutX="469.0" layoutY="207.0" text="Wprowadź liczbę." />
+                                                                        <Label layoutX="309.0" layoutY="207.0" text="-numThreads" />
+                                                                        <TextField fx:id="HTnumThreadsInput" layoutX="576.0" layoutY="203.0" onKeyPressed="#HTnumThreadsEnter" prefHeight="25.0" prefWidth="148.0" />
                                                                         <TextField fx:id="HTprecalcIdxBufSizeInput" layoutX="577.0" layoutY="61.0" onKeyPressed="#HTprecalcIdxBufSizeEnter" prefHeight="25.0" prefWidth="148.0" />
                                                                         <Label layoutX="310.0" layoutY="66.0" text="-precalcIdxBufSize" />
                                                                         <Label fx:id="HTprecalcIdxBufSize" layoutX="470.0" layoutY="65.0" text="Wprowadź liczbę." />
@@ -540,17 +636,21 @@
                                                                         <TextField fx:id="HTmaxWeakCountInput" layoutX="1471.0" layoutY="177.0" onKeyPressed="#HTmaxWeakCountEnter" prefHeight="25.0" prefWidth="154.0" />
                                                                         <Label layoutX="1229.0" layoutY="181.0" text="-maxWeakCount " />
                                                                         <Label fx:id="HTmaxWeakCount" layoutX="1365.0" layoutY="181.0" text="Wprowadź liczbę." />
-                                                                        <ScrollPane layoutX="41.0" layoutY="32.0" prefHeight="103.0" prefWidth="148.0">
+                                                                        <ScrollPane layoutX="41.0" layoutY="32.0" prefHeight="137.0" prefWidth="148.0">
                                                                           <content>
-                                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="93.0" prefWidth="625.0">
+                                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="122.0" prefWidth="890.0">
                                                                                  <children>
-                                                                                    <Label fx:id="HTPathtoXml" layoutX="14.0" layoutY="6.0" text="Wybierz plik xml." />
+                                                                                    <Label fx:id="HTPathtoXml" layoutX="14.0" layoutY="6.0" text="Wybierz folder." />
                                                                                     <Label fx:id="HTPathToVecFile" layoutX="12.0" layoutY="38.0" text="Wybierz plik vec." />
                                                                                     <Label fx:id="HTPathtoBGtxt" layoutX="14.0" layoutY="71.0" text="Wybierz plik txt." />
+                                                                                    <Label fx:id="HTChoosenXMLFile" layoutX="14.0" layoutY="100.0" text="Wybierz plik xml." />
                                                                                  </children>
                                                                               </AnchorPane>
                                                                           </content>
                                                                         </ScrollPane>
+                                                                        <Label layoutX="1.0" layoutY="133.0" text="-xml" />
+                                                                        <Button layoutX="198.0" layoutY="129.0" mnemonicParsing="false" onAction="#HTLoadChoosenXMLFile" prefHeight="25.0" prefWidth="94.0" text="Wybierz plik" />
+                                                                        <Button layoutX="306.0" layoutY="129.0" mnemonicParsing="false" onAction="#HTSaveDataFromCascadeFolder" prefHeight="25.0" prefWidth="109.0" text="Zapisz z folderu" />
                                                                      </children>
                                                                   </AnchorPane>
                                                                </content>
@@ -577,6 +677,15 @@
       <Label layoutX="430.0" layoutY="66.0" text="Ustawienia" />
       <Button layoutX="509.0" layoutY="49.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="148.0" text="Wykryj Biegaczy ze zdjęć" />
       <Label layoutX="665.0" layoutY="20.0" text="Wybierz folder źródłowy do rozpoznawania" />
+      <ScrollPane layoutX="122.0" layoutY="11.0" prefHeight="35.0" prefWidth="167.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="23.0" prefWidth="606.0">
+               <children>
+                    <Label fx:id="Sciezka" layoutX="14.0" layoutY="6.0" minHeight="16" minWidth="69" text="Dokonaj wyboru pliku" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
     
         
         

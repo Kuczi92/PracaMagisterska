@@ -1,3 +1,1 @@
-"Opencv bin\opencv_haartraining.exe" -data cascades -vec Vectors/facevector.vec -bg negative/bg.txt -npos 200 -nneg 200 -nstages 20 -mem 1024 -mode ALL -w 24 -h 24 
-PAUSE
-rem -nonsym
+"C:\Users\Quchi\Documents\NetBeansProjects\Praca Magisterska\Haar Training\Opencv bin\opencv_haartraining.exe" -data "C:\Users\Quchi\Documents\NetBeansProjects\Praca Magisterska\Haar Training\Cascades3" -vec "C:\Users\Quchi\Documents\NetBeansProjects\Praca Magisterska\Haar Training\Vectors\facevector.vec" -bg "C:\Users\Quchi\Documents\NetBeansProjects\Praca Magisterska\Haar Training\negative\bg.txt" -npos 200 -nneg 200 -nstages 15 -precalcValBufSize 2000 -precalcIdxBufSize 2000 -numThreads 8

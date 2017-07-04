@@ -14,14 +14,14 @@ import java.util.ArrayList;
  */
 public class RunnersDetection  {
     final TypeOfDetect Type;
-    final String Path;
+    final BufferedImage InputImage;
     ArrayList<ArrayList<Integer>> ListaPunktów = new ArrayList();
     ArrayList<BufferedImage> ListaBiegaczy = new ArrayList();
     BufferedImage Image;
-    RunnersDetection(TypeOfDetect Type,String path,int x, int y, int max_X, int max_Y, int min_X,int min_Y,double overlapFailedbox,boolean loadXML, String XML)
+    RunnersDetection(TypeOfDetect Type,BufferedImage InputImage,int x, int y, int max_X, int max_Y, int min_X,int min_Y,double overlapFailedbox,boolean loadXML, String XML)
     {
         this.Type = Type;
-        this.Path = path;
+        this.InputImage = InputImage;
         
         if(loadXML){
         Type = TypeOfDetect.SELECTED_XML;
@@ -30,26 +30,26 @@ public class RunnersDetection  {
         switch (Type)
                     {
                         case FACE_DETECT:
-                            FaceDetector FaceDetector = new FaceDetector(Path);
-                            FaceDetector.DetectFaces();
+                            FaceDetector FaceDetector = new FaceDetector(InputImage);
+                            ListaBiegaczy =  FaceDetector.DetectFaces();
                             Image = FaceDetector.GetObrazWynikowy();
                             ListaPunktów = FaceDetector.ListaPunktów;
                             break;
                         case HUMANOID_DETECT:
-                            HumanoidDetecion HumanoidDetecionFullBody = new HumanoidDetecion(Path,Type);
+                            HumanoidDetecion HumanoidDetecionFullBody = new HumanoidDetecion(InputImage,Type);
                             ListaBiegaczy =   HumanoidDetecionFullBody.DetectHumanoids(x,y,max_X,max_Y,min_X,min_Y,overlapFailedbox);
                             Image = HumanoidDetecionFullBody.GetObrazWynikowy();
                             ListaPunktów = HumanoidDetecionFullBody.ListaPunktów;
                             break;
                         case UPPER_BODY_DETECT:
-                            HumanoidDetecion HumanoidDetecionUpper = new HumanoidDetecion(Path,Type);
+                            HumanoidDetecion HumanoidDetecionUpper = new HumanoidDetecion(InputImage,Type);
                             ListaBiegaczy =  HumanoidDetecionUpper.DetectHumanoids(x,y,max_X,max_Y,min_X,min_Y,overlapFailedbox);
                             Image = HumanoidDetecionUpper.GetObrazWynikowy();
                             ListaPunktów = HumanoidDetecionUpper.ListaPunktów;
                             break;
                             
                         case SELECTED_XML:
-                            SelectedXmlDetection DetectXML = new SelectedXmlDetection(Path,XML);
+                            SelectedXmlDetection DetectXML = new SelectedXmlDetection(InputImage,XML);
                             ListaBiegaczy =  DetectXML.Detect(x,y,max_X,max_Y,min_X,min_Y,overlapFailedbox);
                             Image = DetectXML.GetObrazWynikowy();
                             ListaPunktów = DetectXML.ListaPunktów;

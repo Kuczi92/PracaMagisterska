@@ -173,6 +173,18 @@ public final class Picture   {
         initPixelArray();
     }
     
+    
+    
+    
+    
+    public void SetPicture(int[] pixels, int width, int height) {
+        this.image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+        this.width = width;
+        this.height = height;
+        this.totalPixels = this.width * this.height;
+        this.pixels = pixels;
+        setPixelArray(pixels);
+    }
     /** 
      * Read the image using the image file path passed
      * 

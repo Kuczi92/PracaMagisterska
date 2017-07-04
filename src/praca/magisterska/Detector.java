@@ -11,11 +11,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import javax.imageio.ImageIO;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
@@ -28,31 +25,31 @@ import org.opencv.core.Rect;
 abstract class Detector {
     
     
-   final String SciezkaPliku;
+  
    BufferedImage  ObrazWejsciowy;
    ArrayList<ArrayList<Integer>> ListaPunktów = new ArrayList();
    
-   
-   Detector(String SciezkaPliku){
-       this.SciezkaPliku =  SciezkaPliku;
-        try 
-      {
-          ObrazWejsciowy = ImageIO.read(new File(SciezkaPliku));
-      } 
-      catch (IOException e) 
-      {   
-   
-        System.out.println("Bład podczas ładowania pliku");
-      }
+
+   Detector(BufferedImage InputImage){
+          ObrazWejsciowy = convert(InputImage,BufferedImage.TYPE_3BYTE_BGR);
+
    }
    
-   public static Mat bufferedImageToMat(BufferedImage bi) {
+    public static Mat bufferedImageToMat(BufferedImage bi) {
     Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
     byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
     mat.put(0, 0, data);
     return mat;
-   }
-      
+    }
+   
+   
+    public static BufferedImage convert(BufferedImage src, int bufImgType) {
+    BufferedImage img= new BufferedImage(src.getWidth(), src.getHeight(), bufImgType);
+    Graphics2D g2d= img.createGraphics();
+    g2d.drawImage(src, 0, 0, null);
+    g2d.dispose();
+    return img;
+    }     
 public static BufferedImage MatDoBufferedImage(Mat matrix)
 {
     

@@ -19,7 +19,7 @@ import javafx.scene.control.Label;
  * @author Quchi
  */
 public class HaarCascadeTraining {
-   private final String PathtoScript="Haar Training\\HaarTraining.bat";
+   private static String PathtoScript="Haar Training\\HaarTraining.bat";
    private final String AppName="Haar Training\\Opencv bin\\opencv_haartraining.exe"; 
    private final Label data;
    private final Label vec;
@@ -42,6 +42,56 @@ public class HaarCascadeTraining {
    private final Label weightTrimRate;
    private final Label maxDepth;
    private final Label maxWeakCount;
+   
+   
+   private static final String PATH_TO_DATA2CASCADE_SCRIPT = "Haar Training\\ConvertToXML.bat";
+   private static final String APP_NAME_DATA2CASCADE_SCRIPT = "Haar Training\\Opencv bin\\haarconv.exe";
+   
+   public static void ChangeStriptPath(String a){
+       PathtoScript = a;
+   }
+   
+   
+   public  void DataToCascadeXmlSave(Label PathToFolder, Label PathToXMLfile){
+       try (PrintWriter zapis = new PrintWriter(PATH_TO_DATA2CASCADE_SCRIPT)) 
+            {
+                File File = new File(APP_NAME_DATA2CASCADE_SCRIPT);
+                zapis.print("\""+File.getAbsolutePath()+"\""); 
+                if(!("Wybierz folder.".equals(PathToFolder.getText())||null==PathToFolder.getText())) 
+                    {
+                        zapis.print(" "+"\""+PathToFolder.getText()+"\"");
+                    }
+                
+                if(!("Wybierz plik xml.".equals(PathToXMLfile.getText())||null==PathToXMLfile.getText())) 
+                    {
+                        zapis.print(" "+"\""+PathToXMLfile.getText()+"\"");
+                    }
+                
+                if(!("Wprowadź liczbę.".equals(w.getText())||null==w.getText())) 
+                    {
+                        zapis.print(" "+w.getText());
+                    }
+            
+                if(!("Wprowadź liczbę.".equals(h.getText())||null==h.getText())) 
+                    {
+                        zapis.print(" "+h.getText());
+                    }
+            
+            } catch (FileNotFoundException ex) {
+           Logger.getLogger(HaarCascadeTraining.class.getName()).log(Level.SEVERE, null, ex);
+       }
+   }
+   
+   
+   public static void DataToCascadeXmlOpen(){
+       Desktop desktop = Desktop.getDesktop();
+       try {
+           File File = new File(PATH_TO_DATA2CASCADE_SCRIPT);
+           desktop.open(new File(File.getAbsolutePath()));
+       } catch (IOException ex) {
+           Logger.getLogger(HaarCascadeTraining.class.getName()).log(Level.SEVERE, null, ex);
+       }
+   }
    
    public HaarCascadeTraining(
     Label data, Label vec, Label bg, Label npos, Label nneg,Label nstages,Label precalcValBufSize,
@@ -88,9 +138,9 @@ public class HaarCascadeTraining {
             {   
             File File = new File(AppName);
                zapis.print("\""+File.getAbsolutePath()+"\""); 
-            if(!("Wybierz plik xml.".equals(data.getText())||null==data.getText())) 
+            if(!("Wybierz folder.".equals(data.getText())||null==data.getText())) 
             {
-                zapis.print(" "+"-data "+data.getText());
+                zapis.print(" "+"-data "+"\""+data.getText()+"\"");
             }
             
             if(!("Wybierz plik vec.".equals(vec.getText())||null==vec.getText())) 
