@@ -1588,53 +1588,31 @@ public class FXMLDocumentController implements Initializable {
     
     //Fragment odpowiedzialny za ustawienia wycięć fragmentów zawierające interesujące nas obiekty
     //Dokładniej skalowanie i przesunięcie wyciętych obrazów
-    @FXML Slider PreprocMovePointAX;
-    @FXML Label PreprocCurrentMovePointAX;
-    @FXML public void PreprocChangeCurrentMovePointAXtValue(){
-      PreprocCurrentMovePointAX.setText(format("%.2f",PreprocMovePointAX.getValue()));
+    @FXML Slider PreprocMovePointX;
+    @FXML Label PreprocCurrentMovePointX;
+    @FXML public void PreprocChangeCurrentMovePointXtValue(){
+      PreprocCurrentMovePointX.setText(format("%.2f",PreprocMovePointX.getValue()));
     }
     
-    @FXML Slider PreprocMovePointAY;
-    @FXML Label PreprocCurrentMovePointAY;
-    @FXML public void PreprocChangeCurrentMovePointAYtValue(){
-      PreprocCurrentMovePointAY.setText(format("%.2f",PreprocMovePointAY.getValue()));
+    @FXML Slider PreprocMovePointY;
+    @FXML Label PreprocCurrentMovePointY;
+    @FXML public void PreprocChangeCurrentMovePointYtValue(){
+      PreprocCurrentMovePointY.setText(format("%.2f",PreprocMovePointY.getValue()));
     }
     
-    @FXML Slider PreprocMovePointBX;
-    @FXML Label PreprocCurrentMovePointBX;
-    @FXML public void PreprocChangeCurrentMovePointBXtValue(){
-      PreprocCurrentMovePointBX.setText(format("%.2f",PreprocMovePointBX.getValue()));
+    @FXML Slider PreprocMovePointW;
+    @FXML Label PreprocCurrentMovePointW;
+    @FXML public void PreprocChangeCurrentMovePointWtValue(){
+      PreprocCurrentMovePointW.setText(format("%.2f",PreprocMovePointW.getValue()));
     }
     
-    @FXML Slider PreprocMovePointBY;
-    @FXML Label PreprocCurrentMovePointBY;
-    @FXML public void PreprocChangeCurrentMovePointBYtValue(){
-      PreprocCurrentMovePointBY.setText(format("%.2f",PreprocMovePointBY.getValue()));
+    @FXML Slider PreprocMovePointH;
+    @FXML Label PreprocCurrentMovePointH;
+    @FXML public void PreprocChangeCurrentMovePointHtValue(){
+      PreprocCurrentMovePointH.setText(format("%.2f",PreprocMovePointH.getValue()));
     }
     
-    @FXML Slider PreprocMovePointCX;
-    @FXML Label PreprocCurrentMovePointCX;
-    @FXML public void PreprocChangeCurrentMovePointCXtValue(){
-      PreprocCurrentMovePointCX.setText(format("%.2f",PreprocMovePointCX.getValue()));
-    }
-    
-    @FXML Slider PreprocMovePointCY;
-    @FXML Label PreprocCurrentMovePointCY;
-    @FXML public void PreprocChangeCurrentMovePointCYtValue(){
-      PreprocCurrentMovePointCY.setText(format("%.2f",PreprocMovePointCY.getValue()));
-    }
-    
-    @FXML Slider PreprocMovePointDX;
-    @FXML Label PreprocCurrentMovePointDX;
-    @FXML public void PreprocChangeCurrentMovePointDXtValue(){
-      PreprocCurrentMovePointDX.setText(format("%.2f",PreprocMovePointDX.getValue()));
-    }
-    
-    @FXML Slider PreprocMovePointDY;
-    @FXML Label PreprocCurrentMovePointDY;
-    @FXML public void PreprocChangeCurrentMovePointDYtValue(){
-      PreprocCurrentMovePointDY.setText(format("%.2f",PreprocMovePointDY.getValue()));
-    }
+
     //Fragment odpowiedzialny za zakładkę Haar klasyfikator
     
     //Fragment opdowiedzialny za zakładkę Create samples 
@@ -2214,7 +2192,9 @@ public class FXMLDocumentController implements Initializable {
         RunnersDetection RunnersDetection = new RunnersDetection(type,SwingFXUtils.fromFXImage(PreprocImageLoad.getImage(),null),Integer.valueOf(TextFieldRozdzielczonscMAX_X.getCharacters().toString()),
         Integer.valueOf(TextFieldRozdzielczonscMAX_Y.getCharacters().toString()),(int) (SliderRozmiarMaxX.getValue()),(int)(SliderRozmiarMaxY.getValue()),
         (int)(SliderRozmiarMinX.getValue()),(int)(SliderRozmiarMinY.getValue()),SliderFailedBoxes.getValue()/100.0,
-        PreprocLoadChoosenclassif.isSelected(),PreprocLoaedPathToClassifier.getText());
+        PreprocLoadChoosenclassif.isSelected(),PreprocLoaedPathToClassifier.getText(),
+        PreprocCurrentMovePointX,PreprocCurrentMovePointY,
+        PreprocCurrentMovePointW,PreprocCurrentMovePointH);
         
         DetectedRunners = RunnersDetection.DetectedRunners();
         DrawOnCanvas DrawOnCanvas = new DrawOnCanvas(RunnersDetection.PicWithRunners(),RunnersDetection.ListaPunktów.size());

@@ -7,6 +7,7 @@ package praca.magisterska;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import javafx.scene.control.Label;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
@@ -27,7 +28,8 @@ public class SelectedXmlDetection extends Detector {
         super(InputImage);
         this.loadedXML = XML;
     }
-    public ArrayList<BufferedImage> Detect(int x , int y,int max_X, int max_Y, int min_X,int min_Y,double overlapFailedbox){
+    public ArrayList<BufferedImage> Detect(int x , int y,int max_X, int max_Y, int min_X,int min_Y,double overlapFailedbox,
+            Label MovedPointX,Label MovedPointY,Label MovedPointW,Label MovedPointH){
                 CascadeClassifier HumanoidsDetector;
                 HumanoidsDetector = new CascadeClassifier(loadedXML);
                 MatOfRect faceDetections = new MatOfRect();
@@ -39,16 +41,28 @@ public class SelectedXmlDetection extends Detector {
                 System.out.println(String.format("Detected %s faces", faceDetections.toArray().length));
                 ArrayList<BufferedImage> Out = new ArrayList<>();
                 
+                double moddedX = Double.valueOf(MovedPointX.getText().replace(',', '.'))/100*ObrazWejsciowy.getWidth();
+                double moddedY = Double.valueOf(MovedPointY.getText().replace(',', '.'))/100*ObrazWejsciowy.getHeight();
+                double moddedW = Double.valueOf(MovedPointW.getText().replace(',', '.'))/100*ObrazWejsciowy.getWidth();
+                double moddedH = Double.valueOf(MovedPointH.getText().replace(',', '.'))/100*ObrazWejsciowy.getHeight();
+                
+                double MinimumX = min_X/100.0*ObrazWejsciowy.getWidth();
+                double MinumumY = min_Y/100.0*ObrazWejsciowy.getHeight();
+                double MaximumX = max_X/100.0*ObrazWejsciowy.getWidth();
+                double MaximumY = max_Y/100.0*ObrazWejsciowy.getHeight();
                 
              for (Rect rect : faceDetections.toArray()) 
               {
-                    Core.rectangle(image, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),new Scalar(0, 255, 0),10);
-                    Out.add(this.GetFragmentOfPicture(rect.x, rect.y,rect.width, rect.height));
-                    ListaPunktów.add(new ArrayList<>());
-                    ListaPunktów.get(ListaPunktów.size()-1).add(rect.x);
-                    ListaPunktów.get(ListaPunktów.size()-1).add(rect.y);
-                    ListaPunktów.get(ListaPunktów.size()-1).add(rect.x+rect.width);
-                    ListaPunktów.get(ListaPunktów.size()-1).add(rect.y+rect.height);
+                   if((MinimumX<rect.width&&MinumumY<rect.height)&&(MaximumX>rect.height&&MaximumY>rect.width))
+                     {
+                        Core.rectangle(image, new Point(rect.x+moddedX, rect.y+moddedY), new Point(rect.x +moddedX+ rect.width+moddedW, rect.y + moddedY + rect.height+moddedH),new Scalar(0, 255, 0),2);
+                        Out.add(this.GetFragmentOfPicture((int) (rect.x+moddedX), (int) (rect.y+moddedY), (int) (rect.width+moddedW), (int) (rect.height+moddedH))); 
+                        ListaPunktów.add(new ArrayList<>());
+                        ListaPunktów.get(ListaPunktów.size()-1).add(rect.x);
+                        ListaPunktów.get(ListaPunktów.size()-1).add(rect.y);
+                        ListaPunktów.get(ListaPunktów.size()-1).add(rect.x+rect.width);
+                        ListaPunktów.get(ListaPunktów.size()-1).add(rect.y+rect.height);
+                     }
               }
               ObrazWejsciowy = MatDoBufferedImage(image);
               return Out;
