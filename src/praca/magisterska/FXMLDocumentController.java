@@ -14,16 +14,14 @@ import NumericTasks.ArrayUtils;
 import static NumericTasks.ArrayUtils.ChooseOneRadiobutton;
 import NumericTasks.CreateSamples;
 import NumericTasks.HaarCascadeTraining;
+import NumericTasks.LoadSettings;
 import NumericTasks.MarkedRect;
 import NumericTasks.Picture;
 import NumericTasks.MLTraining;
+import NumericTasks.SaveSettings;
 import NumericTasks.TestPictures;
 import NumericTasks.TrainingPictures;
 import NumericTasks.TypeOfThreshold;
-import static NumericTasks.TypeOfThreshold.BRAK_PROGROWANIA;
-import static NumericTasks.TypeOfThreshold.EFEKT_PRZYCIEMNAJACY;
-import static NumericTasks.TypeOfThreshold.EFEKT_ROZJASNIAJACY;
-import static NumericTasks.TypeOfThreshold.PROGOWANIE;
 import NumericTasks.ViewPicture;
 import NumericTasks.WriteToFile;
 import java.awt.image.BufferedImage;
@@ -58,6 +56,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -69,11 +68,19 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
+import static NumericTasks.TypeOfThreshold.EFEKT_ROZJAŚNIAJĄCY;
+import static NumericTasks.TypeOfThreshold.EFEKT_PRZYCIEMNAJĄCY;
+import static NumericTasks.TypeOfThreshold.BRAK_PROGOWANIA;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.scene.control.TableColumn;
+import static NumericTasks.TypeOfThreshold.PROGOWANIE_ZWYKŁE;
 
 /**
  *
  * @author Quchi
  */
+
 public class FXMLDocumentController implements Initializable {
     Parent root;
     FXMLDetectedRunnersController FXMLDetectedRunnersController;
@@ -303,10 +310,10 @@ public class FXMLDocumentController implements Initializable {
     public void ChangeValueGreen(){
         CurrentValueGreen.setText(format("%.2f",SliderCurrentValueGreen.getValue())); 
         if(Test==null){
-       }
-       else{
+        }
+        else{
          changeValuesOfPicture();
-       }
+        }
     }
     
     
@@ -492,11 +499,10 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void changeValuesOfPicture() {
       ViewPicture Pic = new ViewPicture(new Picture().setPicture(Test.GetPicOfTestImage().get(CurrentImageTest),Test.RecognizeTool.sizeX,Test.RecognizeTool.sizeY));
-            int[] pixels = Pic.ModyfikujKoloryWKanaleRGB(
-             SliderCurrentValueRed.getValue()+SliderCurrentValueBrightness.getValue(),
+            int[] pixels = Pic.ModyfikujKoloryWKanaleRGB(SliderCurrentValueRed.getValue()+SliderCurrentValueBrightness.getValue(),
              SliderCurrentValueGreen.getValue()+SliderCurrentValueBrightness.getValue(),
              SliderCurrentValueBlue.getValue()+SliderCurrentValueBrightness.getValue(),
-             SliderCurrentValueContrast.getValue()/1000,TypeOfThreshold,
+             SliderCurrentValueContrast.getValue()/1000,TypeOfThresholdValue,
              (int) SliderCurrentValueThreshold.getValue());
             Picture Out = new Picture(pixels,Pic.pobierzX(),Pic.pobierzY());
             
@@ -514,28 +520,28 @@ public class FXMLDocumentController implements Initializable {
             
     }
     
-    public TypeOfThreshold TypeOfThreshold = BRAK_PROGROWANIA; 
+    public TypeOfThreshold TypeOfThresholdValue = BRAK_PROGOWANIA; 
     @FXML
     public void ChangeTypeOfThreshold(){
         switch(ThresholdType.getSelectionModel().getSelectedIndex())
         {
             case 0:
-            TypeOfThreshold = TypeOfThreshold.BRAK_PROGROWANIA;
+            TypeOfThresholdValue = TypeOfThreshold.BRAK_PROGOWANIA;
             changeValuesOfPicture();
             break;
             
             case 1:
-            TypeOfThreshold = TypeOfThreshold.PROGOWANIE;
+            TypeOfThresholdValue = TypeOfThreshold.PROGOWANIE_ZWYKŁE;
             changeValuesOfPicture();
             break;
             
             case 2:
-            TypeOfThreshold = TypeOfThreshold.EFEKT_ROZJASNIAJACY;   
+            TypeOfThresholdValue = TypeOfThreshold.EFEKT_ROZJAŚNIAJĄCY;   
             changeValuesOfPicture();
             break;
             
             case 3:
-            TypeOfThreshold = TypeOfThreshold.EFEKT_PRZYCIEMNAJACY;   
+            TypeOfThresholdValue = TypeOfThreshold.EFEKT_PRZYCIEMNAJĄCY;   
             changeValuesOfPicture();
             break;
         }
@@ -549,11 +555,10 @@ public class FXMLDocumentController implements Initializable {
         CurrentImageTest = 0;
         Test = new TestPictures(FolderWithTestImages.getText(),NumbersNeuralNet,ProgressFileRead
                 ,LabelProgressReadFileTest,LabelProgressReadFileTest);
-        Test.SetParametersPicture(
-                SliderCurrentValueRed.getValue()+SliderCurrentValueBrightness.getValue(),
+        Test.SetParametersPicture(SliderCurrentValueRed.getValue()+SliderCurrentValueBrightness.getValue(),
                 SliderCurrentValueGreen.getValue()+SliderCurrentValueBrightness.getValue(), 
                 SliderCurrentValueBlue.getValue()+SliderCurrentValueBrightness.getValue(), 
-                SliderCurrentValueContrast.getValue(),TypeOfThreshold, (int) SliderCurrentValueThreshold.getValue(), UseNegative.isSelected(),
+                SliderCurrentValueContrast.getValue(),TypeOfThresholdValue, (int) SliderCurrentValueThreshold.getValue(), UseNegative.isSelected(),
                 SliderCurrentValueBlurr.getValue(), (int) SliderCurrentThresholdRecognize.getValue(),AccuracyOFRecognizing,
                 ViewCurrentNumber,RecognizeNumberTest,CorrectNumber);
         new Thread(()->Test.run()).start();
@@ -1339,8 +1344,24 @@ public class FXMLDocumentController implements Initializable {
             rootItem.getChildren().add(item);
         }          
         LayersAndNumbersOfNeuralNet.setRoot(rootItem);
+        
+        setNumbersOFNeuron( 0,Integer.valueOf(NormalizeWidthX.getText())*Integer.valueOf(NormalizeHeightY.getText()));
+        setNumbersOFNeuron( NumbersOfLayers-1,10);
+         
     }
-    
+    public void setNumbersOFNeuron(int layer,int numberOfneurons){
+        
+         int selectedLayer = layer ;
+         TreeItem<String> item =  (TreeItem<String>) LayersAndNumbersOfNeuralNet.getRoot().getChildren().get(selectedLayer);
+         TreeItem<String> Neuron = new TreeItem<> ("Liczba neuronów: " + numberOfneurons,new ImageView(NeuronIcon)); 
+         if(item.isLeaf()){
+             item.getChildren().add(Neuron);
+         }
+         else {
+           item.getChildren().clear();
+           item.getChildren().add(Neuron);
+         }
+    }
     
     
     @FXML
@@ -1498,7 +1519,7 @@ public class FXMLDocumentController implements Initializable {
     }
     
     
-    TypeOfThreshold PreprocTypeOfThreshold = BRAK_PROGROWANIA;
+    TypeOfThreshold PreprocTypeOfThreshold = BRAK_PROGOWANIA;
     @FXML ComboBox PreprocThresholdType;
     
     @FXML
@@ -1506,22 +1527,22 @@ public class FXMLDocumentController implements Initializable {
         switch(PreprocThresholdType.getSelectionModel().getSelectedIndex())
         {
             case 0:
-            PreprocTypeOfThreshold = BRAK_PROGROWANIA;
+            PreprocTypeOfThreshold = BRAK_PROGOWANIA;
             PreProcchangeValuesOfPicture();
             break;
             
             case 1:
-            PreprocTypeOfThreshold = PROGOWANIE;
+            PreprocTypeOfThreshold = PROGOWANIE_ZWYKŁE;
             PreProcchangeValuesOfPicture();
             break;
             
             case 2:
-            PreprocTypeOfThreshold = EFEKT_ROZJASNIAJACY;   
+            PreprocTypeOfThreshold = EFEKT_ROZJAŚNIAJĄCY;   
             PreProcchangeValuesOfPicture();
             break;
             
             case 3:
-            PreprocTypeOfThreshold = EFEKT_PRZYCIEMNAJACY;   
+            PreprocTypeOfThreshold = EFEKT_PRZYCIEMNAJĄCY;   
             PreProcchangeValuesOfPicture();
             break;
         }
@@ -1533,7 +1554,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML ImageView PreprocImageLoad;
     @FXML
     private void PreProcchangeValuesOfPicture() {
-
+        if(Pic!=null){
             int[] pixels = Pic.ModyfikujKoloryWKanaleRGB(
              PreProcRedSlider.getValue()+PreProcBrightnessSlider.getValue(),
              PreProcGreenSlider.getValue()+PreProcBrightnessSlider.getValue(),
@@ -1551,15 +1572,14 @@ public class FXMLDocumentController implements Initializable {
             }
             
             PreprocImageLoad.setImage(SwingFXUtils.toFXImage(PreprocOut.Image(), null));
-            
-            
+        }   
     }
     
     @FXML CheckBox PreprocUseResizeImage;
     @FXML public void PreprocReloadImage(){
         if(PreprocUseResizeImage.isSelected()){
            try {
-                Pic = new ViewPicture(new Picture().setPicture(ImageIO.read(new File(Sciezka.getText())), Integer.valueOf(TextFieldRozdzielczonscMAX_X.getText()), Integer.valueOf(TextFieldRozdzielczonscMAX_Y.getText())));
+                Pic = new ViewPicture(new Picture().setPicture(ImageIO.read(new File(Sciezka.getText())), Integer.valueOf(PreprocResolutionX.getText()), Integer.valueOf(PreprocResolutionX.getText())));
                 PreProcchangeValuesOfPicture();
                 
                } 
@@ -1612,7 +1632,23 @@ public class FXMLDocumentController implements Initializable {
       PreprocCurrentMovePointH.setText(format("%.2f",PreprocMovePointH.getValue()));
     }
     
+    @FXML Label PreprocResolutionX;
+    public void PreprocEnterResolutionX(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          PreprocResolutionX.setText(TextFieldRozdzielczonscMAX_X.getText());
+          TextFieldRozdzielczonscMAX_X.clear();
+          PreprocReloadImage(); 
+      }
+    }
 
+    @FXML Label PreprocResolutionY;
+    public void PreprocEnterResolutionY(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          PreprocResolutionY.setText(TextFieldRozdzielczonscMAX_Y.getText());
+          TextFieldRozdzielczonscMAX_Y.clear();
+          PreprocReloadImage(); 
+      }
+    }
     //Fragment odpowiedzialny za zakładkę Haar klasyfikator
     
     //Fragment opdowiedzialny za zakładkę Create samples 
@@ -2174,30 +2210,349 @@ public class FXMLDocumentController implements Initializable {
     public void changeValueMinX(){
         LabelValueRozmiarMinX.setText(format("%.2f",SliderRozmiarMinX.getValue()));
     }
+    
+    
     @FXML
     public void changeValueMinY(){
         LabelValueRozmiarMinY.setText(format("%.2f",SliderRozmiarMinY.getValue())); 
     }
+    
+    
     @FXML
     public void changeValueMaxX(){
          LabelValueRozmiarMaxX.setText(format("%.2f",SliderRozmiarMaxX.getValue()));
     }
+    
+    
     @FXML
     public void changeValueMaxY(){
          LabelValueRozmiarMaxY.setText(format("%.2f",SliderRozmiarMaxY.getValue()));
     }
     
+    
+    //Kod dotyczący zakładki Automatycznego rozpoznawania
+    
+    @FXML ImageView AutoImage;
+    @FXML TableView AutoRecognizedNumbers;
+    @FXML public void AutoRecognize(){
+        try {
+            RunnersDetection RunnersDetection = new RunnersDetection(type,
+                    new Picture().setPicture(ImageIO.read(new File(AutoChoosenPicFile.getText())), Integer.valueOf(PreprocResolutionX.getText()), Integer.valueOf(PreprocResolutionY.getText())),
+                    Integer.valueOf(PreprocResolutionX.getText()),
+                    Integer.valueOf(PreprocResolutionY.getText()),
+                    (int) (SliderRozmiarMaxX.getValue()),(int)(SliderRozmiarMaxY.getValue()),
+                    (int)(SliderRozmiarMinX.getValue()),(int)(SliderRozmiarMinY.getValue()),
+                    SliderFailedBoxes.getValue()/100.0,
+                    PreprocLoadChoosenclassif.isSelected(),PreprocLoaedPathToClassifier.getText(),
+                    PreprocCurrentMovePointX,PreprocCurrentMovePointY,
+                    PreprocCurrentMovePointW,PreprocCurrentMovePointH);
+                ArrayList<Integer> Runner = new ArrayList<>();
+                ArrayList<String> NumberOfRunner = new ArrayList<>();
+                
+            ArrayList< BufferedImage > DetectedRunners = RunnersDetection.DetectedRunners();
+            // przegladanie pojedyńczego zdjęcia biegacza
+            int currentrunner = 0; 
+            for(BufferedImage a1:DetectedRunners) {
+                
+                
+                ViewPicture Pic = new ViewPicture(a1);
+                //zmiana progowania mod jasnosci kontrastu kolorów
+                int[] pixels = Pic.ModyfikujKoloryWKanaleRGB(ValuesFromSliders.get(0)+ValuesFromSliders.get(3),
+                        ValuesFromSliders.get(1)+ValuesFromSliders.get(3),
+                        ValuesFromSliders.get(2)+ValuesFromSliders.get(3), 
+                        ValuesFromSliders.get(4)/1000.0,
+                        TypeOfThreshold.valueOf(ValuesFromComboBox.get(0).replace(' ','_').toUpperCase()),
+                        (int) ValuesFromSliders.get(5).doubleValue());
+                // dotąd ok
+                
+                
+                Picture Out = new Picture(pixels,a1.getWidth(),a1.getHeight());
+                Out = new Picture( Out.Zoom(ValuesFromSliders.get(12)/2));
+             
+                if(ValuesFromCheckBox.get(0)){
+                    Out = new Picture (Out.changeBlurr((int)ValuesFromSliders.get(6).doubleValue(), (int)ValuesFromSliders.get(6).doubleValue()));
+                    
+                }
+                if(ValuesFromCheckBox.get(3)){
+                    Out = new Picture (Out.Negative(Out.Image()));
+                   
+                }
+                if (ValuesFromCheckBox.get(1)||ValuesFromCheckBox.get(4)) {
+                    
+                    
+                
+                ArrayList< BufferedImage > DetectedNumbers = Out.FindContorous((int)ValuesFromSliders.get(6).doubleValue(),
+                            (int) ValuesFromSliders.get(11).doubleValue(),
+                            (int)(ValuesFromSliders.get(7)/100.0*Out.getImageWidth()),
+                            (int)(ValuesFromSliders.get(8)/100.0*Out.getImageHeight()),
+                            (int)(ValuesFromSliders.get(9)/100.0*Out.getImageWidth()),
+                            (int)(ValuesFromSliders.get(10)/100.0*Out.getImageHeight()),
+                            ValuesFromCheckBox.get(2),
+                            new Picture(a1).Zoom((int)ValuesFromSliders.get(12).doubleValue()/2), //oryginany obraz
+                            ValuesFromCheckBox.get(4),
+                            ValuesFromCheckBox.get(5));
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    if (DetectedNumbers.size()>0) {
+                            StringBuilder RecognizedNumber = new StringBuilder();
+                            DetectedNumbers.forEach((CurrentImage) -> {
+                                RecognizedNumber.append(NumbersNeuralNet.RecognizeNumber(new Picture(CurrentImage), (int)ValuesFromSliders.get(13).doubleValue()));
+                            });
+
+                            String Numer  =  RecognizedNumber.toString();
+                            Runner.add(++currentrunner);
+                            NumberOfRunner.add(Numer);
+                          }
+                       }
+            }
+            
+            AutoRecognizedNumbers.getColumns().clear();
+            AutoRecognizedNumbers.getItems().clear();
+      for (int i = 0; i < currentrunner && i < currentrunner; i++){
+                           AutoRecognizedNumbers.getItems().add(i);
+                        }
+
+        TableColumn<Integer, Number> intColumn = new TableColumn<>("Biegacz");
+        intColumn.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            return new ReadOnlyIntegerWrapper(Runner.get(rowIndex));
+        });
+
+        TableColumn<Integer, String> nameColumn = new TableColumn<>("Numer");
+        nameColumn.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            return new ReadOnlyStringWrapper(NumberOfRunner.get(rowIndex));
+        });
+              
+        AutoRecognizedNumbers.getColumns().add(intColumn);
+        AutoRecognizedNumbers.getColumns().add(nameColumn);  
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    
+    //klasa potrzebna do ładowania danych do tabeli
+    public class MyDataType {
+                private final int intValue ;
+                private final String stringValue ;
+                public MyDataType(int intValue, String stringValue) {
+                    this.intValue = intValue ;
+                    this.stringValue = stringValue ;
+                }
+                public int getIntValue() {
+                    return intValue ;
+                }
+                public String getStringValue() {
+                    return stringValue ;
+                }
+    }
+    
+    
+    
+    
+    @FXML Label AutoChoosenPicFile;
+    @FXML public void AutoChoosePic(){
+        try {
+            Stage stage = new Stage();
+            FileChooserSample FileChooserSample = new FileChooserSample(AutoChoosenPicFile.getText());
+            FileChooserSample.start(stage); 
+            pobranaścieszka = FileChooserSample.getPobranaŚciezka();
+            AutoChoosenPicFile.setText(FileChooserSample.Sciezka);
+            AutoPic = new ViewPicture(ImageIO.read( new File(AutoChoosenPicFile.getText())));
+            AutochangeValuesOfPicture();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    ViewPicture AutoPic;
+    @FXML public void AutoReloadImage(){
+        if(PreprocUseResizeImage.isSelected()){
+           try {
+                AutoPic = new ViewPicture(new Picture().setPicture(ImageIO.read(new File(Sciezka.getText())), Integer.valueOf(PreprocResolutionX.getText()), Integer.valueOf(PreprocResolutionX.getText())));
+                AutochangeValuesOfPicture();
+                
+               } 
+           catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         
+        }
+        else{
+            try 
+            {  
+                AutoPic = new ViewPicture(ImageIO.read(new File(Sciezka.getText())));
+                AutochangeValuesOfPicture();
+               
+            } 
+            catch (IOException ex) {
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    
+    
+    Picture AutoOut = new Picture();
+    @FXML
+    private void AutochangeValuesOfPicture() {
+            
+            int[] pixels = AutoPic.ModyfikujKoloryWKanaleRGB(
+             PreProcRedSlider.getValue()+PreProcBrightnessSlider.getValue(),
+             PreProcGreenSlider.getValue()+PreProcBrightnessSlider.getValue(),
+             PreProcBlueSlider.getValue()+PreProcBrightnessSlider.getValue(),
+             PreProcContrastSlider.getValue()/1000,PreprocTypeOfThreshold,
+            (int) PreProcThresholdSlider.getValue());
+            AutoOut.SetPicture(pixels,AutoPic.pobierzX(),AutoPic.pobierzY());
+            
+            if(PreprocUseNegative.isSelected()){
+               AutoOut.setImage(AutoOut.Negative(AutoOut.Image()));
+            }
+            
+            if(PreProcBlurrSlider.getValue()>0.0){
+                AutoOut.setImage(AutoOut.changeBlurr((int)PreProcBlurrSlider.getValue(), (int)PreProcBlurrSlider.getValue()));
+            }
+            
+            AutoImage.setImage(SwingFXUtils.toFXImage(AutoOut.Image(), null));
+            
+            
+    }
+    
+    @FXML Label AutoPreprocSettings;
+    @FXML public void AutoChoosePreprocSettings(){
+        AutoPreprocSettings.getText();
+        Stage stage = new Stage();
+        FileChooserFile FileChooserFile = new FileChooserFile(AutoPreprocSettings.getText(),false,"conf");
+        FileChooserFile.start(stage);
+        AutoPreprocSettings.setText(FileChooserFile.Sciezka);
+        LoadSettings LoadSettings =  new LoadSettings(AutoPreprocSettings.getText());
+        LoadSettings.loadSliders(SliderFailedBoxes,SliderRozmiarMinX,SliderRozmiarMinY,SliderRozmiarMaxX,
+        SliderRozmiarMaxY,PreProcRedSlider,PreProcGreenSlider,PreProcBlueSlider,
+        PreProcBrightnessSlider,PreProcContrastSlider,PreProcBlurrSlider,
+        PreProcThresholdSlider,PreprocMovePointX,PreprocMovePointY,PreprocMovePointH,
+        PreprocMovePointW);
+        LoadSettings.loadComboBoxes(WybórWykrycia,PreprocThresholdType);
+        LoadSettings.loadLabels(PreprocResolutionX,PreprocResolutionY,PreprocLoaedPathToClassifier,
+        LabelFailedBoxes,LabelValueRozmiarMinX,LabelValueRozmiarMinY,LabelValueRozmiarMaxX,LabelValueRozmiarMaxY,PreprocRedValue,
+        PreprocGreenValue,PreprocBlueValue,PreprocBrightnessValue,PreprocContrastValue,
+        PreprocBlurrValue,PreprocThresholdValue,PreprocCurrentMovePointX,PreprocCurrentMovePointY,
+        PreprocCurrentMovePointH,PreprocCurrentMovePointW);
+        LoadSettings.loadCheckBoxes(PreprocLoadChoosenclassif,PreprocUseResizeImage,PreprocUseNegative);
+        LoadSettings.load();
+        AutochangeValuesOfPicture();
+    }
+    
+    ArrayList<Double> ValuesFromSliders;
+    ArrayList<String> ValuesFromLabels;
+    ArrayList<Boolean> ValuesFromCheckBox;
+    ArrayList<String> ValuesFromComboBox;
+    @FXML Label AutoDetectNumbersSettings;
+    @FXML public void AutoChooseDetectNumbersSettings(){
+        AutoDetectNumbersSettings.getText();
+        Stage stage = new Stage();
+        FileChooserFile FileChooserFile = new FileChooserFile(AutoDetectNumbersSettings.getText(),false,"conf");
+        FileChooserFile.start(stage);
+        AutoDetectNumbersSettings.setText(FileChooserFile.Sciezka);
+        LoadSettings LoadSettings =  new LoadSettings(AutoDetectNumbersSettings.getText());
+        LoadSettings.loadValues();
+        ValuesFromCheckBox = LoadSettings.GetValuesFromCheckBox();
+        ValuesFromComboBox = LoadSettings.GetValuesFromComboBox();
+        ValuesFromLabels = LoadSettings.GetValuesFromLabels();
+        ValuesFromSliders = LoadSettings.GetValuesFromSliders();
+    }
+    
+    @FXML Label AutoDetectNeuralNetSettings;
+    @FXML public void AutoChooseNeuralNetNumbersSettings(){
+         Stage stage = new Stage();
+            FileChooserFile FileChooserFile = new FileChooserFile(AutoDetectNeuralNetSettings.getText(),false);
+            FileChooserFile.start(stage); 
+            AutoDetectNeuralNetSettings.setText(FileChooserFile.Sciezka);
+            LabelFileWithNeuralNet.setText(FileChooserFile.Sciezka);
+        try {
+                 if(LabelFileWithNeuralNet.getText()!=null){
+                     NumbersNeuralNet = new Numbers(LabelFileWithNeuralNet.getText());
+                 }
+                
+            }
+        catch (FileNotFoundException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            LabelFileWithNeuralNet.setText("Błąd w odczytywaniu pliku,  bądź nie został poprawnie wybrany");
+            AutoDetectNeuralNetSettings.setText("Błąd w odczytywaniu pliku,  bądź nie został poprawnie wybrany");
+        }
+    }
+    //Kontemt ogólny 
+    
+   
+    
+    @FXML public void GlobalSaveSettings(){
+        String Path ="New Path";
+        Stage stage = new Stage();
+        FileChooserFile FileChooserFile = new FileChooserFile(Path,true,"conf","Ustawienie preproc");
+        FileChooserFile.start(stage);
+        Path = FileChooserFile.Sciezka;
+        SaveSettings SaveSettings =  new SaveSettings(Path);
+        SaveSettings.loadSliders(SliderFailedBoxes,SliderRozmiarMinX,SliderRozmiarMinY,SliderRozmiarMaxX,
+        SliderRozmiarMaxY,PreProcRedSlider,PreProcGreenSlider,PreProcBlueSlider,
+        PreProcBrightnessSlider,PreProcContrastSlider,PreProcBlurrSlider,
+        PreProcThresholdSlider,PreprocMovePointX,PreprocMovePointY,PreprocMovePointH,
+        PreprocMovePointW);
+        SaveSettings.loadComboBoxes(WybórWykrycia,PreprocThresholdType);
+        SaveSettings.loadLabels(PreprocResolutionX,PreprocResolutionY,PreprocLoaedPathToClassifier,
+        LabelFailedBoxes,LabelValueRozmiarMinX,LabelValueRozmiarMinY,LabelValueRozmiarMaxX,LabelValueRozmiarMaxY,PreprocRedValue,
+        PreprocGreenValue,PreprocBlueValue,PreprocBrightnessValue,PreprocContrastValue,
+        PreprocBlurrValue,PreprocThresholdValue,PreprocCurrentMovePointX,PreprocCurrentMovePointY,
+        PreprocCurrentMovePointH,PreprocCurrentMovePointW);
+        SaveSettings.loadCheckBoxes(PreprocLoadChoosenclassif,PreprocUseResizeImage,PreprocUseNegative);
+        SaveSettings.save();
+    }
+    
+    
+    @FXML public void GloalLoadSettings(){
+        String Path ="New Path";
+        Stage stage = new Stage();
+        FileChooserFile FileChooserFile = new FileChooserFile(Path,false,"conf");
+        FileChooserFile.start(stage);
+        Path = FileChooserFile.Sciezka;
+        LoadSettings LoadSettings =  new LoadSettings(Path);
+        LoadSettings.loadSliders(SliderFailedBoxes,SliderRozmiarMinX,SliderRozmiarMinY,SliderRozmiarMaxX,
+        SliderRozmiarMaxY,PreProcRedSlider,PreProcGreenSlider,PreProcBlueSlider,
+        PreProcBrightnessSlider,PreProcContrastSlider,PreProcBlurrSlider,
+        PreProcThresholdSlider,PreprocMovePointX,PreprocMovePointY,PreprocMovePointH,
+        PreprocMovePointW);
+        LoadSettings.loadComboBoxes(WybórWykrycia,PreprocThresholdType);
+        LoadSettings.loadLabels(PreprocResolutionX,PreprocResolutionY,PreprocLoaedPathToClassifier,
+        LabelFailedBoxes,LabelValueRozmiarMinX,LabelValueRozmiarMinY,LabelValueRozmiarMaxX,LabelValueRozmiarMaxY,PreprocRedValue,
+        PreprocGreenValue,PreprocBlueValue,PreprocBrightnessValue,PreprocContrastValue,
+        PreprocBlurrValue,PreprocThresholdValue,PreprocCurrentMovePointX,PreprocCurrentMovePointY,
+        PreprocCurrentMovePointH,PreprocCurrentMovePointW);
+        LoadSettings.loadCheckBoxes(PreprocLoadChoosenclassif,PreprocUseResizeImage,PreprocUseNegative);
+        LoadSettings.load();
+    }
+    
+    
     @FXML
     private void handleButtonWykrywanieAction() throws Exception {
-        RunnersDetection RunnersDetection = new RunnersDetection(type,SwingFXUtils.fromFXImage(PreprocImageLoad.getImage(),null),Integer.valueOf(TextFieldRozdzielczonscMAX_X.getCharacters().toString()),
-        Integer.valueOf(TextFieldRozdzielczonscMAX_Y.getCharacters().toString()),(int) (SliderRozmiarMaxX.getValue()),(int)(SliderRozmiarMaxY.getValue()),
-        (int)(SliderRozmiarMinX.getValue()),(int)(SliderRozmiarMinY.getValue()),SliderFailedBoxes.getValue()/100.0,
+        RunnersDetection RunnersDetection = new RunnersDetection(type,
+        SwingFXUtils.fromFXImage(PreprocImageLoad.getImage(),null),
+        Integer.valueOf(PreprocResolutionX.getText()),
+        Integer.valueOf(PreprocResolutionY.getText()),
+        (int) (SliderRozmiarMaxX.getValue()),(int)(SliderRozmiarMaxY.getValue()),
+        (int)(SliderRozmiarMinX.getValue()),(int)(SliderRozmiarMinY.getValue()),
+        SliderFailedBoxes.getValue()/100.0,
         PreprocLoadChoosenclassif.isSelected(),PreprocLoaedPathToClassifier.getText(),
         PreprocCurrentMovePointX,PreprocCurrentMovePointY,
         PreprocCurrentMovePointW,PreprocCurrentMovePointH);
-        
         DetectedRunners = RunnersDetection.DetectedRunners();
-        DrawOnCanvas DrawOnCanvas = new DrawOnCanvas(RunnersDetection.PicWithRunners(),RunnersDetection.ListaPunktów.size());
+        DrawOnCanvas DrawOnCanvas = new DrawOnCanvas(RunnersDetection.PicWithRunners(),
+        RunnersDetection.ListaPunktów.size());
+        
         Stage stage = new Stage();
         DrawOnCanvas.start(stage);
         stage.show();
@@ -2212,7 +2567,6 @@ public class FXMLDocumentController implements Initializable {
         Image i =  new Image("file:title_icon.png");
         stage.getIcons().add(i);
         stage.setTitle("Ustawienia parametrów na wykrytych biegaczach");
-        
         FXMLDetectedRunnersController = loader.getController();
         Scene scene = new Scene(root);
         Stage StagePic = new Stage();
@@ -2225,15 +2579,11 @@ public class FXMLDocumentController implements Initializable {
         FXMLDetectedRunnersController.Numbers = NumbersNeuralNet;
         FXMLDetectedRunnersController.PathToTrainingFolderExamples = FolderNewExamples.getText();
         StagePic.show();
-        
     }
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        
-        
-        
        KlasifLabelPercent.setVisible(false);
        KlasifLabelLoadPic.setVisible(false);
        KlasifProgressbarLoadImages.setVisible(false);
@@ -2256,9 +2606,9 @@ public class FXMLDocumentController implements Initializable {
         series1.getData().add(new XYChart.Data(NUMBERS[8], 0.0));
         series1.getData().add(new XYChart.Data(NUMBERS[9], 0.0));
        
-       ChartNumbersDetect.getData().add(series1);
-       ChartNumbersDetect.setAnimated(true);
-       
+        ChartNumbersDetect.getData().add(series1);
+        ChartNumbersDetect.setAnimated(true);
+        PreprocThresholdType.getSelectionModel().selectFirst();
         gc = KlasifImageView.getGraphicsContext2D();
         
         CreateSamples = new CreateSamples(CSinfotxtfile,CSvecfile,CSnum,CSw,CSh,CSShow,
@@ -2269,8 +2619,5 @@ public class FXMLDocumentController implements Initializable {
         HTprecalcValBufSize,HTprecalcIdxBufSize,HTbaseFormatSave,HTnumThreads,HTacceptanceRatioBreakValue,
         HTw,HTh,HTfeaturetype,HTmode,HTbt,HTminHitRate,HTmaxFalseAlarmRate,HTweightTrimRate,
         HTmaxDepth,HTmaxWeakCount);
-    }    
-
-   
-    
+    }
 }

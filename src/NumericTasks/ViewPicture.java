@@ -111,7 +111,7 @@ public class ViewPicture{
                                       //obliczenie wartosci pikseli oraz operacje progowania  
                                       if(null != progowanie)  
                                         switch (progowanie) {
-                                            case BRAK_PROGROWANIA:
+                                            case BRAK_PROGOWANIA:
                                                 
                                                 
                                                                     if((KolorCzerwony[x+width*y]+czerwien)*kontrast>255)
@@ -159,7 +159,7 @@ public class ViewPicture{
                                                 
                                                
                                                
-                                            case PROGOWANIE:
+                                            case PROGOWANIE_ZWYKŁE:
                                               
                                                 if((KolorCzerwony[x+width*y]+KolorZielony[x+width*y]+KolorNiebieski[x+width*y])/3 > wartoscprogujaca)
                                                 {   
@@ -259,7 +259,7 @@ public class ViewPicture{
                                                 
                                                 
                                                 break;
-                                            case EFEKT_ROZJASNIAJACY:
+                                            case EFEKT_ROZJAŚNIAJĄCY:
                                                 if((KolorCzerwony[x+width*y]+KolorZielony[x+width*y]+KolorNiebieski[x+width*y])/3 > wartoscprogujaca)
                                                 {
                                                     KolorCzerwony[x+width*y]= 255;
@@ -313,7 +313,7 @@ public class ViewPicture{
                                                                     
                                                 }    
                                                 break;
-                                            case EFEKT_PRZYCIEMNAJACY:
+                                            case EFEKT_PRZYCIEMNAJĄCY:
                                                 if((KolorCzerwony[x+width*y]+KolorZielony[x+width*y]+KolorNiebieski[x+width*y])/3 > wartoscprogujaca)
                                                 {
                                                     if(((KolorCzerwony[x+width*y]+czerwien)*kontrast)>255)

@@ -6,7 +6,9 @@
 package praca.magisterska;
 
 import NeuralNetPackage.Numbers;
+import NumericTasks.LoadSettings;
 import NumericTasks.Picture;
+import NumericTasks.SaveSettings;
 import NumericTasks.TypeOfThreshold;
 import NumericTasks.ViewPicture;
 import java.awt.image.BufferedImage;
@@ -31,6 +33,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 
 /**
@@ -182,7 +185,7 @@ public class FXMLDetectedRunnersController implements Initializable {
     ArrayList<BufferedImage> DetectedNumbers;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-     TypeOfThreshold = TypeOfThreshold.BRAK_PROGROWANIA;
+     TypeOfThreshold = TypeOfThreshold.BRAK_PROGOWANIA;
      ComboBoxWybierzRodzajProgowania.getSelectionModel().selectFirst();
       XYChart.Series series1 = new XYChart.Series();
         series1.setName("Stopień podobieństwa");
@@ -233,22 +236,22 @@ public class FXMLDetectedRunnersController implements Initializable {
         switch(ComboBoxWybierzRodzajProgowania.getSelectionModel().getSelectedIndex())
         {
             case 0:
-            TypeOfThreshold = TypeOfThreshold.BRAK_PROGROWANIA;
+            TypeOfThreshold = TypeOfThreshold.BRAK_PROGOWANIA;
             changeValuesOfPicture();
             break;
             
             case 1:
-            TypeOfThreshold = TypeOfThreshold.PROGOWANIE;
+            TypeOfThreshold = TypeOfThreshold.PROGOWANIE_ZWYKŁE;
             changeValuesOfPicture();
             break;
             
             case 2:
-            TypeOfThreshold = TypeOfThreshold.EFEKT_ROZJASNIAJACY;   
+            TypeOfThreshold = TypeOfThreshold.EFEKT_ROZJAŚNIAJĄCY;   
             changeValuesOfPicture();
             break;
             
             case 3:
-            TypeOfThreshold = TypeOfThreshold.EFEKT_PRZYCIEMNAJACY;   
+            TypeOfThreshold = TypeOfThreshold.EFEKT_PRZYCIEMNAJĄCY;   
             changeValuesOfPicture();
             break;
         }
@@ -294,7 +297,6 @@ public class FXMLDetectedRunnersController implements Initializable {
     }
     @FXML
     CheckBox DrawContorous;
-    
     @FXML
     ComboBox CorrectNumber;
     @FXML
@@ -303,7 +305,6 @@ public class FXMLDetectedRunnersController implements Initializable {
          String FilePath = PathToTrainingFolderExamples+"\\Liczba_"+CorrectNumber.getSelectionModel().getSelectedItem().toString()+"_"+i+".png";
          File outputfile = new File(FilePath);
          ImageIO.write(DetectedNumbers.get(currentDetectedNumber), "png", outputfile);
-        
     }
     
     
@@ -312,7 +313,11 @@ public class FXMLDetectedRunnersController implements Initializable {
     public void changeValuesOfPicture(){
         ViewPicture Pic = new ViewPicture(Images.get(currentImage));
         //zmiana progowania mod jasnosci kontrastu kolorów
-        int[] pixels = Pic.ModyfikujKoloryWKanaleRGB(SliderCzerwony.getValue()+SliderJasnosc.getValue(), SliderZielony.getValue()+SliderJasnosc.getValue(), SliderNiebieski.getValue()+SliderJasnosc.getValue(), SliderKontrast.getValue()/1000.0,TypeOfThreshold, (int) SliderWartoscProgowa.getValue());
+        int[] pixels = Pic.ModyfikujKoloryWKanaleRGB(SliderCzerwony.getValue()+SliderJasnosc.getValue(),
+                SliderZielony.getValue()+SliderJasnosc.getValue(), 
+                SliderNiebieski.getValue()+SliderJasnosc.getValue(),
+                SliderKontrast.getValue()/1000.0,TypeOfThreshold, 
+                (int) SliderWartoscProgowa.getValue());
         Picture Out = new Picture(pixels,Images.get(currentImage).getWidth(),Images.get(currentImage).getHeight());
         Out = new Picture( Out.Zoom(SliderZoom.getValue()/2));
         Image image = null;
@@ -326,11 +331,18 @@ public class FXMLDetectedRunnersController implements Initializable {
             image = SwingFXUtils.toFXImage(Out.DetectEdges(SliderKrawedz.getValue()), null); 
         }
         if(CheckBoxKontury.isSelected()||LoadOriginPic.isSelected()){
-            DetectedNumbers = Out.FindContorous((int)SliderRozmycie.getValue(), (int) SliderKrawedz.getValue(), (int)(SliderMinimalnyX.getValue()/100.0*Out.getImageWidth()),
-                    (int)(SliderMinimalnyY.getValue()/100.0*Out.getImageHeight()), (int)(SliderMaksymalnyX.getValue()/100.0*Out.getImageWidth()),
-                    (int)(SliderMaksymalnyY.getValue()/100.0*Out.getImageHeight()),
-                    DrawContorous.isSelected(),new Picture(Images.get(currentImage)).Zoom(SliderZoom.getValue()/2),
-                    LoadOriginPic.isSelected(), DrawContur.isSelected());
+            
+            DetectedNumbers = Out.FindContorous((int)SliderRozmycie.getValue(), 
+            (int) SliderKrawedz.getValue(), 
+            (int)(SliderMinimalnyX.getValue()/100.0*Out.getImageWidth()),
+            (int)(SliderMinimalnyY.getValue()/100.0*Out.getImageHeight()), 
+            (int)(SliderMaksymalnyX.getValue()/100.0*Out.getImageWidth()),
+            (int)(SliderMaksymalnyY.getValue()/100.0*Out.getImageHeight()),
+            DrawContorous.isSelected(),
+            new Picture(Images.get(currentImage)).Zoom(SliderZoom.getValue()/2),
+            LoadOriginPic.isSelected(), 
+            DrawContur.isSelected());
+            
             image = SwingFXUtils.toFXImage(Out.Image(), null);
             if(DetectedNumbers.size()>0){
                 ImageViewNumber.setImage(SwingFXUtils.toFXImage(DetectedNumbers.get(0), null));
@@ -476,7 +488,7 @@ public class FXMLDetectedRunnersController implements Initializable {
     SliderCzerwony.setValue(0.0);
     SliderZielony.setValue(0.0);
     SliderNiebieski.setValue(0.0);
-    TypeOfThreshold = TypeOfThreshold.BRAK_PROGROWANIA;
+    TypeOfThreshold = TypeOfThreshold.BRAK_PROGOWANIA;
     changeValueSliderCzerwony();
     changeValueSliderZielony();
     changeValueSliderNiebieski();
@@ -487,4 +499,47 @@ public class FXMLDetectedRunnersController implements Initializable {
     changeValuesOfPicture();
     ComboBoxWybierzRodzajProgowania.getSelectionModel().selectFirst();
     }
+    
+    
+    @FXML public void SaveNumbersDetectionSettings(){
+        String Path ="New Path";
+        Stage stage = new Stage();
+        FileChooserFile FileChooserFile = new FileChooserFile(Path,true,"conf","Ustawienie detekcji Cyfr");
+        FileChooserFile.start(stage);
+        Path = FileChooserFile.Sciezka;
+        SaveSettings SaveSettings =  new SaveSettings(Path);
+        SaveSettings.loadSliders(SliderCzerwony,SliderZielony,SliderNiebieski,SliderJasnosc,
+        SliderKontrast,SliderWartoscProgowa,SliderRozmycie,SliderMinimalnyX,SliderMinimalnyY,
+        SliderMaksymalnyX,SliderMaksymalnyY,SliderKrawedz,SliderZoom,SliderDetectThreshold);
+        SaveSettings.loadComboBoxes(ComboBoxWybierzRodzajProgowania);
+        SaveSettings.loadLabels();
+        SaveSettings.loadCheckBoxes(CheckBoxUseKrawedz,CheckBoxKontury,DrawContorous,UseNegative,LoadOriginPic,DrawContur);
+        SaveSettings.save();
+    }
+    
+    @FXML public void LoadNumbersDetectionSettings(){
+        String Path ="New Path";
+        Stage stage = new Stage();
+        FileChooserFile FileChooserFile = new FileChooserFile(Path,false,"conf");
+        FileChooserFile.start(stage);
+        Path = FileChooserFile.Sciezka;
+        LoadSettings LoadSettings =  new LoadSettings(Path);
+        LoadSettings.loadSliders(SliderCzerwony,SliderZielony,SliderNiebieski,SliderJasnosc,
+        SliderKontrast,SliderWartoscProgowa,SliderRozmycie,SliderMinimalnyX,SliderMinimalnyY,
+        SliderMaksymalnyX,SliderMaksymalnyY,SliderKrawedz,SliderZoom,SliderDetectThreshold);
+        LoadSettings.loadComboBoxes(ComboBoxWybierzRodzajProgowania);
+        LoadSettings.loadLabels();
+        LoadSettings.loadCheckBoxes(CheckBoxUseKrawedz,CheckBoxKontury,DrawContorous,UseNegative,LoadOriginPic,DrawContur);
+        LoadSettings.load();
+        
+        changeValueSliderCzerwony();
+        changeValueSliderZielony();
+        changeValueSliderNiebieski();
+        changeValueSliderJasnosc();
+        changeValueSliderKontrast();
+        changeValueSliderWartoscProgowa();
+        changeValueSliderRozmycie();
+        changeValuesOfPicture();
+    }
+   
 }

@@ -40,8 +40,8 @@
                                   </FXCollections>
                              </items>
                          </ComboBox>
-                        <Button id="ButtonZwrocDomyslneUstawienie" layoutX="130.0" layoutY="261.0" mnemonicParsing="false" onMouseClicked="#defaultValues" text="Zwróć domyślne ustawienie" />
-                        <Button layoutX="15.0" layoutY="261.0" mnemonicParsing="false" text="Zapisz Ustawienia" />
+                        <Button id="ButtonZwrocDomyslneUstawienie" layoutX="269.0" layoutY="261.0" mnemonicParsing="false" onMouseClicked="#defaultValues" text="Zwróć domyślne ustawienie" />
+                        <Button layoutX="15.0" layoutY="261.0" mnemonicParsing="false" onAction="#SaveNumbersDetectionSettings" text="Zapisz Ustawienia" />
                         <Slider fx:id="SliderRozmycie" layoutX="14.0" layoutY="66.0" onMouseDragged="#changeValueSliderRozmycie" onMousePressed="#changeValueSliderRozmycie" onMouseReleased="#changeValueSliderRozmycie" prefHeight="14.0" prefWidth="385.0" />
                         <Label id="LabelSliderValueRozmycie" fx:id="LabelValueSliderRozmycie" layoutX="411.0" layoutY="64.0" text="0,00" />
                         <Label layoutX="501.0" layoutY="64.0" text="Rozmycie" />
@@ -74,6 +74,7 @@
                         <CheckBox fx:id="DrawContorous" layoutX="15.0" layoutY="162.0" mnemonicParsing="false" onMouseClicked="#changeValuesOfPicture" text="Maluj krawędzie" />
                         <CheckBox fx:id="UseNegative" layoutX="15.0" layoutY="186.0" mnemonicParsing="false" onMouseClicked="#changeValuesOfPicture" onMousePressed="#changeValuesOfPicture" onMouseReleased="#changeValuesOfPicture" text="Zastosuj Negatyw" />
                         <CheckBox fx:id="LoadOriginPic" layoutX="150.0" layoutY="186.0" mnemonicParsing="false" onMouseClicked="#changeValuesOfPicture" onMousePressed="#changeValuesOfPicture" onMouseReleased="#changeValuesOfPicture" text="Wyświetl oryginał" />
+                        <Button layoutX="130.0" layoutY="261.0" mnemonicParsing="false" onAction="#LoadNumbersDetectionSettings" prefHeight="25.0" prefWidth="130.0" text="Załaduj ustawienia" />
                      </children>
                   </AnchorPane>
             </content>

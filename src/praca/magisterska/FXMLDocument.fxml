@@ -14,9 +14,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="605.0" prefWidth="965.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="praca.magisterska.FXMLDocumentController">
    <children>
-        <Button fx:id="button" layoutX="14.0" layoutY="16.0" onAction="#handleButtonAction" text="Wybierz Obraz" />
-        <Button fx:id="Wykrywanie" layoutX="14.0" layoutY="54.0" mnemonicParsing="false" onAction="#handleButtonWykrywanieAction" prefHeight="25.0" prefWidth="157.0" text="Wykryj Biegaczy" />
-      <TabPane layoutX="14.0" layoutY="85.0" prefHeight="514.0" prefWidth="935.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="14.0" layoutY="85.0" prefHeight="522.0" prefWidth="951.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Pre - processing">
             <content>
@@ -31,12 +29,12 @@
                                   </FXCollections>
                              </items>
                          </ComboBox>
-                        <TextField fx:id="TextFieldRozdzielczonscMAX_X" layoutX="112.0" layoutY="37.0" text="800" />
-                        <TextField fx:id="TextFieldRozdzielczonscMAX_Y" layoutX="112.0" layoutY="67.0" text="800" />
+                        <TextField fx:id="TextFieldRozdzielczonscMAX_X" layoutX="165.0" layoutY="38.0" onKeyPressed="#PreprocEnterResolutionX" prefHeight="25.0" prefWidth="96.0" />
+                        <TextField fx:id="TextFieldRozdzielczonscMAX_Y" layoutX="165.0" layoutY="68.0" onKeyPressed="#PreprocEnterResolutionY" prefHeight="25.0" prefWidth="96.0" />
                         <Label layoutX="14.0" layoutY="41.0" text="Rozdzielczość x:" />
                         <Label layoutX="14.0" layoutY="71.0" text="Rozdzielczość y:" />
                         <Label layoutX="14.0" layoutY="16.0" text="Ustawienie rozdzielczości:" />
-                        <Button layoutX="14.0" layoutY="446.0" mnemonicParsing="false" text="Zapisz ustawienia" />
+                        <Button layoutX="14.0" layoutY="446.0" mnemonicParsing="false" onAction="#GlobalSaveSettings" text="Zapisz ustawienia" />
                         <Slider fx:id="SliderFailedBoxes" layoutX="569.0" layoutY="30.0" onMouseDragged="#preprocSlider" onMousePressed="#preprocSlider" onMouseReleased="#preprocSlider" prefHeight="14.0" prefWidth="310.0" value="65.0" />
                         <Label fx:id="LabelFailedBoxes" layoutX="879.0" layoutY="29.0" text="65,00" />
                         <Label layoutX="569.0" layoutY="12.0" prefHeight="17.0" prefWidth="353.0" text="Parametr dopuszczalnej części wspólnej dla wykrytych biegaczy:" />
@@ -65,18 +63,18 @@
                         <Label layoutX="361.0" layoutY="136.0" text="Wybrany obraz:" />
                         <Separator layoutX="358.0" layoutY="163.0" orientation="VERTICAL" prefHeight="321.0" prefWidth="5.0" />
                         <Separator layoutX="358.0" layoutY="158.0" prefHeight="2.0" prefWidth="574.0" />
-                        <Label layoutX="40.0" layoutY="128.0" text="Ustawienia ogólne obrazu oraz wykrycia biegaczy:" />
+                        <Label layoutX="40.0" layoutY="205.0" text="Ustawienia ogólne obrazu oraz wykrycia biegaczy:" />
                         <CheckBox fx:id="PreprocUseResizeImage" layoutX="22.0" layoutY="101.0" mnemonicParsing="false" onAction="#PreprocReloadImage" text="Zastosuj ograniczenie rozdzielczości." />
                         <ScrollPane layoutX="368.0" layoutY="94.0" prefHeight="41.0" prefWidth="163.0">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="23.0" prefWidth="642.0">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="23.0" prefWidth="584.0">
                                  <children>
                                     <Label fx:id="PreprocLoaedPathToClassifier" layoutX="14.0" layoutY="6.0" text="Wybierz plik" />
                                  </children>
                               </AnchorPane>
                           </content>
                         </ScrollPane>
-                        <ScrollPane layoutX="-2.0" layoutY="144.0" prefHeight="283.0" prefWidth="347.0">
+                        <ScrollPane layoutX="-2.0" layoutY="228.0" prefHeight="199.0" prefWidth="347.0">
                            <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="560.0" prefWidth="331.0">
                                  <children>
@@ -141,6 +139,20 @@
                               </AnchorPane>
                            </content>
                         </ScrollPane>
+                        <ScrollPane layoutX="112.0" layoutY="127.0" prefHeight="35.0" prefWidth="167.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="23.0" prefWidth="606.0">
+                                 <children>
+                                      <Label fx:id="Sciezka" layoutX="14.0" layoutY="6.0" minHeight="16" minWidth="69" text="Dokonaj wyboru pliku" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                          <Button fx:id="button" layoutX="10.0" layoutY="132.0" onAction="#handleButtonAction" text="Wybierz Obraz" />
+                          <Button fx:id="Wykrywanie" layoutX="10.0" layoutY="169.0" mnemonicParsing="false" onAction="#handleButtonWykrywanieAction" prefHeight="25.0" prefWidth="157.0" text="Wykryj Biegaczy" />
+                        <Label fx:id="PreprocResolutionX" layoutX="120.0" layoutY="42.0" text="800" />
+                        <Label fx:id="PreprocResolutionY" layoutX="120.0" layoutY="71.0" text="800" />
+                        <Button layoutX="130.0" layoutY="446.0" mnemonicParsing="false" onAction="#GloalLoadSettings" text="Odtwórz ustawienia" />
                      </children>
                   </AnchorPane>
             </content>
@@ -149,7 +161,6 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button layoutX="14.0" layoutY="446.0" mnemonicParsing="false" text="Zapisz ustawienia" />
                         <Button fx:id="ButtonChooseFolderExamples" layoutX="22.0" layoutY="47.0" mnemonicParsing="false" onAction="#chooseFolderExamples" text="Wybierz folder" />
                         <Label layoutX="22.0" layoutY="30.0" text="Wybór folderu do zapisu nowych obrazów z pojedyńczymi cyframi " />
                         <Label layoutX="18.0" layoutY="217.0" text="Folder do zapisu nowych cyfr:" />
@@ -170,7 +181,6 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button layoutX="14.0" layoutY="446.0" mnemonicParsing="false" text="Zapisz ustawienia" />
                         <TabPane layoutX="14.0" layoutY="14.0" prefHeight="431.0" prefWidth="913.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Nowa sieć ">
@@ -381,12 +391,12 @@
                                           <Button layoutX="17.0" layoutY="82.0" mnemonicParsing="false" onAction="#KlasifChooseFolderPosPath" text="Wybierz folder" />
                                           <Label layoutX="17.0" layoutY="65.0" text="Wybór przykładów pozytywnych :" />
                                           <Label fx:id="KlassifPosPath" layoutX="114.0" layoutY="86.0" text="Wybierz folder" />
-                                          <Button layoutX="20.0" layoutY="132.0" mnemonicParsing="false" onAction="#KlasifChooseFolderNegPath" text="Wybierz folder" />
+                                          <Button layoutX="17.0" layoutY="132.0" mnemonicParsing="false" onAction="#KlasifChooseFolderNegPath" text="Wybierz folder" />
                                           <Label layoutX="20.0" layoutY="115.0" text="Wybór przykładów negatywnych: " />
                                           <Label fx:id="KlassifNegPath" layoutX="114.0" layoutY="136.0" text="Wybierz folder" />
-                                          <Button layoutX="20.0" layoutY="184.0" mnemonicParsing="false" onAction="#KlasifChooseFileTestPath" text="Wybierz plik" />
+                                          <Button layoutX="20.0" layoutY="184.0" mnemonicParsing="false" onAction="#KlasifChooseFileTestPath" prefHeight="25.0" prefWidth="91.0" text="Wybierz plik" />
                                           <Label layoutX="21.0" layoutY="167.0" text="Wybór pliku testowego:" />
-                                          <Label fx:id="KlassifChooseTestFile" layoutX="109.0" layoutY="188.0" text="Wybierz plik" />
+                                          <Label fx:id="KlassifChooseTestFile" layoutX="121.0" layoutY="188.0" text="Wybierz plik" />
                                           <TextField fx:id="KlasifPosSizeX" layoutX="575.0" layoutY="71.0" />
                                           <TextField fx:id="KlasifPosSizeY" layoutX="731.0" layoutY="70.0" />
                                           <TextField fx:id="KlasifNegSizeX" layoutX="575.0" layoutY="163.0" />
@@ -653,21 +663,76 @@
                   </AnchorPane>
               </content>
             </Tab>
+            <Tab text="Automatyczne rozpoznawanie">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="9.0" layoutY="90.0" text="Wybór pliku z ustawieniami Pre processingu:" />
+                        <Label layoutX="9.0" layoutY="148.0" text="Wybór pliku z ustawieniami wykrycia liczb:" />
+                        <Button layoutX="12.0" layoutY="107.0" mnemonicParsing="false" onAction="#AutoChoosePreprocSettings" prefHeight="43.0" prefWidth="121.0" text="Wybierz plik " />
+                        <Button layoutX="11.0" layoutY="165.0" mnemonicParsing="false" onAction="#AutoChooseDetectNumbersSettings" prefHeight="43.0" prefWidth="122.0" text="Wybierz plik " />
+                        <Label layoutX="8.0" layoutY="10.0" text="Wybór obrazu przedstawiających biegaczy:" />
+                        <Button layoutX="6.0" layoutY="31.0" mnemonicParsing="false" onAction="#AutoChoosePic" prefHeight="46.0" prefWidth="105.0" text="Wybierz obraz" />
+                        <Button layoutX="12.0" layoutY="228.0" mnemonicParsing="false" onAction="#AutoChooseNeuralNetNumbersSettings" prefHeight="43.0" prefWidth="121.0" text="Wybierz plik " />
+                        <Label layoutX="6.0" layoutY="211.0" text="Wybór pliku zawierającego sieć neuronową:" />
+                        <ImageView fx:id="AutoImage" fitHeight="412.0" fitWidth="685.0" layoutX="266.0" layoutY="78.0" pickOnBounds="true" preserveRatio="true" />
+                        <ScrollPane layoutX="140.0" layoutY="107.0" prefHeight="43.0" prefWidth="122.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="29.0" prefWidth="758.0">
+                                 <children>
+                                    <Label fx:id="AutoPreprocSettings" layoutY="7.0" text="Wybierz plik." />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                        <ScrollPane layoutX="140.0" layoutY="164.0" prefHeight="43.0" prefWidth="122.0">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="29.0" prefWidth="758.0">
+                                 <children>
+                                    <Label fx:id="AutoDetectNumbersSettings" layoutY="7.0" text="Wybierz plik." />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane layoutX="140.0" layoutY="228.0" prefHeight="43.0" prefWidth="122.0">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="29.0" prefWidth="758.0">
+                                 <children>
+                                    <Label fx:id="AutoDetectNeuralNetSettings" layoutY="7.0" text="Wybierz plik." />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
+                        <ScrollPane layoutX="121.0" layoutY="32.0" prefHeight="43.0" prefWidth="122.0">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="29.0" prefWidth="758.0">
+                                 <children>
+                                    <Label fx:id="AutoChoosenPicFile" layoutY="7.0" text="Wybierz obraz." />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
+                        <Button layoutX="252.0" layoutY="31.0" mnemonicParsing="false" onAction="#AutoRecognize" prefHeight="45.0" prefWidth="100.0" text="Rozpoznaj" />
+                        <Label layoutX="565.0" layoutY="58.0" text="Obraz źródłowy:" />
+                        <ScrollPane layoutX="11.0" layoutY="280.0" prefHeight="203.0" prefWidth="251.0">
+                           <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="433.0" prefWidth="236.0">
+                                 <children>
+                                    <TableView fx:id="AutoRecognizedNumbers" layoutX="-16.0" layoutY="-38.0" prefHeight="433.0" prefWidth="236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
         </tabs>
       </TabPane>
-      <Button layoutX="509.0" layoutY="16.0" mnemonicParsing="false" text="Wybierz Folder źródłowy" />
+      <Button layoutX="14.0" layoutY="16.0" mnemonicParsing="false" text="Wybierz Folder źródłowy" />
       <Label layoutX="430.0" layoutY="66.0" text="Ustawienia" />
-      <Button layoutX="509.0" layoutY="49.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="148.0" text="Wykryj Biegaczy ze zdjęć" />
-      <Label layoutX="665.0" layoutY="20.0" text="Wybierz folder źródłowy do rozpoznawania" />
-      <ScrollPane layoutX="122.0" layoutY="11.0" prefHeight="35.0" prefWidth="167.0">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="23.0" prefWidth="606.0">
-               <children>
-                    <Label fx:id="Sciezka" layoutX="14.0" layoutY="6.0" minHeight="16" minWidth="69" text="Dokonaj wyboru pliku" />
-               </children>
-            </AnchorPane>
-        </content>
-      </ScrollPane>
+      <Button layoutX="14.0" layoutY="54.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="148.0" text="Wykryj Biegaczy ze zdjęć" />
+      <Label layoutX="173.0" layoutY="20.0" text="Wybierz folder źródłowy do rozpoznawania" />
     
         
         

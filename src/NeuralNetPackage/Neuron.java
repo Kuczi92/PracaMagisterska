@@ -171,7 +171,8 @@ public class Neuron {
     for(int Wagi = 0 ;Wagi <rozmiar;Wagi++ )
     {
        //double PochodnaSumyWażonejNeuronówPoWadzeNeuronu=WagaFunkcji.get(Wagi); 
-       double Gradient = PochodnaBłęduTotalnegoPoWyjściuAktywacjiNeuronu*PochodnaWyjściaAktywującegoPoSumieWażonejWartościNeuronu*PochodnaSumyWażonejNeuronówPoWadzeNeuronu.get(Wagi);
+       double Gradient = PochodnaBłęduTotalnegoPoWyjściuAktywacjiNeuronu*PochodnaWyjściaAktywującegoPoSumieWażonejWartościNeuronu
+                         *PochodnaSumyWażonejNeuronówPoWadzeNeuronu.get(Wagi);
        UaktualnijWage(Wagi,WagaFunkcji.get(Wagi)-tempoUczenia*Gradient);
     }
       

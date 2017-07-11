@@ -325,9 +325,9 @@ public class SiećNeuronowa
     
      private ArrayList<Double> StringToDoubleTablica(String[] Tablica){
      ArrayList<Double> Liczby = new ArrayList<>();
-            for(int indeks =0 ; indeks < Tablica.length ;indeks ++){
-                Liczby.add(Double.valueOf(Tablica[indeks]));
-            }
+        for (String Tablica1 : Tablica) {
+            Liczby.add(Double.valueOf(Tablica1));
+        }
      return Liczby;
     }
 }
