@@ -41,10 +41,7 @@ public class SelectedXmlDetection extends Detector {
                 System.out.println(String.format("Detected %s faces", faceDetections.toArray().length));
                 ArrayList<BufferedImage> Out = new ArrayList<>();
                 
-                double moddedX = Double.valueOf(MovedPointX.getText().replace(',', '.'))/100*ObrazWejsciowy.getWidth();
-                double moddedY = Double.valueOf(MovedPointY.getText().replace(',', '.'))/100*ObrazWejsciowy.getHeight();
-                double moddedW = Double.valueOf(MovedPointW.getText().replace(',', '.'))/100*ObrazWejsciowy.getWidth();
-                double moddedH = Double.valueOf(MovedPointH.getText().replace(',', '.'))/100*ObrazWejsciowy.getHeight();
+              
                 
                 double MinimumX = min_X/100.0*ObrazWejsciowy.getWidth();
                 double MinumumY = min_Y/100.0*ObrazWejsciowy.getHeight();
@@ -53,6 +50,12 @@ public class SelectedXmlDetection extends Detector {
                 
              for (Rect rect : faceDetections.toArray()) 
               {
+                  
+               double moddedX = Double.valueOf(MovedPointX.getText().replace(',', '.'))/100*rect.width;
+               double moddedY = Double.valueOf(MovedPointY.getText().replace(',', '.'))/100*rect.height;
+               double moddedW = Double.valueOf(MovedPointW.getText().replace(',', '.'))/100*rect.width;
+               double moddedH = Double.valueOf(MovedPointH.getText().replace(',', '.'))/100*rect.height;
+               
                    if((MinimumX<rect.width&&MinumumY<rect.height)&&(MaximumX>rect.height&&MaximumY>rect.width))
                      {
                         Core.rectangle(image, new Point(rect.x+moddedX, rect.y+moddedY), new Point(rect.x +moddedX+ rect.width+moddedW, rect.y + moddedY + rect.height+moddedH),new Scalar(0, 255, 0),2);

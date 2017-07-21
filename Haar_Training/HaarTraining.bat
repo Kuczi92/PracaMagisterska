@@ -1,0 +1,2 @@
+"C:\Users\Quchi\Documents\NetBeansProjects\Praca_Magisterska\Haar_Training\Opencv bin\opencv_haartraining.exe" -data "C:\Users\Quchi\Documents\NetBeansProjects\Praca_Magisterska\Haar_Training\Cascades\Logo7" -vec "C:\Users\Quchi\Documents\NetBeansProjects\Praca_Magisterska\Haar_Training\Vectors\Nowy plik vec7.vec" -bg Haar_Training\negative\bg.txt -npos 200 -nneg 200 -nstages 20 -nsplits 3 -precalcValBufSize 1000 -precalcIdxBufSize 1000 -numThreads 6 -w 30 -h 30
+PAUSE

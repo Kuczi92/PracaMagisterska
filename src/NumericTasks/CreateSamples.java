@@ -19,8 +19,8 @@ import javafx.scene.control.Label;
  * @author Quchi
  */
 public class CreateSamples {
-    private  final String PathtoScript="Haar Training\\CreateSamples.bat";
-    private  final String AppName="Haar Training\\Opencv bin\\opencv_createsamples.exe";
+    private  final String PathtoScript="Haar_Training\\CreateSamples.bat";
+    private  final String AppName="Haar_Training\\Opencv bin\\opencv_createsamples.exe";
     private final Label info;
     private final Label vec;
     private final Label num;
@@ -37,13 +37,13 @@ public class CreateSamples {
     private final Label maxzangle;
     private final Label bg;
     private final Label maxidev;
-    
+    private final Label PngOutput;
     
     
     
     public CreateSamples(
      Label info,Label vec,Label num, Label w,Label h,Label show,Label img,Label bg,Label bgcolor,Label bgthresh,
-     Label inv,Label randinv,Label maxidev, Label maxxangle, Label maxyangle,Label maxzangle){
+     Label inv,Label randinv,Label maxidev, Label maxxangle, Label maxyangle,Label maxzangle,Label Pngoutput){
      this. info = info;
      this. vec = vec;
      this. num = num;
@@ -60,6 +60,7 @@ public class CreateSamples {
      this. maxzangle = maxzangle;
      this. bg = bg;
      this. maxidev = maxidev;
+     this.PngOutput = Pngoutput;
     }
     
     
@@ -69,80 +70,88 @@ public class CreateSamples {
             {
               File File = new File(AppName);
                zapis.print("\""+File.getAbsolutePath()+"\""); 
-               if(list){
-                   if(!("Wybierz plik txt.".equals(info.getText())||null==info.getText())) 
+     
+               if(!("Wybierz plik txt.".equals(info.getText())||"".equals(info.getText()))) 
                        {
-                        zapis.print(" "+"-info "+"\""+info.getText()+"\"");
+                        String tmp = info.getText().substring(info.getText().indexOf("Haar_Training"));
+                        zapis.print(" "+"-info "+tmp);
                        }
-               }
-               else{
-                   if(!("Wybierz obraz.".equals(img.getText())||null==img.getText())) 
+
+                   if(!("Wybierz obraz.".equals(img.getText())||"".equals(img.getText()))) 
                        {
                         zapis.print(" "+"-img "+"\""+img.getText()+"\"");
                        }
-               }
+                   if(!("Wybierz plik txt.".equals(bg.getText())||"".equals(bg.getText()))) 
+                       {
+                        zapis.print(" "+"-bg "+bg.getText().substring(bg.getText().indexOf("Haar_Training")));
+                       } 
+                   
+            
                
-              if(!("Stwórz plik vec.".equals(vec.getText())||null==vec.getText())) 
+              if(!("Stwórz plik vec.".equals(vec.getText())||"".equals(vec.getText()))) 
                        {
                         zapis.print(" "+"-vec "+"\""+vec.getText()+"\"");
                        } 
                
-              if(!("Wprowadź liczbę.".equals(num.getText())||null==num.getText())) 
+              if(!("Wprowadź liczbę.".equals(num.getText())||"".equals(num.getText()))) 
                        {
                         zapis.print(" "+"-num "+num.getText());
                        } 
               
-              if(!("Wprowadź liczbę.".equals(w.getText())||null==w.getText())) 
+              if(!("Wprowadź liczbę.".equals(w.getText())||"".equals(w.getText()))) 
                        {
                         zapis.print(" "+"-w "+w.getText());
                        }  
               
-              if(!("Wprowadź liczbę.".equals(h.getText())||null==h.getText())) 
+              if(!("Wprowadź liczbę.".equals(h.getText())||"".equals(h.getText()))) 
                        {
                         zapis.print(" "+"-h "+h.getText());
                        }  
               
-              if(!("Zaznacz/odznacz opcję.".equals(show.getText())||null==show.getText())) 
+              if(!("Zaznacz/odznacz opcję.".equals(show.getText())||"".equals(show.getText()))) 
                        {
                         zapis.print(" "+"-show "+show.getText());
                        }
               
-              if(!("Wprowadź liczbę.".equals(maxidev.getText())||null==maxidev.getText())) 
+              if(!("Wprowadź liczbę.".equals(maxidev.getText())||"".equals(maxidev.getText()))) 
                        {
                         zapis.print(" "+"-maxidev "+maxidev.getText());
                        }
               
               
-              if(!list){ 
-                        if(!("Wybierz plik txt.".equals(bg.getText())||null==bg.getText())) 
+              if(!("Zaznacz/odznacz opcję.".equals(PngOutput.getText())||"".equals(PngOutput.getText()))) 
                                  {
-                                  zapis.print(" "+"-bg "+bg.getText());
+                                    if(PngOutput.getText().equals("TRUE")) 
+                                        zapis.print(" "+"-pngoutput");
                                  } 
-                        if(!("Zaznacz/odznacz opcję.".equals(randinv.getText())||null==randinv.getText())) 
+              
+       if(!list){ 
+                        
+                        if(!("Zaznacz/odznacz opcję.".equals(randinv.getText())||"".equals(randinv.getText()))) 
                                  {
                                   zapis.print(" "+"-randinv "+randinv.getText());
                                  } 
-                        if(!("Wprowadź liczbę.".equals(bgcolor.getText())||null==bgcolor.getText())) 
+                        if(!("Wprowadź liczbę.".equals(bgcolor.getText())||"".equals(bgcolor.getText()))) 
                                  {
                                   zapis.print(" "+"-bgcolor "+bgcolor.getText());
                                  } 
-                        if(!("Wprowadź liczbę.".equals(bgthresh.getText())||null==bgthresh.getText())) 
+                        if(!("Wprowadź liczbę.".equals(bgthresh.getText())||"".equals(bgthresh.getText()))) 
                                  {
-                                  zapis.print(" "+"-bgthreshold "+bgthresh.getText());
+                                  zapis.print(" "+"-bgthresh "+bgthresh.getText());
                                  } 
-                        if(!("Zaznacz/odznacz opcję.".equals(inv.getText())||null==inv.getText())) 
+                        if(!("Zaznacz/odznacz opcję.".equals(inv.getText())||"".equals(inv.getText()))) 
                                  {
                                   zapis.print(" "+"-inv "+inv.getText());
                                  }
-                        if(!("Wprowadź liczbę.".equals(maxxangle.getText())||null==maxxangle.getText())) 
+                        if(!("Wprowadź liczbę.".equals(maxxangle.getText())||"".equals(maxxangle.getText()))) 
                                  {
                                   zapis.print(" "+"-maxxangle "+maxxangle.getText());
                                  }
-                        if(!("Wprowadź liczbę.".equals(maxyangle.getText())||null==maxyangle.getText())) 
+                        if(!("Wprowadź liczbę.".equals(maxyangle.getText())||"".equals(maxyangle.getText()))) 
                                  {
                                   zapis.print(" "+"-maxyangle "+maxyangle.getText());
                                  }
-                        if(!("Wprowadź liczbę.".equals(maxzangle.getText())||null==maxzangle.getText())) 
+                        if(!("Wprowadź liczbę.".equals(maxzangle.getText())||"".equals(maxzangle.getText()))) 
                                  {
                                   zapis.print(" "+"-maxzangle "+maxzangle.getText());
                                  }
@@ -151,8 +160,9 @@ public class CreateSamples {
               
               }
               zapis.println();
-              zapis.println("PAUSE"); 
-               
+              zapis.println("PAUSE");
+              
+             zapis.close();
             } catch (FileNotFoundException ex) { 
             Logger.getLogger(CreateSamples.class.getName()).log(Level.SEVERE, null, ex);
         } 

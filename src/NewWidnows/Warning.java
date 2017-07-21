@@ -5,6 +5,10 @@
  */
 package NewWidnows;
 
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 
 /**
@@ -23,11 +27,20 @@ public class Warning extends javax.swing.JDialog {
     static String PathToWarningPic = "settings\\pictures\\alert.png";
 
 
+    
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public Warning(boolean modal,String WarningSentence) {
         super(new JFrame(), modal);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Display = new Display(PathToWarningPic);
         initComponents();
         LabelWarning.setText(WarningSentence);
+        int width = (int) screenSize.getWidth();
+        int height = (int) screenSize.getHeight();
+        setLocation(width/3, height/3);
+        this.setTitle("Wystąpił wyjątek.");
+        Image im = Toolkit.getDefaultToolkit().getImage("settings\\icontitle\\icon_title.png");
+        this.setIconImage(im);
     }
     
     /**
@@ -59,10 +72,9 @@ public class Warning extends javax.swing.JDialog {
         );
 
         ButtonConfirm.setText("OK");
-        ButtonConfirm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonConfirmActionPerformed(evt);
-            }
+        
+        ButtonConfirm.addActionListener((java.awt.event.ActionEvent evt) -> {
+            ButtonConfirmActionPerformed(evt);
         });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

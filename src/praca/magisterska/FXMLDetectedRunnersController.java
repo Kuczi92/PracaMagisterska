@@ -6,6 +6,7 @@
 package praca.magisterska;
 
 import NeuralNetPackage.Numbers;
+import NumericTasks.ArrayUtils;
 import NumericTasks.LoadSettings;
 import NumericTasks.Picture;
 import NumericTasks.SaveSettings;
@@ -20,6 +21,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -53,6 +56,8 @@ public class FXMLDetectedRunnersController implements Initializable {
     public Numbers Numbers;
     public String PathToTrainingFolderExamples;
     //komponenty znajdujące się w zakładce ustawienia obrazu w Tab text Obraz
+    
+    String FileNametoDetectingImage;
     
     @FXML
     Slider SliderJasnosc;
@@ -306,6 +311,32 @@ public class FXMLDetectedRunnersController implements Initializable {
          File outputfile = new File(FilePath);
          ImageIO.write(DetectedNumbers.get(currentDetectedNumber), "png", outputfile);
     }
+    
+    
+    
+    @FXML Label ZWOfolderSaveCurrentPic;
+    @FXML public void ZWOfolderSaveCurrentPicChooseAnotherFolder(){
+        Stage stage = new Stage();
+        FolderChooser FolderChooser = new FolderChooser(ZWOfolderSaveCurrentPic.getText());
+        FolderChooser.start(stage);
+        ZWOfolderSaveCurrentPic.setText(FolderChooser.getPobranaŚciezka());
+    }
+    
+    @FXML public void ZWOsavecurrentfolder(){
+        int NumberOfFiles = 0;
+        try {
+          NumberOfFiles =  new ArrayUtils().ListaPlikówWFolderze(ZWOfolderSaveCurrentPic.getText()).size();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDetectedRunnersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      File file = new File (ZWOfolderSaveCurrentPic.getText()+"\\"+FileNametoDetectingImage.substring(0,FileNametoDetectingImage.lastIndexOf("."))+NumberOfFiles+FileNametoDetectingImage.substring(FileNametoDetectingImage.lastIndexOf(".")));  
+        try {
+            
+            ImageIO.write(Images.get(currentImage),FileNametoDetectingImage.substring(FileNametoDetectingImage.lastIndexOf(".")+1).toLowerCase(), file);
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDetectedRunnersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }    
     
     
     

@@ -1,1 +1,0 @@
-"C:\Users\Quchi\Documents\NetBeansProjects\Praca Magisterska\Haar Training\Opencv bin\haarconv.exe" "C:\Users\Quchi\Documents\NetBeansProjects\Praca Magisterska\Haar Training\Cascades2" "C:\Users\Quchi\Documents\NetBeansProjects\Praca Magisterska\Haar Training\Nowy klasyfikator.xml" 24 24

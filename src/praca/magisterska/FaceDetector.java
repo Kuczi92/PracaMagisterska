@@ -31,8 +31,8 @@ public class FaceDetector extends Detector {
     
     
    public ArrayList<BufferedImage> DetectFaces(int max_X, int max_Y, int min_X,int min_Y,double overlapFailedbox,Label MovedPointX,Label MovedPointY,Label MovedPointW,Label MovedPointH){
-       CascadeClassifier faceDetector = new CascadeClassifier("lbpcascade_frontalface.xml");
-       CascadeClassifier faceProfileDetector = new  CascadeClassifier("haarcascade_profileface.xml");
+       CascadeClassifier faceDetector = new CascadeClassifier("BuildInXML\\lbpcascade_frontalface.xml");
+       CascadeClassifier faceProfileDetector = new  CascadeClassifier("BuildInXML\\haarcascade_profileface.xml");
        
       //  ObrazWejsciowy =  setPicture(ObrazWejsciowy,500,500);
      
@@ -59,15 +59,17 @@ public class FaceDetector extends Detector {
         double MaximumY = max_Y/100.0*ObrazWejsciowy.getHeight();
         
         
-         double moddedX = Double.valueOf(MovedPointX.getText().replace(',', '.'))/100*ObrazWejsciowy.getWidth();
-         double moddedY = Double.valueOf(MovedPointY.getText().replace(',', '.'))/100*ObrazWejsciowy.getHeight();
-         double moddedW = Double.valueOf(MovedPointW.getText().replace(',', '.'))/100*ObrazWejsciowy.getWidth();
-         double moddedH = Double.valueOf(MovedPointH.getText().replace(',', '.'))/100*ObrazWejsciowy.getHeight();
+        
          
          ArrayList<BufferedImage> Out = new ArrayList<>();
             for (Rect rect : faceDetections.toArray()) {
+                
+               double moddedX = Double.valueOf(MovedPointX.getText().replace(',', '.'))/100*rect.width;
+               double moddedY = Double.valueOf(MovedPointY.getText().replace(',', '.'))/100*rect.height;
+               double moddedW = Double.valueOf(MovedPointW.getText().replace(',', '.'))/100*rect.width;
+               double moddedH = Double.valueOf(MovedPointH.getText().replace(',', '.'))/100*rect.height;
                
-            if((MinimumX<rect.width&&MinumumY<rect.height)&&(MaximumX>rect.height&&MaximumY>rect.width))
+                if((MinimumX<rect.width&&MinumumY<rect.height)&&(MaximumX>rect.height&&MaximumY>rect.width))
                     {
                      Core.rectangle(image, new Point(rect.x+moddedX, rect.y+moddedY), new Point(rect.x +moddedX+ rect.width+moddedW, rect.y + moddedY + rect.height+moddedH),new Scalar(0, 255, 0),2);
                      Out.add(this.GetFragmentOfPicture((int) (rect.x+moddedX), (int) (rect.y+moddedY), (int) (rect.width+moddedW), (int) (rect.height+moddedH))); 
@@ -82,7 +84,13 @@ public class FaceDetector extends Detector {
             
                    }
          for (Rect rect : faceProfileDetections.toArray()) {
-               if((MinimumX<rect.width&&MinumumY<rect.height)&&(MaximumX>rect.height&&MaximumY>rect.width))
+             
+               double moddedX = Double.valueOf(MovedPointX.getText().replace(',', '.'))/100*rect.x;
+               double moddedY = Double.valueOf(MovedPointY.getText().replace(',', '.'))/100*rect.y;
+               double moddedW = Double.valueOf(MovedPointW.getText().replace(',', '.'))/100*rect.width;
+               double moddedH = Double.valueOf(MovedPointH.getText().replace(',', '.'))/100*rect.height;
+               
+                if((MinimumX<rect.width&&MinumumY<rect.height)&&(MaximumX>rect.height&&MaximumY>rect.width))
                     {
                     Core.rectangle(image, new Point(rect.x+moddedX, rect.y+moddedY), new Point(rect.x +moddedX+ rect.width+moddedW, rect.y + moddedY + rect.height+moddedH),new Scalar(255, 0, 0),2);
                     Out.add(this.GetFragmentOfPicture((int) (rect.x+moddedX), (int) (rect.y+moddedY), (int) (rect.width+moddedW), (int) (rect.height+moddedH))); 

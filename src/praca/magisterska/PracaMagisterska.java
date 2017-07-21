@@ -45,7 +45,7 @@ public class PracaMagisterska extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Image i =  new Image("file:title_icon.png");
+        Image i =  new Image("file:settings\\icontitle\\icon_title.png");
         stage.getIcons().add(i);
         stage.setTitle("Wykrywanie biegaczy");
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
@@ -59,7 +59,13 @@ public class PracaMagisterska extends Application {
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
-        addLibraryPath("lib\\x64");
+        if("amd64".equals(System.getProperty("os.arch"))){
+            addLibraryPath("lib\\x64");
+        }
+        else{
+            addLibraryPath("lib\\x86");
+        }
+        
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         launch(args);
     }

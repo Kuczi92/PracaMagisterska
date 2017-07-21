@@ -16,12 +16,16 @@ import javafx.stage.Stage;
  */
 public class FolderChooser extends Application{
     private String pobranaścieszka;
- 
+    private String InicialDirectory;
     
     FolderChooser(String pobranaścieszka) {
        this.pobranaścieszka = pobranaścieszka;
     }
     
+    FolderChooser(String pobranaścieszka,String InicialDirectory){
+        this.pobranaścieszka = pobranaścieszka;
+        this.InicialDirectory = InicialDirectory;
+    }
     public String getPobranaŚciezka(){
         return pobranaścieszka;
     }
@@ -40,9 +44,14 @@ public class FolderChooser extends Application{
  
     private void configureFileChooser(final DirectoryChooser fileChooser) 
     {      
-
-                fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-              
+                if(null!=InicialDirectory){
+                    fileChooser.setInitialDirectory(new File(InicialDirectory));
+                }
+                else{
+                    fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+                }
+                    
+                
     }
  
    

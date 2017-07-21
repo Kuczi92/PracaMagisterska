@@ -25,6 +25,7 @@ public class FileChooserFile extends Application{
     boolean createFile = true;
     String extension;
     String FileName;
+    String InicialDirectory;
     FileChooserFile(String pobranaścieszka) {
         if(pobranaścieszka==null){
             this.pobranaścieszka = "Brak";
@@ -50,6 +51,14 @@ public class FileChooserFile extends Application{
         this.createFile = b;
         this.extension = txt;
         this.FileName = listaObrazówiObiektów;
+    }
+    
+    FileChooserFile(String text, boolean b, String txt, String listaObrazówiObiektów,String InicialDirectory) {
+     this.pobranaścieszka = text;
+        this.createFile = b;
+        this.extension = txt;
+        this.FileName = listaObrazówiObiektów;
+        this.InicialDirectory = InicialDirectory;
     }
     
     public String getPobranaŚciezka(){
@@ -126,10 +135,17 @@ public class FileChooserFile extends Application{
                         
                     }
                 }
-                
-                fileChooser.setInitialDirectory(                
+                if(InicialDirectory!=null){
+                     fileChooser.setInitialDirectory(                
+                        new File(InicialDirectory)
+                );
+                }
+                else{
+                     fileChooser.setInitialDirectory(                
                         new File(System.getProperty("user.home"))
                 );
+                }
+               
             }
             
             if(extension==null){                

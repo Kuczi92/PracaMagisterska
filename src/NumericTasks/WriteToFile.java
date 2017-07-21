@@ -26,13 +26,21 @@ public class WriteToFile {
         try (PrintWriter zapis = new PrintWriter(Path)) 
         {   
             Pictures.forEach((CurentItem) -> {
-                zapis.print(CurentItem.PathToImage()+" ");
+                zapis.print(CurentItem.PathToImage());
                 
-                zapis.print(CurentItem.GetMarkedRect().size()+" ");
+                if(CurentItem.GetMarkedRect().isEmpty()){
+                    
+                }
+                else{
+                    zapis.print(" ");
+                    zapis.print(CurentItem.GetMarkedRect().size());
+                    zapis.print(" ");
+               
+                    CurentItem.GetMarkedRect().forEach((CurrenRect) -> {
+                        zapis.print(CurrenRect.x+" "+CurrenRect.y+" "+CurrenRect.width+" "+CurrenRect.height+" ");
+                    });
+                }
                 
-                CurentItem.GetMarkedRect().forEach((CurrenRect) -> {
-                    zapis.print(CurrenRect.x+" "+CurrenRect.y+" "+CurrenRect.width+" "+CurrenRect.height+" ");
-                });
                 zapis.println();
                 
             });

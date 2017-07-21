@@ -121,7 +121,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView layoutX="66.0" layoutY="43.0" prefHeight="67.0" prefWidth="301.0">
+                        <TableView layoutX="14.0" layoutY="37.0" prefHeight="67.0" prefWidth="301.0">
                           <columns>
                               <TableColumn id="Point1FromPic" fx:id="Point1FromPic" prefWidth="75.0" text="Punkt 1" />
                               <TableColumn id="Point2FromPic" fx:id="Point2FromPic" prefWidth="75.0" text="Punkt 2" />
@@ -129,7 +129,7 @@
                               <TableColumn id="Point4fromPic" fx:id="Point4fromPic" prefWidth="75.0" text="Punkt 4" />
                           </columns>
                         </TableView>
-                        <Label layoutX="66.0" layoutY="14.0" text="Punkty z oryginalnego obrazu" />
+                        <Label layoutX="14.0" layoutY="14.0" text="Punkty z oryginalnego obrazu" />
                      </children>
                   </AnchorPane>
               </content>
@@ -173,6 +173,26 @@
                              </items>
                          </ComboBox>
                         <CheckBox fx:id="DrawContur" layoutX="511.0" layoutY="267.0" mnemonicParsing="false" onMouseClicked="#changeValuesOfPicture" onMousePressed="#changeValuesOfPicture" onMouseReleased="#changeValuesOfPicture" text="Kontury" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Zapis wykrytego obrazu">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button layoutX="14.0" layoutY="51.0" mnemonicParsing="false" onAction="#ZWOsavecurrentfolder" prefHeight="35.0" prefWidth="109.0" text="Zapisz obraz" />
+                        <Label layoutX="14.0" layoutY="23.0" text="Folder zawierający zapisywane obrazy " />
+                        <ScrollPane layoutX="223.0" layoutY="17.0" prefHeight="37.0" prefWidth="119.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="22.0" prefWidth="518.0">
+                                 <children>
+                                    <Label fx:id="ZWOfolderSaveCurrentPic" layoutX="8.0" layoutY="6.0" text="Dany folder" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                        <Button layoutX="355.0" layoutY="16.0" mnemonicParsing="false" onAction="#ZWOfolderSaveCurrentPicChooseAnotherFolder" prefHeight="37.0" prefWidth="150.0" text="Wybierz inny folder" />
                      </children>
                   </AnchorPane>
               </content>

@@ -111,20 +111,20 @@
                                     <Label fx:id="PreprocThresholdValue" layoutX="298.0" layoutY="177.0" text="0,00" />
                                     <CheckBox fx:id="PreprocUseNegative" layoutX="20.0" layoutY="202.0" mnemonicParsing="false" onMouseClicked="#PreProcchangeValuesOfPicture" text="Zastosuj negatyw" />
                                     <Label layoutX="26.0" layoutY="227.0" text="Ustawienia obszaru wycięcia fragmentu z biegaczem:" />
-                                    <Slider fx:id="PreprocMovePointX" layoutX="32.0" layoutY="276.0" min="-100.0" onMouseDragged="#PreprocChangeCurrentMovePointXtValue" onMousePressed="#PreprocChangeCurrentMovePointXtValue" onMouseReleased="#PreprocChangeCurrentMovePointXtValue" prefHeight="14.0" prefWidth="236.0" />
+                                    <Slider fx:id="PreprocMovePointX" layoutX="32.0" layoutY="276.0" max="400.0" min="-400.0" onMouseDragged="#PreprocChangeCurrentMovePointXtValue" onMousePressed="#PreprocChangeCurrentMovePointXtValue" onMouseReleased="#PreprocChangeCurrentMovePointXtValue" prefHeight="14.0" prefWidth="236.0" />
                                     <Label layoutX="13.0" layoutY="257.0" text="Przesunięcie punktu początku kwadrata:" />
                                     <Label fx:id="PreprocCurrentMovePointX" layoutX="272.0" layoutY="275.0" prefHeight="17.0" prefWidth="40.0" text="0,00" />
                                     <Label layoutX="16.0" layoutY="274.0" text="X" />
                                     <Label layoutX="17.0" layoutY="298.0" text="Y" />
                                     <Label fx:id="PreprocCurrentMovePointY" layoutX="272.0" layoutY="298.0" prefHeight="17.0" prefWidth="45.0" text="0,00" />
-                                    <Slider fx:id="PreprocMovePointY" layoutX="33.0" layoutY="300.0" min="-100.0" onMouseDragged="#PreprocChangeCurrentMovePointYtValue" onMousePressed="#PreprocChangeCurrentMovePointYtValue" onMouseReleased="#PreprocChangeCurrentMovePointYtValue" prefHeight="14.0" prefWidth="236.0" />
-                                    <Slider fx:id="PreprocMovePointH" layoutX="35.0" layoutY="367.0" min="-100.0" onMouseDragged="#PreprocChangeCurrentMovePointHtValue" onMousePressed="#PreprocChangeCurrentMovePointHtValue" onMouseReleased="#PreprocChangeCurrentMovePointHtValue" prefHeight="14.0" prefWidth="236.0" />
+                                    <Slider fx:id="PreprocMovePointY" layoutX="33.0" layoutY="300.0" max="400.0" min="-400.0" onMouseDragged="#PreprocChangeCurrentMovePointYtValue" onMousePressed="#PreprocChangeCurrentMovePointYtValue" onMouseReleased="#PreprocChangeCurrentMovePointYtValue" prefHeight="14.0" prefWidth="236.0" />
+                                    <Slider fx:id="PreprocMovePointH" layoutX="35.0" layoutY="367.0" max="400.0" min="-400.0" onMouseDragged="#PreprocChangeCurrentMovePointHtValue" onMousePressed="#PreprocChangeCurrentMovePointHtValue" onMouseReleased="#PreprocChangeCurrentMovePointHtValue" prefHeight="14.0" prefWidth="236.0" />
                                     <Label fx:id="PreprocCurrentMovePointH" layoutX="272.0" layoutY="365.0" prefHeight="17.0" prefWidth="45.0" text="0,00" />
                                     <Label layoutX="19.0" layoutY="365.0" text="H" />
                                     <Label layoutX="18.0" layoutY="341.0" text="W" />
                                     <Label fx:id="PreprocCurrentMovePointW" layoutX="272.0" layoutY="341.0" prefHeight="17.0" prefWidth="45.0" text="0,00" />
                                     <Label layoutX="15.0" layoutY="324.0" text="Przesunięcie wartości rozmiarów fragmentu:" />
-                                    <Slider fx:id="PreprocMovePointW" layoutX="34.0" layoutY="343.0" min="-100.0" onMouseDragged="#PreprocChangeCurrentMovePointWtValue" onMousePressed="#PreprocChangeCurrentMovePointWtValue" onMouseReleased="#PreprocChangeCurrentMovePointWtValue" prefHeight="14.0" prefWidth="236.0" />
+                                    <Slider fx:id="PreprocMovePointW" layoutX="34.0" layoutY="343.0" max="400.0" min="-400.0" onMouseDragged="#PreprocChangeCurrentMovePointWtValue" onMousePressed="#PreprocChangeCurrentMovePointWtValue" onMouseReleased="#PreprocChangeCurrentMovePointWtValue" prefHeight="14.0" prefWidth="236.0" />
                                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" layoutX="78.0" layoutY="447.0" stroke="BLACK" strokeType="INSIDE" width="148.0" />
                                     <Label layoutX="316.0" layoutY="274.0" text="\%" />
                                     <Label layoutX="316.0" layoutY="298.0" text="\%" />
@@ -379,7 +379,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TabPane layoutX="-1.0" prefHeight="351.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane layoutX="-1.0" prefHeight="351.0" prefWidth="951.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Klasyfikator Binarny">
                               <content>
@@ -419,15 +419,15 @@
                                  <content>
                                     <AnchorPane prefHeight="302.0" prefWidth="899.0">
                                        <children>
-                                          <TabPane layoutX="-3.0" layoutY="-2.0" prefHeight="322.0" prefWidth="947.0" tabClosingPolicy="UNAVAILABLE">
+                                          <TabPane layoutX="-3.0" layoutY="-2.0" prefHeight="322.0" prefWidth="959.0" tabClosingPolicy="UNAVAILABLE">
                                             <tabs>
-                                              <Tab text="Skrypt - Stworzenie pliku z przykładami trenującymi (CreateSamples.bat) ">
+                                              <Tab fx:id="CSloadfrom" text="Skrypt - Stworzenie pliku z przykładami trenującymi (CreateSamples.bat) ">
                                                 <content>
                                                       <AnchorPane prefHeight="277.0" prefWidth="901.0">
                                                          <children>
-                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="299.0" prefWidth="935.0">
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="299.0" prefWidth="951.0">
                                                                <children>
-                                                                  <TabPane layoutX="4.0" prefHeight="248.0" prefWidth="935.0" tabClosingPolicy="UNAVAILABLE">
+                                                                  <TabPane layoutX="4.0" prefHeight="299.0" prefWidth="965.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="0.0">
                                                                     <tabs>
                                                                       <Tab fx:id="CSloadfromImages" text="Załadowanie do kreatora wybranych fragmentów zdjęć do uczenia">
                                                                         <content>
@@ -442,9 +442,9 @@
                                                                                     <Label fx:id="CSnum" layoutX="88.0" layoutY="101.0" text="Wprowadź liczbę." />
                                                                                     <Label layoutX="14.0" layoutY="101.0" text="-num" />
                                                                                     <Label layoutX="14.0" layoutY="135.0" text="-w" />
-                                                                                    <Label fx:id="CSw" layoutX="88.0" layoutY="135.0" text="Wprowadź liczbę. " />
+                                                                                    <Label fx:id="CSw" layoutX="88.0" layoutY="135.0" text="Wprowadź liczbę." />
                                                                                     <Label layoutX="14.0" layoutY="168.0" text="-h" />
-                                                                                    <Label fx:id="CSh" layoutX="88.0" layoutY="168.0" text="Wprowadź liczbę. " />
+                                                                                    <Label fx:id="CSh" layoutX="88.0" layoutY="168.0" text="Wprowadź liczbę." />
                                                                                     <Label fx:id="CSShow" layoutX="385.0" layoutY="168.0" text="Zaznacz/odznacz opcję." />
                                                                                     <Label layoutX="311.0" layoutY="168.0" text="-show" />
                                                                                     <TextField fx:id="CSinputnum" layoutX="208.0" layoutY="97.0" onKeyPressed="#CSEnterNumbers" prefHeight="25.0" prefWidth="84.0" />
@@ -469,69 +469,75 @@
                                                                         <content>
                                                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="219.0" prefWidth="865.0">
                                                                                  <children>
-                                                                                    <Label layoutX="14.0" layoutY="14.0" text="Parametr:" />
-                                                                                    <Label layoutX="98.0" layoutY="14.0" text="Wartość parametru:" />
-                                                                                    <Label layoutX="14.0" layoutY="38.0" text="-img" />
-                                                                                    <Button layoutX="203.0" layoutY="34.0" mnemonicParsing="false" onAction="#CSILchooseImage" text="Wybierz obraz" />
+                                                                                    <Label layoutX="9.0" layoutY="6.0" text="Parametr:" />
+                                                                                    <Label layoutX="93.0" layoutY="6.0" text="Wartość parametru:" />
+                                                                                    <Label layoutX="16.0" layoutY="38.0" text="-img" />
+                                                                                    <Button layoutX="203.0" layoutY="34.0" mnemonicParsing="false" onAction="#CSILchooseImage" prefHeight="25.0" prefWidth="96.0" text="Wybierz obraz" />
                                                                                     <Button layoutX="203.0" layoutY="65.0" mnemonicParsing="false" onAction="#CSILchooseBGfile" prefHeight="25.0" prefWidth="94.0" text="Wybierz plik" />
-                                                                                    <Label layoutX="14.0" layoutY="69.0" text="-bg" />
-                                                                                    <Label fx:id="SCInum" layoutX="93.0" layoutY="125.0" text="Wprowadź liczbę." />
-                                                                                    <Label layoutX="9.0" layoutY="125.0" text="-num" />
-                                                                                    <Label fx:id="SCIbgcolor" layoutX="93.0" layoutY="157.0" text="Wprowadź liczbę." />
-                                                                                    <Label layoutX="9.0" layoutY="157.0" text="-bgcolor" />
-                                                                                    <Label fx:id="SCIbgthresh" layoutX="93.0" layoutY="189.0" text="Wprowadź liczbę." />
-                                                                                    <Label layoutX="9.0" layoutY="189.0" text="-bgthresh" />
-                                                                                    <Label layoutX="404.0" layoutY="47.0" text="-inv" />
-                                                                                    <Label layoutX="9.0" layoutY="101.0" text="-randinv" />
-                                                                                    <Label layoutX="399.0" layoutY="78.0" text="-maxidev" />
-                                                                                    <Label layoutX="307.0" layoutY="157.0" text="-maxxangle" />
-                                                                                    <Label layoutX="307.0" layoutY="189.0" text="-maxyangle" />
-                                                                                    <TextField fx:id="SCIbgcolorInput" layoutX="198.0" layoutY="153.0" onKeyPressed="#SCIEnterbgcolor" prefHeight="25.0" prefWidth="94.0" />
-                                                                                    <TextField fx:id="SCInumInput" layoutX="198.0" layoutY="121.0" onKeyPressed="#SCIEnterNum" prefHeight="25.0" prefWidth="94.0" />
-                                                                                    <TextField fx:id="SCIbgthreshInput" layoutX="198.0" layoutY="185.0" onKeyPressed="#SCIEnterbgthresh" prefHeight="25.0" prefWidth="94.0" />
-                                                                                    <Label layoutX="622.0" layoutY="124.0" text="-show" />
-                                                                                    <Label layoutX="622.0" layoutY="155.0" text="-w" />
-                                                                                    <Label fx:id="SCIw" layoutX="687.0" layoutY="155.0" text="Wprowadź cyfrę." />
-                                                                                    <Label layoutX="622.0" layoutY="187.0" text="-h" />
-                                                                                    <Label fx:id="SCIshow" layoutX="668.0" layoutY="124.0" text="Zaznacz/odznacz opcję." />
-                                                                                    <Label fx:id="SCIh" layoutX="687.0" layoutY="187.0" text="Wprowadź cyfrę." />
-                                                                                    <TextField fx:id="SCIwInput" layoutX="811.0" layoutY="151.0" onKeyPressed="#SCIEnterw" prefHeight="25.0" prefWidth="94.0" />
-                                                                                    <TextField fx:id="SCIhInput" layoutX="811.0" layoutY="183.0" onKeyPressed="#SCIEnterh" prefHeight="25.0" prefWidth="94.0" />
-                                                                                    <CheckBox fx:id="SCIshowt" layoutX="811.0" layoutY="124.0" mnemonicParsing="false" onMouseClicked="#SCIRandSetShow" text="Pokaż wyniki. " />
-                                                                                    <Label fx:id="SCIinv" layoutX="463.0" layoutY="47.0" text="Zaznacz/odznacz opcję." />
-                                                                                    <CheckBox fx:id="SCIinvSet" layoutX="602.0" layoutY="47.0" mnemonicParsing="false" onMouseClicked="#SCISetInv" text="Zamiana kolorów. " />
-                                                                                    <Label fx:id="SCIrandinv" layoutX="69.0" layoutY="101.0" text="Zaznacz/odznacz opcję." />
-                                                                                    <CheckBox fx:id="SCIrandinvSet" layoutX="209.0" layoutY="101.0" mnemonicParsing="false" onMouseClicked="#SCIRandSetInv" text="Losowa zmiana kolorów. " />
-                                                                                    <TextField fx:id="SCImaxidevInput" layoutX="601.0" layoutY="74.0" onKeyPressed="#SCIEntermaxidev" prefHeight="25.0" prefWidth="94.0" />
-                                                                                    <Label fx:id="SCImaxidev" layoutX="496.0" layoutY="78.0" text="Wprowadź liczbę." />
-                                                                                    <TextField fx:id="SCImaxxangleInput" layoutX="508.0" layoutY="153.0" onKeyPressed="#SCIEntermaxxangle" prefHeight="25.0" prefWidth="94.0" />
-                                                                                    <Label fx:id="SCImaxxangle" layoutX="404.0" layoutY="157.0" text="Wprowadź liczbę." />
-                                                                                    <TextField fx:id="SCImaxyangleInput" layoutX="510.0" layoutY="185.0" onKeyPressed="#SCIEntermaxyangle" prefHeight="25.0" prefWidth="94.0" />
-                                                                                    <Label fx:id="SCImaxyangle" layoutX="404.0" layoutY="189.0" text="Wprowadź liczbę." />
-                                                                                    <ScrollPane layoutX="43.0" layoutY="34.0" prefHeight="63.0" prefWidth="148.0">
+                                                                                    <Label layoutX="19.0" layoutY="70.0" text="-bg" />
+                                                                                    <Label fx:id="SCInum" layoutX="98.0" layoutY="145.0" text="Wprowadź liczbę." />
+                                                                                    <Label layoutX="14.0" layoutY="145.0" text="-num" />
+                                                                                    <Label fx:id="SCIbgcolor" layoutX="98.0" layoutY="177.0" text="Wprowadź liczbę." />
+                                                                                    <Label layoutX="14.0" layoutY="177.0" text="-bgcolor" />
+                                                                                    <Label fx:id="SCIbgthresh" layoutX="98.0" layoutY="209.0" text="Wprowadź liczbę." />
+                                                                                    <Label layoutX="14.0" layoutY="209.0" text="-bgthresh" />
+                                                                                    <Label layoutX="306.0" layoutY="96.0" text="-inv" />
+                                                                                    <Label layoutX="306.0" layoutY="117.0" text="-randinv" />
+                                                                                    <Label layoutX="615.0" layoutY="165.0" text="-maxidev" />
+                                                                                    <Label layoutX="307.0" layoutY="197.0" text="-maxxangle" />
+                                                                                    <Label layoutX="307.0" layoutY="229.0" text="-maxyangle" />
+                                                                                    <TextField fx:id="SCIbgcolorInput" layoutX="203.0" layoutY="173.0" onKeyPressed="#SCIEnterbgcolor" prefHeight="25.0" prefWidth="94.0" />
+                                                                                    <TextField fx:id="SCInumInput" layoutX="203.0" layoutY="141.0" onKeyPressed="#SCIEnterNum" prefHeight="25.0" prefWidth="94.0" />
+                                                                                    <TextField fx:id="SCIbgthreshInput" layoutX="203.0" layoutY="205.0" onKeyPressed="#SCIEnterbgthresh" prefHeight="25.0" prefWidth="94.0" />
+                                                                                    <Label layoutX="307.0" layoutY="137.0" text="-show" />
+                                                                                    <Label layoutX="616.0" layoutY="197.0" text="-w" />
+                                                                                    <Label fx:id="SCIw" layoutX="692.0" layoutY="194.0" text="Wprowadź liczbę." />
+                                                                                    <Label layoutX="616.0" layoutY="229.0" text="-h" />
+                                                                                    <Label fx:id="SCIshow" layoutX="366.0" layoutY="137.0" text="Zaznacz/odznacz opcję." />
+                                                                                    <Label fx:id="SCIh" layoutX="691.0" layoutY="226.0" text="Wprowadź liczbę." />
+                                                                                    <TextField fx:id="SCIwInput" layoutX="809.0" layoutY="190.0" onKeyPressed="#SCIEnterw" prefHeight="25.0" prefWidth="100.0" />
+                                                                                    <TextField fx:id="SCIhInput" layoutX="809.0" layoutY="222.0" onKeyPressed="#SCIEnterh" prefHeight="25.0" prefWidth="100.0" />
+                                                                                    <CheckBox fx:id="SCIshowt" layoutX="503.0" layoutY="137.0" mnemonicParsing="false" onMouseClicked="#SCIRandSetShow" text="Pokaż wyniki. " />
+                                                                                    <Label fx:id="SCIinv" layoutX="365.0" layoutY="96.0" text="Zaznacz/odznacz opcję." />
+                                                                                    <CheckBox fx:id="SCIinvSet" layoutX="503.0" layoutY="96.0" mnemonicParsing="false" onMouseClicked="#SCISetInv" text="Zamiana kolorów. " />
+                                                                                    <Label fx:id="SCIrandinv" layoutX="366.0" layoutY="117.0" text="Zaznacz/odznacz opcję." />
+                                                                                    <CheckBox fx:id="SCIrandinvSet" layoutX="503.0" layoutY="117.0" mnemonicParsing="false" onMouseClicked="#SCIRandSetInv" text="Losowa zmiana kolorów. " />
+                                                                                    <TextField fx:id="SCImaxidevInput" layoutX="809.0" layoutY="161.0" onKeyPressed="#SCIEntermaxidev" prefHeight="25.0" prefWidth="100.0" />
+                                                                                    <Label fx:id="SCImaxidev" layoutX="692.0" layoutY="165.0" text="Wprowadź liczbę." />
+                                                                                    <TextField fx:id="SCImaxxangleInput" layoutX="504.0" layoutY="193.0" onKeyPressed="#SCIEntermaxxangle" prefHeight="25.0" prefWidth="100.0" />
+                                                                                    <Label fx:id="SCImaxxangle" layoutX="404.0" layoutY="197.0" text="Wprowadź liczbę." />
+                                                                                    <TextField fx:id="SCImaxyangleInput" layoutX="504.0" layoutY="225.0" onKeyPressed="#SCIEntermaxyangle" prefHeight="25.0" prefWidth="100.0" />
+                                                                                    <Label fx:id="SCImaxyangle" layoutX="402.0" layoutY="229.0" text="Wprowadź liczbę." />
+                                                                                    <ScrollPane layoutX="43.0" layoutY="22.0" prefHeight="121.0" prefWidth="148.0">
                                                                                        <content>
-                                                                                        <AnchorPane fx:id="CSILchooseBGfile" minHeight="0.0" minWidth="0.0" prefHeight="48.0" prefWidth="782.0">
+                                                                                        <AnchorPane fx:id="CSILchooseBGfile" minHeight="0.0" minWidth="0.0" prefHeight="107.0" prefWidth="880.0">
                                                                                              <children>
-                                                                                                <Label fx:id="SCIChoosenImage" layoutX="14.0" layoutY="6.0" text="Wybierz obraz." />
-                                                                                                <Label fx:id="SCIChoosenBGfile" layoutX="14.0" layoutY="30.0" text="Wybierz plik txt." />
+                                                                                                <Label fx:id="SCIChoosenImage" layoutX="17.0" layoutY="16.0" text="Wybierz obraz." />
+                                                                                                <Label fx:id="SCIChoosenBGfile" layoutX="14.0" layoutY="48.0" text="Wybierz plik txt." />
+                                                                                                <Label fx:id="SCIChoosenInfofile" layoutX="14.0" layoutY="80.0" text="Wybierz plik txt." />
                                                                                              </children>
                                                                                           </AnchorPane>
                                                                                        </content>
                                                                                     </ScrollPane>
-                                                                                    <Button layoutX="646.0" layoutY="11.0" mnemonicParsing="false" onAction="#CScreatevecFile" prefHeight="25.0" prefWidth="83.0" text="Wybierz plik" />
-                                                                                    <ScrollPane layoutX="451.0" layoutY="4.0" prefHeight="38.0" prefWidth="192.0">
+                                                                                    <Button layoutX="581.0" layoutY="10.0" mnemonicParsing="false" onAction="#CScreatevecFile" prefHeight="25.0" prefWidth="83.0" text="Wybierz plik" />
+                                                                                    <ScrollPane layoutX="379.0" layoutY="9.0" prefHeight="38.0" prefWidth="190.0">
                                                                                       <content>
-                                                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="23.0" prefWidth="631.0">
+                                                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="23.0" prefWidth="564.0">
                                                                                              <children>
                                                                                                 <Label fx:id="CSvecfile1" layoutX="14.0" layoutY="6.0" text="Stwórz plik vec." />
                                                                                              </children>
                                                                                           </AnchorPane>
                                                                                       </content>
                                                                                     </ScrollPane>
-                                                                                    <Label layoutX="403.0" layoutY="14.0" text="-vec" />
-                                                                                    <Label fx:id="SCImaxzangle" layoutX="405.0" layoutY="125.0" text="Wprowadź liczbę." />
-                                                                                    <TextField fx:id="SCImaxzangleInput" layoutX="510.0" layoutY="120.0" onKeyPressed="#SCIEntermaxzangle" prefHeight="25.0" prefWidth="94.0" />
-                                                                                    <Label layoutX="307.0" layoutY="124.0" text="-maxzangle" />
+                                                                                    <Label layoutX="307.0" layoutY="14.0" text="-vec" />
+                                                                                    <Label fx:id="SCImaxzangle" layoutX="405.0" layoutY="165.0" text="Wprowadź liczbę." />
+                                                                                    <TextField fx:id="SCImaxzangleInput" layoutX="504.0" layoutY="160.0" onKeyPressed="#SCIEntermaxzangle" prefHeight="25.0" prefWidth="100.0" />
+                                                                                    <Label layoutX="307.0" layoutY="164.0" text="-maxzangle" />
+                                                                                    <Label layoutX="16.0" layoutY="104.0" text="-info" />
+                                                                                    <Button layoutX="203.0" layoutY="100.0" mnemonicParsing="false" onAction="#CSILchooseInfofile" prefHeight="25.0" prefWidth="94.0" text="Wybierz plik" />
+                                                                                    <Label layoutX="307.0" layoutY="57.0" text="-pngoutput" />
+                                                                                    <Label fx:id="SCIPNG" layoutX="379.0" layoutY="57.0" text="Zaznacz/odznacz opcję." />
+                                                                                    <CheckBox fx:id="SCIiPngOutuputSet" layoutX="510.0" layoutY="57.0" mnemonicParsing="false" onMouseClicked="#SCISetPNG" text="Wyjscie w formacie PNG." />
                                                                                  </children>
                                                                               </AnchorPane>
                                                                         </content>
@@ -552,7 +558,7 @@
                                                          <children>
                                                             <Button layoutX="109.0" layoutY="260.0" mnemonicParsing="false" onAction="#OpenScript" text="Uruchom skrypt" />
                                                             <Button layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#SaveScript" text="Utwórz skrypt" />
-                                                            <ScrollPane layoutX="6.0" prefHeight="259.0" prefWidth="935.0">
+                                                            <ScrollPane layoutX="6.0" prefHeight="257.0" prefWidth="951.0">
                                                                <content>
                                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="257.0" prefWidth="1874.0">
                                                                      <children>
@@ -573,9 +579,9 @@
                                                                         <Label layoutX="2.0" layoutY="207.0" text="-nstages" />
                                                                         <TextField fx:id="HTnstagesInput" layoutX="197.0" layoutY="203.0" onKeyPressed="#HTnstagesEnter" prefHeight="25.0" prefWidth="98.0" />
                                                                         <Button layoutX="198.0" layoutY="98.0" mnemonicParsing="false" onAction="#HTChooseBGtxtFile" prefHeight="25.0" prefWidth="94.0" text="Wybierz plik" />
-                                                                        <TextField fx:id="HTacceptanceRatioBreakValueInput" layoutX="1046.0" layoutY="195.0" onKeyPressed="#HTacceptanceRatioBreakValueEnter" prefHeight="25.0" prefWidth="149.0" />
-                                                                        <Label layoutX="779.0" layoutY="199.0" text="-acceptanceRatioBreakValue " />
-                                                                        <Label fx:id="HTacceptanceRatioBreakValue" layoutX="939.0" layoutY="199.0" text="Wprowadź liczbę." />
+                                                                        <TextField fx:id="HTacceptanceRatioBreakValueInput" layoutX="1046.0" layoutY="207.0" onKeyPressed="#HTacceptanceRatioBreakValueEnter" prefHeight="25.0" prefWidth="149.0" />
+                                                                        <Label layoutX="779.0" layoutY="211.0" text="-acceptanceRatioBreakValue " />
+                                                                        <Label fx:id="HTacceptanceRatioBreakValue" layoutX="939.0" layoutY="211.0" text="Wprowadź liczbę." />
                                                                         <Label layoutX="310.0" layoutY="98.0" text="-baseFormatSave " />
                                                                         <Label fx:id="HTbaseFormatSave" layoutX="437.0" layoutY="97.0" text="Zaznacz/odznacz opcję." />
                                                                         <CheckBox fx:id="HTbaseFormatSaveCheck" layoutX="577.0" layoutY="97.0" mnemonicParsing="false" onMouseClicked="#HTbaseFormatSaveSet" text="Uzyj starszego formatu. " />
@@ -588,24 +594,24 @@
                                                                         <TextField fx:id="HTprecalcValBufSizeInput" layoutX="577.0" layoutY="30.0" onKeyPressed="#HTprecalcValBufSizeEnter" prefHeight="25.0" prefWidth="148.0" />
                                                                         <Label layoutX="310.0" layoutY="35.0" text="-precalcValBufSize" />
                                                                         <Label fx:id="HTprecalcValBufSize" layoutX="470.0" layoutY="34.0" text="Wprowadź liczbę." />
-                                                                        <Label layoutX="776.0" layoutY="97.0" text="-featureType" />
-                                                                        <RadioButton fx:id="HTHaar" layoutX="958.0" layoutY="98.0" mnemonicParsing="false" onMouseClicked="#HTChooseHaar" text="HAAR" />
-                                                                        <RadioButton fx:id="HTLBP" layoutX="1033.0" layoutY="98.0" mnemonicParsing="false" onMouseClicked="#HTChooseLBP" text="LBP" />
-                                                                        <Label fx:id="HTfeaturetype" layoutX="865.0" layoutY="98.0" text="Wybierz jedno." />
-                                                                        <Label fx:id="HTw" layoutX="822.0" layoutY="31.0" text="Wprowadź liczbę." />
-                                                                        <Label layoutX="776.0" layoutY="31.0" text="-w" />
-                                                                        <TextField fx:id="HTwInput" layoutX="929.0" layoutY="27.0" onKeyPressed="#HTwEnter" prefHeight="25.0" prefWidth="148.0" />
-                                                                        <TextField fx:id="HThInput" layoutX="929.0" layoutY="58.0" onKeyPressed="#HThEnter" prefHeight="25.0" prefWidth="148.0" />
-                                                                        <Label layoutX="776.0" layoutY="62.0" text="-h" />
-                                                                        <Label fx:id="HTh" layoutX="822.0" layoutY="62.0" text="Wprowadź liczbę." />
-                                                                        <Label layoutX="358.0" layoutY="6.0" text="Parametry podstawowe:" />
-                                                                        <Label layoutX="776.0" layoutY="6.0" text="Parametry dla ustawienia kaskadowego:" />
-                                                                        <Label layoutX="776.0" layoutY="130.0" text="Dodatkowe parametry klasyfikatora Haara:" />
-                                                                        <Label fx:id="HTmode" layoutX="871.0" layoutY="161.0" text="Wybierz jedno." />
-                                                                        <RadioButton fx:id="HTCORE" layoutX="1039.0" layoutY="161.0" mnemonicParsing="false" onMouseClicked="#HTChooseCORE" text="CORE" />
-                                                                        <RadioButton fx:id="HTBASIC" layoutX="964.0" layoutY="161.0" mnemonicParsing="false" onMouseClicked="#HTChooseBASIC" prefHeight="17.0" prefWidth="58.0" text="BASIC" />
-                                                                        <Label layoutX="780.0" layoutY="161.0" text="-mode" />
-                                                                        <RadioButton fx:id="HTALL" layoutX="1109.0" layoutY="161.0" mnemonicParsing="false" onMouseClicked="#HTChooseALL" text="ALL" />
+                                                                        <Label layoutX="1229.0" layoutY="211.0" text="-featureType" />
+                                                                        <RadioButton fx:id="HTHaar" layoutX="1469.0" layoutY="211.0" mnemonicParsing="false" onMouseClicked="#HTChooseHaar" text="HAAR" />
+                                                                        <RadioButton fx:id="HTLBP" layoutX="1544.0" layoutY="211.0" mnemonicParsing="false" onMouseClicked="#HTChooseLBP" text="LBP" />
+                                                                        <Label fx:id="HTfeaturetype" layoutX="1376.0" layoutY="211.0" text="Wybierz jedno." />
+                                                                        <Label fx:id="HTw" layoutX="825.0" layoutY="98.0" text="Wprowadź liczbę." />
+                                                                        <Label layoutX="779.0" layoutY="98.0" text="-w" />
+                                                                        <TextField fx:id="HTwInput" layoutX="932.0" layoutY="94.0" onKeyPressed="#HTwEnter" prefHeight="25.0" prefWidth="148.0" />
+                                                                        <TextField fx:id="HThInput" layoutX="932.0" layoutY="125.0" onKeyPressed="#HThEnter" prefHeight="25.0" prefWidth="148.0" />
+                                                                        <Label layoutX="779.0" layoutY="129.0" text="-h" />
+                                                                        <Label fx:id="HTh" layoutX="825.0" layoutY="129.0" text="Wprowadź liczbę." />
+                                                                        <Label layoutX="309.0" layoutY="14.0" text="Parametry podstawowe:" />
+                                                                        <Label layoutX="779.0" layoutY="73.0" text="Parametry dla ustawienia kaskadowego:" />
+                                                                        <Label layoutX="779.0" layoutY="153.0" text="Dodatkowe parametry klasyfikatora Haara:" />
+                                                                        <Label fx:id="HTmode" layoutX="874.0" layoutY="184.0" text="Wybierz jedno." />
+                                                                        <RadioButton fx:id="HTCORE" layoutX="1042.0" layoutY="184.0" mnemonicParsing="false" onMouseClicked="#HTChooseCORE" text="CORE" />
+                                                                        <RadioButton fx:id="HTBASIC" layoutX="967.0" layoutY="184.0" mnemonicParsing="false" onMouseClicked="#HTChooseBASIC" prefHeight="17.0" prefWidth="58.0" text="BASIC" />
+                                                                        <Label layoutX="783.0" layoutY="184.0" text="-mode" />
+                                                                        <RadioButton fx:id="HTALL" layoutX="1112.0" layoutY="184.0" mnemonicParsing="false" onMouseClicked="#HTChooseALL" text="ALL" />
                                                                         <Label layoutX="1305.0" layoutY="6.0" text="Parametry wzmacniające klasyfikator Haara:" />
                                                                         <RadioButton fx:id="HTLB" layoutX="1558.0" layoutY="31.0" mnemonicParsing="false" onMouseClicked="#HTChooseLB" text="LB" />
                                                                         <Label layoutX="1229.0" layoutY="31.0" text="-bt" />
@@ -630,7 +636,7 @@
                                                                         <Label fx:id="HTmaxWeakCount" layoutX="1365.0" layoutY="181.0" text="Wprowadź liczbę." />
                                                                         <ScrollPane layoutX="41.0" layoutY="32.0" prefHeight="137.0" prefWidth="148.0">
                                                                           <content>
-                                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="122.0" prefWidth="890.0">
+                                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="122.0" prefWidth="379.0">
                                                                                  <children>
                                                                                     <Label fx:id="HTPathtoXml" layoutX="14.0" layoutY="6.0" text="Wybierz folder." />
                                                                                     <Label fx:id="HTPathToVecFile" layoutX="12.0" layoutY="38.0" text="Wybierz plik vec." />
@@ -643,6 +649,11 @@
                                                                         <Label layoutX="1.0" layoutY="133.0" text="-xml" />
                                                                         <Button layoutX="198.0" layoutY="129.0" mnemonicParsing="false" onAction="#HTLoadChoosenXMLFile" prefHeight="25.0" prefWidth="94.0" text="Wybierz plik" />
                                                                         <Button layoutX="306.0" layoutY="129.0" mnemonicParsing="false" onAction="#HTSaveDataFromCascadeFolder" prefHeight="25.0" prefWidth="109.0" text="Zapisz z folderu" />
+                                                                        <CheckBox fx:id="HTUseotherexeFileCheckBox" layoutX="577.0" layoutY="133.0" mnemonicParsing="false" onMouseClicked="#HTUseotherexeFileSet" text="Użyj pliku traincascade.exe" />
+                                                                        <Label fx:id="HTUseotherexeFile" layoutX="437.0" layoutY="133.0" text="Zaznacz/odznacz opcję." />
+                                                                        <TextField fx:id="HTnsplitsInput" layoutX="1045.0" layoutY="35.0" onKeyPressed="#HTnsplitsEnter" prefHeight="25.0" prefWidth="148.0" />
+                                                                        <Label layoutX="778.0" layoutY="39.0" text="-nsplits" />
+                                                                        <Label fx:id="HTnsplits" layoutX="938.0" layoutY="39.0" text="Wprowadź liczbę." />
                                                                      </children>
                                                                   </AnchorPane>
                                                                </content>

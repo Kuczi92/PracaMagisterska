@@ -91,9 +91,9 @@ public class FXMLDocumentController implements Initializable {
     public int widthOriginImage;
     public int heightOriginImage;
     Numbers NumbersNeuralNet;
-    private final Image rootIcon = new Image("file:icontitle//neuralnet.jpg"); 
-    private final Image LayerIcon = new Image("file:icontitle//layers.png");
-    private final Image NeuronIcon = new Image("file:icontitle//neuron.png");
+    private final Image rootIcon = new Image("file:settings//icontitle//neuralnet.jpg"); 
+    private final Image LayerIcon = new Image("file:settings//icontitle//layers.png");
+    private final Image NeuronIcon = new Image("file:settings//icontitle//neuron.png");
     
     
     //Ustawienia sieci neuronowej
@@ -437,7 +437,7 @@ public class FXMLDocumentController implements Initializable {
     public void ChooseFileWithNeuralNetTest(){
         try {
             Stage stage = new Stage();
-            FileChooserFile FileChooserFile = new FileChooserFile(FileWithNeuralNet.getText(),false);
+            FileChooserFile FileChooserFile = new FileChooserFile(FileWithNeuralNet.getText(),false,"txt","","NeuralNetsFiles");
             FileChooserFile.start(stage);
             FileWithNeuralNet.setText(FileChooserFile.Sciezka);
             NumbersNeuralNet = new Numbers(FileWithNeuralNet.getText());
@@ -445,7 +445,7 @@ public class FXMLDocumentController implements Initializable {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
         String Text = FileWithNeuralNet.getText();
-        if(Text.length()>50){
+        if(Text.length()>48){
         Text =  Text.substring(0,Text.length()/2)+"\n"+Text.substring(Text.length()/2,Text.length());
         }
         FileWithNeuralNet.setText(Text);
@@ -1183,7 +1183,7 @@ public class FXMLDocumentController implements Initializable {
         {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Image i =  new Image("file:title_icon.png");
+        Image i =  new Image("file:settings\\icontitle\\icon_title.png");
         FXMLDetectedRunnersController = loader.getController();
         Scene scene = new Scene(root);
         Stage StagePic = new Stage();
@@ -1225,7 +1225,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public void ReadNeuralNetFromFile(){
             Stage stage = new Stage();
-            FileChooserFile FileChooserFile = new FileChooserFile(LabelFileWithNeuralNet.getText(),false);
+            FileChooserFile FileChooserFile = new FileChooserFile(LabelFileWithNeuralNet.getText(),false,"txt","","NeuralNetsFiles");
             FileChooserFile.start(stage); 
             LabelFileWithNeuralNet.setText(FileChooserFile.Sciezka);
         try {
@@ -1304,7 +1304,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML 
     public void createFilewithNeuralNet(){
             Stage stage = new Stage();
-            FileChooserFile FileChooserFile = new FileChooserFile(PathToNeuralNet.getText());
+            FileChooserFile FileChooserFile = new FileChooserFile(PathToNeuralNet.getText(),true,"txt","Nowa sieć","NeuralNetsFiles");
             FileChooserFile.start(stage); 
             PathToNeuralNet.setText(FileChooserFile.Sciezka);
     }
@@ -1405,7 +1405,7 @@ public class FXMLDocumentController implements Initializable {
                                 TrainingNeuralNetController.SetVariables(NumbersNeuralNet, PathToTrainSet, NumberOfLearningIteration, PathToNewNeuralNet, NumberOfLayers);
                                 
                                 Scene scene = new Scene(root);
-                                Image i =  new Image("file:title_icon.png");
+                                Image i =  new Image("file:settings\\icontitle\\icon_title.png");
                                 Stage StagePic = new Stage();
                                 StagePic.getIcons().add(i);
                                 StagePic.setTitle("Proces uczenia sieci neuronowej - "+PathToNewNeuralNet);
@@ -1662,19 +1662,19 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public void CSloadinfofile(){
         Stage stage = new Stage();
-            FileChooserFile FileChooserFile = new FileChooserFile(CSinfotxtfile.getText(),false,"txt");
-            FileChooserFile.start(stage);
-            CSinfotxtfile.setText(FileChooserFile.Sciezka);
+        FileChooserFile FileChooserFile = new FileChooserFile(CSinfotxtfile.getText(),false,"txt","Nowy plik info","Haar_Training\\Info");
+        FileChooserFile.start(stage);
+        CSinfotxtfile.setText(FileChooserFile.Sciezka);
     }
     
     @FXML
     public Label CSvecfile;
-     @FXML
+    @FXML
     public Label CSvecfile1;
     @FXML
     public void CScreatevecFile(){
         Stage stage = new Stage();
-        FileChooserFile FileChooserFile = new FileChooserFile(CSvecfile.getText(),true,"vec");
+        FileChooserFile FileChooserFile = new FileChooserFile(CSvecfile.getText(),true,"vec","Nowy plik vec","Haar_Training\\Vectors");
         FileChooserFile.start(stage);
         CSvecfile.setText(FileChooserFile.Sciezka);
         CSvecfile1.setText(FileChooserFile.Sciezka);
@@ -1755,18 +1755,31 @@ public class FXMLDocumentController implements Initializable {
     @FXML Label SCIChoosenBGfile;
     @FXML
     public void CSILchooseBGfile(){
-        Stage stage = new Stage();
-            FileChooserFile FileChooserFile = new FileChooserFile(SCIChoosenBGfile.getText(),false,"txt");
+            Stage stage = new Stage();
+            FileChooserFile FileChooserFile = new FileChooserFile(SCIChoosenBGfile.getText(),false,"txt","Nowy plik BG","Haar_Training");
             FileChooserFile.start(stage); 
             SCIChoosenBGfile.setText(FileChooserFile.Sciezka);
     }
     
+    
+    
+   @FXML Label SCIChoosenInfofile;
+   
+   @FXML public void CSILchooseInfofile(){
+            Stage stage = new Stage();
+            FileChooserFile FileChooserFile = new FileChooserFile(SCIChoosenInfofile.getText(),false,"txt","Nowy plik Info","Haar_Training\\Info");
+            FileChooserFile.start(stage); 
+            SCIChoosenInfofile.setText(FileChooserFile.Sciezka);
+            CSinfotxtfile.setText(FileChooserFile.Sciezka);
+   }
+   
+   
+   
     @FXML Label SCInum;
     @FXML TextField SCInumInput;
      public void SCIEnterNum(KeyEvent e){
       if(e.getCode()== KeyCode.ENTER){
           SCInum.setText(SCInumInput.getText());
-          SCInumInput.clear();
           CSnum.setText(SCInumInput.getText());
           SCInumInput.clear();
       }
@@ -1868,7 +1881,21 @@ public class FXMLDocumentController implements Initializable {
         else{
             SCIinv.setText("FALSE");
         }
-    }  
+    }
+    
+    @FXML public Label SCIPNG;
+    @FXML CheckBox SCIiPngOutuputSet;
+    @FXML
+    public void SCISetPNG(){
+        if(SCIiPngOutuputSet.isSelected()){
+            SCIPNG.setText("TRUE");
+        }
+        else{
+            SCIPNG.setText("FALSE");
+        }
+    }
+    
+    
     
     @FXML
     public Label SCIrandinv;
@@ -1908,7 +1935,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML Label HTPathtoXml;
     public void HTChoosePathToXML(){
         Stage stage = new Stage();
-            FolderChooser FolderChooser = new FolderChooser(HTPathtoXml.getText());
+            FolderChooser FolderChooser = new FolderChooser(HTPathtoXml.getText(),"Haar_Training\\Cascades");
             FolderChooser.start(stage);
             HTPathtoXml.setText(FolderChooser.getPobranaŚciezka());
     }
@@ -1916,7 +1943,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML Label HTPathToVecFile;
     public void HTChoosePathToVec(){
         Stage stage = new Stage();
-        FileChooserFile FileChooserFile = new FileChooserFile(HTPathToVecFile.getText(),false,"vec"," ");
+        FileChooserFile FileChooserFile = new FileChooserFile(HTPathToVecFile.getText(),false,"vec","Wybierz plik vec","Haar_Training\\Vectors");
             FileChooserFile.start(stage);
             HTPathToVecFile.setText(FileChooserFile.Sciezka);
     }
@@ -1924,7 +1951,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML Label HTPathtoBGtxt;
     public void HTChooseBGtxtFile(){
         Stage stage = new Stage();
-        FileChooserFile FileChooserFile = new FileChooserFile(HTPathtoBGtxt.getText(),false,"txt"," ");
+        FileChooserFile FileChooserFile = new FileChooserFile(HTPathtoBGtxt.getText(),false,"txt"," ","Haar_Training");
             FileChooserFile.start(stage);
             HTPathtoBGtxt.setText(FileChooserFile.Sciezka);
     }
@@ -2015,13 +2042,23 @@ public class FXMLDocumentController implements Initializable {
      
     @FXML Label HTw ;
     @FXML TextField HTwInput;
-     public void HTwEnter(KeyEvent e){
+    @FXML public void HTwEnter(KeyEvent e){
       if(e.getCode()== KeyCode.ENTER){
           HTw.setText(HTwInput.getText());
           HTwInput.clear();
       }
     } 
     
+     @FXML Label HTnsplits;
+     @FXML TextField HTnsplitsInput;
+     @FXML public void HTnsplitsEnter(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          HTnsplits.setText(HTnsplitsInput.getText());
+          HTnsplitsInput.clear();
+      }
+    } 
+     
+     
     @FXML Label HTh ;
     @FXML TextField HThInput;
      public void HThEnter(KeyEvent e){
@@ -2125,7 +2162,7 @@ public class FXMLDocumentController implements Initializable {
      
      @FXML public void HTLoadChoosenXMLFile(){
          Stage Stage = new Stage();
-         FileChooserFile FileChooserFile = new FileChooserFile(HTChoosenXMLFile.getText(),true,"xml");
+         FileChooserFile FileChooserFile = new FileChooserFile(HTChoosenXMLFile.getText(),true,"xml","Nowy plik xml","Haar_Training\\XmlCascades");
          FileChooserFile.start(Stage);
          HTChoosenXMLFile.setText(FileChooserFile.Sciezka);
      }
@@ -2139,27 +2176,45 @@ public class FXMLDocumentController implements Initializable {
     // fragment odpowiedzialny za tworzenie oraz uruchomienie skryptu
     //referencja do tworzenia / odtworzenia skryptu CreateSample 
     CreateSamples CreateSamples;
-    
+    @FXML Tab CSloadfrom;
     //Referencja do tworzenia/odtworzenia skrytpu HaarCascade
     HaarCascadeTraining Cascade;
      @FXML public void SaveScript(){
-         if(CSloadfromImages.isSelected()){
-             CreateSamples.SaveScript(true);
+         if(CSloadfrom.isSelected()){
+             if(CSloadfromImages.isSelected()){
+                CreateSamples.SaveScript(true);
          }
-         else if(CSloadfromImage.isSelected()){
-             CreateSamples.SaveScript(false);
+            else if(CSloadfromImage.isSelected()){
+                CreateSamples.SaveScript(false);
+            }
          }
+         
          else if(HTsetTraining.isSelected()){
-             Cascade.SaveScript();
+             Cascade.SaveScript(HTUseotherexeFileCheckBox.isSelected());
          }
      }
 
+     @FXML Label HTUseotherexeFile;
+     @FXML CheckBox HTUseotherexeFileCheckBox;
+     @FXML
+     public void HTUseotherexeFileSet(){
+        if(HTUseotherexeFileCheckBox.isSelected()){
+            HTUseotherexeFile.setText("TRUE");
+        }
+        else{
+            HTUseotherexeFile.setText("FALSE");
+        }
+     }
+     
      @FXML public void OpenScript(){
-         if(CSloadfromImages.isSelected()){
-            CreateSamples.RunScript();
-         }
-         else if(CSloadfromImage.isSelected()){
-            CreateSamples.RunScript(); 
+         
+         if(CSloadfrom.isSelected()){
+             if(CSloadfromImages.isSelected()){
+               CreateSamples.RunScript();
+             }
+             else if(CSloadfromImage.isSelected()){
+                CreateSamples.RunScript(); 
+             }
          }
          else if(HTsetTraining.isSelected()){
             Cascade.RunScript();
@@ -2175,7 +2230,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML 
     public void preprocLoadClassifier(){
         Stage stage = new Stage();
-            FileChooserFile FileChooserFile = new FileChooserFile(PreprocLoaedPathToClassifier.getText(),false,"xml"," ");
+            FileChooserFile FileChooserFile = new FileChooserFile(PreprocLoaedPathToClassifier.getText(),false,"xml"," ","Haar_Training\\XmlCascades");
             FileChooserFile.start(stage);
             PreprocLoaedPathToClassifier.setText(FileChooserFile.Sciezka);
     }
@@ -2429,7 +2484,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML public void AutoChoosePreprocSettings(){
         AutoPreprocSettings.getText();
         Stage stage = new Stage();
-        FileChooserFile FileChooserFile = new FileChooserFile(AutoPreprocSettings.getText(),false,"conf");
+        FileChooserFile FileChooserFile = new FileChooserFile(AutoPreprocSettings.getText(),false,"conf","","DetectionSettings");
         FileChooserFile.start(stage);
         AutoPreprocSettings.setText(FileChooserFile.Sciezka);
         LoadSettings LoadSettings =  new LoadSettings(AutoPreprocSettings.getText());
@@ -2457,7 +2512,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML public void AutoChooseDetectNumbersSettings(){
         AutoDetectNumbersSettings.getText();
         Stage stage = new Stage();
-        FileChooserFile FileChooserFile = new FileChooserFile(AutoDetectNumbersSettings.getText(),false,"conf");
+        FileChooserFile FileChooserFile = new FileChooserFile(AutoDetectNumbersSettings.getText(),false,"conf","","DetectionSettings");
         FileChooserFile.start(stage);
         AutoDetectNumbersSettings.setText(FileChooserFile.Sciezka);
         LoadSettings LoadSettings =  new LoadSettings(AutoDetectNumbersSettings.getText());
@@ -2471,7 +2526,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML Label AutoDetectNeuralNetSettings;
     @FXML public void AutoChooseNeuralNetNumbersSettings(){
          Stage stage = new Stage();
-            FileChooserFile FileChooserFile = new FileChooserFile(AutoDetectNeuralNetSettings.getText(),false);
+            FileChooserFile FileChooserFile = new FileChooserFile(AutoDetectNeuralNetSettings.getText(),false,"txt","","NeuralNetsFiles");
             FileChooserFile.start(stage); 
             AutoDetectNeuralNetSettings.setText(FileChooserFile.Sciezka);
             LabelFileWithNeuralNet.setText(FileChooserFile.Sciezka);
@@ -2564,7 +2619,7 @@ public class FXMLDocumentController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Image i =  new Image("file:title_icon.png");
+        Image i =  new Image("file:settings\\icontitle\\icon_title.png");
         stage.getIcons().add(i);
         stage.setTitle("Ustawienia parametrów na wykrytych biegaczach");
         FXMLDetectedRunnersController = loader.getController();
@@ -2578,6 +2633,9 @@ public class FXMLDocumentController implements Initializable {
         FXMLDetectedRunnersController.Images = DetectedRunners;
         FXMLDetectedRunnersController.Numbers = NumbersNeuralNet;
         FXMLDetectedRunnersController.PathToTrainingFolderExamples = FolderNewExamples.getText();
+        FXMLDetectedRunnersController.FileNametoDetectingImage = Sciezka.getText().substring(Sciezka.getText().lastIndexOf("\\"));
+        
+        FXMLDetectedRunnersController.ZWOfolderSaveCurrentPic.setText(klassifFolderOutSave.getText());
         StagePic.show();
     }
     
@@ -2613,11 +2671,11 @@ public class FXMLDocumentController implements Initializable {
         
         CreateSamples = new CreateSamples(CSinfotxtfile,CSvecfile,CSnum,CSw,CSh,CSShow,
         SCIChoosenImage,SCIChoosenBGfile,SCIbgcolor,SCIbgthresh,SCIinv,SCIrandinv,SCImaxidev,
-        SCImaxxangle,SCImaxyangle,SCImaxzangle);
+        SCImaxxangle,SCImaxyangle,SCImaxzangle,SCIPNG);
         
         Cascade = new HaarCascadeTraining(HTPathtoXml,HTPathToVecFile,HTPathtoBGtxt,HTnpos,HTnneg,HTnstages,
         HTprecalcValBufSize,HTprecalcIdxBufSize,HTbaseFormatSave,HTnumThreads,HTacceptanceRatioBreakValue,
         HTw,HTh,HTfeaturetype,HTmode,HTbt,HTminHitRate,HTmaxFalseAlarmRate,HTweightTrimRate,
-        HTmaxDepth,HTmaxWeakCount);
+        HTmaxDepth,HTmaxWeakCount,HTnsplits);
     }
 }
