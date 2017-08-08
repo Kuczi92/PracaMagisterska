@@ -5,29 +5,27 @@
  */
 package NeuralNetPackage;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author Quchi
  */
 
 public class WartstwaNeuronów {
-    ArrayList<Neuron> Neuron;
+    public Neuron[] Neuron;
     private final int LiczbaNeuronów;
     private final FunkcjaAktywacji Aktywacja;
-    private ArrayList<Double> WartościWyjść;
+    private double[] WartościWyjść;
     
-    public ArrayList<Double> ZwróćWartościWyjść(){
+    public double[] ZwróćWartościWyjść(){
         return WartościWyjść;
     }
     
-    public ArrayList<Double> ObliczWartościWyjść(ArrayList<Double> WartościDziedziny){
-       ArrayList<Double> Tablica = new ArrayList<>();
-       WartościWyjść = new ArrayList<>();
+    public double[] ObliczWartościWyjść(double[] WartościDziedziny){
+       double[] Tablica = new double[LiczbaNeuronów];
+       WartościWyjść = new double[LiczbaNeuronów];
        for(int i = 0 ; i <LiczbaNeuronów;i++){
-         WartościWyjść.add(Neuron.get(i).ObliczWyjście(WartościDziedziny));
-         Tablica.add(Neuron.get(i).ObliczWyjście(WartościDziedziny));
+         WartościWyjść[i] = Neuron[i].ObliczWyjście(WartościDziedziny);
+         Tablica[i] = Neuron[i].ObliczWyjście(WartościDziedziny);
          }
        return Tablica;
    }
@@ -37,64 +35,54 @@ public class WartstwaNeuronów {
     }
     public WartstwaNeuronów (int liczbaNeuronów,FunkcjaAktywacji FunkcjaAktywacji){
         this.LiczbaNeuronów=liczbaNeuronów;
-        this.Neuron = new ArrayList <>();
+        this.Neuron = new Neuron[liczbaNeuronów];
         this.Aktywacja =FunkcjaAktywacji;
         
         for(int i =0 ; i<LiczbaNeuronów ;i++){
-            Neuron.add(new Neuron(LiczbaNeuronów,Aktywacja));
+            Neuron[i]=new Neuron(LiczbaNeuronów,Aktywacja);
         }
     }
 
-    public void trenujNeurony(ArrayList<Double> PochodnaBłęduTotalnegoPoWyjściuAktywacjiNeuronu,ArrayList<Double> PochodnaSumyWażonejNeuronówPoWadzeNeuronu,double tempoUczenia){
-
+    public void trenujNeurony(double[] PochodnaBłęduTotalnegoPoWyjściuAktywacjiNeuronu,double[] PochodnaSumyWażonejNeuronówPoWadzeNeuronu,double tempoUczenia){
+     //tu gdzieś strzel se ustawienie biasu neuronów 
         for (int n = 0 ; n <LiczbaNeuronów ;n++){ 
-           Neuron.get(n).DouczWagi(PochodnaBłęduTotalnegoPoWyjściuAktywacjiNeuronu.get(n),PochodnaSumyWażonejNeuronówPoWadzeNeuronu, tempoUczenia);
+           Neuron[n].DouczWagi(PochodnaBłęduTotalnegoPoWyjściuAktywacjiNeuronu[n],PochodnaSumyWażonejNeuronówPoWadzeNeuronu, tempoUczenia);
+           //Neuron[n].UaktualnijUkos(Neuron[n].PobierzUkos() - PochodnaBłęduTotalnegoPoWyjściuAktywacjiNeuronu[n]);
         }
     }
     
-   public void UstawUkosy(ArrayList<Double> Ukosy){
+   public void UstawUkosy(double[] Ukosy){
        for (int i = 0 ; i <LiczbaNeuronów ; i++){
-           Neuron.get(i).UaktualnijUkos(Ukosy.get(i));
+           Neuron[i].UaktualnijUkos(Ukosy[i]);
        }
    }
    
-   public void UstawWagi(int DanyNeuron,ArrayList<Double> Wagi){
-       for (int i = 0 ; i <LiczbaNeuronów ; i++){
-           Neuron.get(DanyNeuron).UaktualnijWage(i, Wagi.get(i));
-       }
+   public void UstawWagi(int DanyNeuron,double[] Wagi){
+           Neuron[DanyNeuron].WstawWagi(Wagi);
    }
    
-   public void DodajWagi(int DanyNeuron,ArrayList<Double> Wagi){
-       int rozmiar = Wagi.size();
+   public void DodajWagi(int DanyNeuron,double[] Wagi){
+       int rozmiar = Wagi.length;
        for (int i = 0 ; i <rozmiar ; i++){
-           Neuron.get(DanyNeuron).DodajWage(Wagi.get(i));
+           Neuron[DanyNeuron].DodajWage(i,Wagi[i]);
        }
    }
    
-   public ArrayList<Double> ObliczBłędyCałkowiteNeuronów(){
-       ArrayList<Double> Błędy = new ArrayList<>();
+   public double[] ObliczBłędyCałkowiteNeuronów(){
+       double[] Błędy = new double[LiczbaNeuronów];
        for (int n =0 ;n<LiczbaNeuronów;n++){
-           Błędy.add(ObliczBłądCałkowityDlaNeuronu(n));
+           Błędy[n] = ObliczBłądCałkowityDlaNeuronu(n);
        }
        return Błędy;
    }
 
-   public ArrayList<Double> ObliczBłędyCałkowiteNeuronów(ArrayList<Double> Błęd){
-       ArrayList<Double> Błędy = new ArrayList<>();
-       for (int n =0 ;n<LiczbaNeuronów;n++){
-           Błędy.add(ObliczBłądCałkowityDlaNeuronu(n));
-       }
-       return Błędy;
-   }
-   
    public  double ObliczBłądCałkowityDlaNeuronu(int DanyNeuron){
-      ArrayList<Double> TablicaWag = ZwróćWagiŁącząceSięZDanymNeuronem( DanyNeuron);
-      ArrayList<Double> TablicaPochodnych = ZwróćPochodneBłęduNeuronuPoWyjściuNeuronu();
+      double[] TablicaWag = ZwróćWagiŁącząceSięZDanymNeuronem(DanyNeuron);
+      double[] TablicaPochodnych = ZwróćPochodneBłęduNeuronuPoWyjściuNeuronu();
       double BłądDlaNeuronu = 0;
        for (int n =0 ;n<LiczbaNeuronów;n++)
        {
-           
-           BłądDlaNeuronu +=TablicaWag.get(n)*TablicaPochodnych.get(n);
+           BłądDlaNeuronu +=TablicaWag[n]*TablicaPochodnych[n];
        }
        return BłądDlaNeuronu;
    }
@@ -102,40 +90,41 @@ public class WartstwaNeuronów {
    
    
    
-   public ArrayList<Double> ZwróćWagiŁącząceSięZDanymNeuronem(int DanyNeuron){
-       ArrayList<Double>Tablica = new ArrayList<>();
-       for(int i = 0;i<LiczbaNeuronów;i++){
-           
-          Tablica.add(Neuron.get(i).PodajWartośćWagi(DanyNeuron));
+   public double[] ZwróćWagiŁącząceSięZDanymNeuronem(int DanyNeuron){
+       //liczbe wag nie neuronów
+       double[] Tablica = new double[Neuron[DanyNeuron].LiczbaWag];
+       for(int i = 0;i<Tablica.length;i++){
+          Tablica[i]=Neuron[i].PodajWartośćWagi(DanyNeuron);
        }
        return Tablica;
    }
    
-   public ArrayList<Double> ZwróćWagiDanegoNeuronu(int DanyNeuron){
-      ArrayList<Double>Tablica = new ArrayList<>();
-     int rozmiar = Neuron.get(DanyNeuron).PodajDługośćStarychWag();
-      for(int waga = 0;waga<rozmiar;waga++){
-       Tablica.add(Neuron.get(DanyNeuron).PodajWartośćWagi(waga));
+   public double[] ZwróćWagiDanegoNeuronu(int DanyNeuron){
+       //liczbe wag nie neuronów !
+     double[] Tablica = new double[Neuron[DanyNeuron].LiczbaWag];
+     int rozmiar = Neuron[DanyNeuron].PodajDługośćStarychWag();
+      for(int waga = 0;waga<rozmiar;waga++)
+      {
+       Tablica[waga]= Neuron[DanyNeuron].PodajWartośćWagi(waga);
       }
-      
       return Tablica;
    }
    
    
-   public ArrayList<Double> ZwróćPochodneBłęduNeuronuPoWyjściuNeuronu(){
-     ArrayList<Double> Tablica = new ArrayList<>();
+   public double[] ZwróćPochodneBłęduNeuronuPoWyjściuNeuronu(){
+     double[] Tablica = new double[LiczbaNeuronów];
      for(int i =0 ;i<LiczbaNeuronów;i++){
-         Tablica.add(Neuron.get(i).PochodnaBłęduNeuronuPoWyjściuNeuronu());
+         Tablica[i]=Neuron[i].PochodnaBłęduNeuronuPoWyjściuNeuronu();
      }
     return Tablica;
    }
    
   
-   @SuppressWarnings("null")
-   public ArrayList<Double> ObliczWartości(ArrayList<Double> WartościDziedziny){
-       ArrayList<Double> Tablica = new ArrayList<>();
+
+   public double[] ObliczWartości(double[] WartościDziedziny){
+       double[] Tablica = new double[LiczbaNeuronów];
        for(int i = 0 ; i <LiczbaNeuronów;i++){
-         Tablica.add(Neuron.get(i).ObliczWyjście(WartościDziedziny));
+         Tablica[i] = Neuron[i].ObliczWyjście(WartościDziedziny);
          }
        return Tablica;
    }

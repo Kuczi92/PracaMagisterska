@@ -74,7 +74,9 @@ public final class ArrayUtils {
         }
         return b;
     }
+   
 
+    
     public static double[] castOf(final float[] x) {
         double[] y = new double[x.length];
         for (int i = 0; i < y.length; i++) {

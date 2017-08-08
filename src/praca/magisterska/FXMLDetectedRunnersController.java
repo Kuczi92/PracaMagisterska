@@ -75,11 +75,8 @@ public class FXMLDetectedRunnersController implements Initializable {
     Label LabelMinimalnyY;
     @FXML
     Label LabelMinimalnyX;
-    
     @FXML 
     CheckBox DrawContur;
-    
-    
     @FXML 
     Slider SliderMaksymalnyX;
     @FXML 
@@ -88,8 +85,6 @@ public class FXMLDetectedRunnersController implements Initializable {
     Label LabelMaksymalnyY;
     @FXML
     Label LabelMaksymalnyX;
-    
-    
     @FXML
     CheckBox CheckBoxKontury;
     @FXML
@@ -110,7 +105,6 @@ public class FXMLDetectedRunnersController implements Initializable {
     CheckBox CheckBoxUseKrawedz;
     @FXML
     CheckBox UseNegative;
-    
     @FXML
     CheckBox LoadOriginPic;
     //Komponenty znajdujące się w zakładce Tab Kolory 
@@ -151,9 +145,7 @@ public class FXMLDetectedRunnersController implements Initializable {
     TableColumn Point3FromPic;
     @FXML
     TableColumn Point4FromPic;
-    
     // Komponenty znajdujące się w Wykrytych Liczbach
-    
     @FXML
     BarChart ChartNumbers;
     @FXML
@@ -180,12 +172,8 @@ public class FXMLDetectedRunnersController implements Initializable {
     Button ButtonPrevios;
     @FXML 
     Button ButtonNext;
-    
-   
-    
     TypeOfThreshold TypeOfThreshold;
     int currentImage= 0;
-    
     int currentDetectedNumber = 0;
     ArrayList<BufferedImage> DetectedNumbers;
     @Override
@@ -231,7 +219,7 @@ public class FXMLDetectedRunnersController implements Initializable {
             XYChart.Data p =   new XYChart.Data();
            p = (XYChart.Data) series1.getData().get(i);
            p.setXValue(NUMBERS[i]);
-           p.setYValue(Numbers.CalculatedValuesArray().get(i));
+           p.setYValue(Numbers.CalculatedValuesArray()[i]);
        }
     }
    
@@ -256,7 +244,7 @@ public class FXMLDetectedRunnersController implements Initializable {
             break;
             
             case 3:
-            TypeOfThreshold = TypeOfThreshold.EFEKT_PRZYCIEMNAJĄCY;   
+            TypeOfThreshold = TypeOfThreshold.EFEKT_PRZYCIEMNIAJĄCY;   
             changeValuesOfPicture();
             break;
         }
@@ -265,6 +253,7 @@ public class FXMLDetectedRunnersController implements Initializable {
     @FXML
     public void handleButtonNext(){
         if(currentImage+1<Images.size()&&currentImage+1>=0){
+            currentDetectedNumber = 0;
             Image image = SwingFXUtils.toFXImage(Images.get(++currentImage), null);
             ImageView.setImage(image);
             Label.setText("Obraz nr: "+(currentImage+1)+" spośród: "+Images.size());
@@ -272,6 +261,7 @@ public class FXMLDetectedRunnersController implements Initializable {
         }
         else 
         {   
+            currentDetectedNumber = 0;
             currentImage=0;
             Image image = SwingFXUtils.toFXImage(Images.get(currentImage), null);
             ImageView.setImage(image);
@@ -298,7 +288,6 @@ public class FXMLDetectedRunnersController implements Initializable {
             Label.setText("Obraz nr: "+(currentImage+1)+" spośród: "+Images.size()+ " Brak innych obrazów!");
             changeValuesOfPicture();
         }
-       
     }
     @FXML
     CheckBox DrawContorous;
@@ -307,12 +296,10 @@ public class FXMLDetectedRunnersController implements Initializable {
     @FXML
     public void saveCorrectDetectNumber() throws IOException{
          long i  = (int) Files.list(Paths.get(PathToTrainingFolderExamples)).count();
-         String FilePath = PathToTrainingFolderExamples+"\\Liczba_"+CorrectNumber.getSelectionModel().getSelectedItem().toString()+"_"+i+".png";
+         String FilePath = PathToTrainingFolderExamples+"\\"+CorrectNumber.getSelectionModel().getSelectedItem().toString()+"_"+i+".png";
          File outputfile = new File(FilePath);
          ImageIO.write(DetectedNumbers.get(currentDetectedNumber), "png", outputfile);
     }
-    
-    
     
     @FXML Label ZWOfolderSaveCurrentPic;
     @FXML public void ZWOfolderSaveCurrentPicChooseAnotherFolder(){
@@ -337,7 +324,6 @@ public class FXMLDetectedRunnersController implements Initializable {
             Logger.getLogger(FXMLDetectedRunnersController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }    
-    
     
     
     @FXML
@@ -535,7 +521,7 @@ public class FXMLDetectedRunnersController implements Initializable {
     @FXML public void SaveNumbersDetectionSettings(){
         String Path ="New Path";
         Stage stage = new Stage();
-        FileChooserFile FileChooserFile = new FileChooserFile(Path,true,"conf","Ustawienie detekcji Cyfr");
+        FileChooserFile FileChooserFile = new FileChooserFile(Path,true,"conf","Ustawienie detekcji Cyfr","DetectionSettings\\NumericDetectionSettings");
         FileChooserFile.start(stage);
         Path = FileChooserFile.Sciezka;
         SaveSettings SaveSettings =  new SaveSettings(Path);
@@ -551,7 +537,7 @@ public class FXMLDetectedRunnersController implements Initializable {
     @FXML public void LoadNumbersDetectionSettings(){
         String Path ="New Path";
         Stage stage = new Stage();
-        FileChooserFile FileChooserFile = new FileChooserFile(Path,false,"conf");
+        FileChooserFile FileChooserFile = new FileChooserFile(Path,false,"conf","","DetectionSettings\\NumericDetectionSettings");
         FileChooserFile.start(stage);
         Path = FileChooserFile.Sciezka;
         LoadSettings LoadSettings =  new LoadSettings(Path);
@@ -562,7 +548,6 @@ public class FXMLDetectedRunnersController implements Initializable {
         LoadSettings.loadLabels();
         LoadSettings.loadCheckBoxes(CheckBoxUseKrawedz,CheckBoxKontury,DrawContorous,UseNegative,LoadOriginPic,DrawContur);
         LoadSettings.load();
-        
         changeValueSliderCzerwony();
         changeValueSliderZielony();
         changeValueSliderNiebieski();

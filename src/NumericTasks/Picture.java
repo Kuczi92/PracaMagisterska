@@ -698,8 +698,8 @@ public final class Picture   {
     
     
     
-    public ArrayList<BufferedImage> FindContorous(int blurr,int threshold, int min_wielkoscx, int min_wielkoscy, int max_wielkoscy, int max_wielkoscx,
-            boolean drawContorous,BufferedImage original,boolean originalview, boolean Zoom){
+public ArrayList<BufferedImage> FindContorous(int blurr,int threshold, int min_wielkoscx, int min_wielkoscy, int max_wielkoscy, int max_wielkoscx,
+         boolean drawContorous,BufferedImage original,boolean originalview, boolean Zoom){
         
          ArrayList<Double> PointX = new ArrayList<>();
         
@@ -711,9 +711,9 @@ public final class Picture   {
          
          Mat opencv = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
          opencv.put(0, 0, data);
-        //ładowanie oryginalu   
-        Mat originalImage = null;
-         if(drawContorous&&originalview)
+         //ładowanie oryginalu   
+         Mat originalImage = null;
+         if(originalview)
             {
                       data = ((DataBufferByte) original.getRaster().getDataBuffer()).getData();  
                       originalImage = new Mat(original.getHeight(), original.getWidth(), CvType.CV_8UC3);  
@@ -802,10 +802,10 @@ public final class Picture   {
                                                                        PointX.add((double)PoczatekX);
                                                                        Core.rectangle(originalImage, new Point(PoczatekX,PoczatekY), new Point(PoczatekX+Szerokosc,PoczatekY+Wysokosc), color);
                                                                        if(Zoom){
-                                                                           PicturesWithNumbers.add(PobierzWycinekObrazu(image,PoczatekX+1,PoczatekY+1,Szerokosc-1,Wysokosc-1)); 
+                                                                           PicturesWithNumbers.add(PobierzWycinekObrazu(original,PoczatekX+1,PoczatekY+1,Szerokosc-1,Wysokosc-1)); 
                                                                        }
                                                                        else{
-                                                                           PicturesWithNumbers.add(PobierzWycinekObrazu(image,PoczatekX,PoczatekY,Szerokosc,Wysokosc)); 
+                                                                           PicturesWithNumbers.add(PobierzWycinekObrazu(original,PoczatekX,PoczatekY,Szerokosc,Wysokosc)); 
                                                                        }
                                                                        
                                                                       }
@@ -904,7 +904,7 @@ public final class Picture   {
      return  image;
     }
     
-    public ArrayList<Double>convertTo2DWithoutUsingGetRGB(int threshold) {
+    public double[] convertTo2DWithoutUsingGetRGB(int threshold) {
       if(image.getType()!=BufferedImage.TYPE_3BYTE_BGR){
       BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
       convertedImg.getGraphics().drawImage(image, 0, 0, null);
@@ -915,35 +915,28 @@ public final class Picture   {
       final byte[] pixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
       final int width = image.getWidth();
       final int height = image.getHeight();
-      int[][] result = new int[height][width];
-      ArrayList<Double> ListOfRGBValues = new ArrayList<>();
+      
+      double[] ListOfRGBValues = new double[width*height];
          final int pixelLength = 3;
-         for (int pixel = 0, row = 0, col = 0; pixel < pixels.length; pixel += pixelLength) {
+         for (int pixel = 0, current= 0; pixel < pixels.length; pixel += pixelLength) {
             int argb = 0;
             argb += -16777216;
             argb += ((int) pixels[pixel] & 0xff); // blue
             argb += (((int) pixels[pixel + 1] & 0xff) << 8); // green
             argb += (((int) pixels[pixel + 2] & 0xff) << 16); // red
-            
-            
             int  red   = (argb & 0x00ff0000) >> 16;
             int  green = (argb & 0x0000ff00) >> 8;
             int  blue  =  argb & 0x000000ff;
             
            // double value = 0.2989 * red + 0.5870 * green + 0.1140 * blue;
             if((red+green+blue)/3 >threshold){
-                ListOfRGBValues.add(1.0);
+                ListOfRGBValues[current] = 1.0;
+            }
+            else{
+                ListOfRGBValues[current] = 0.0;
             }
             
-            else{
-                ListOfRGBValues.add(0.0);
-            }
-            result[row][col] = argb;
-            col++;
-            if (col == width) {
-               col = 0;
-               row++;
-            }
+            current++;
          }
       return ListOfRGBValues;
    }

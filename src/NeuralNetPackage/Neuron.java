@@ -7,7 +7,6 @@ package NeuralNetPackage;
 
 import static java.lang.Math.exp;
 import static java.lang.Math.pow;
-import java.util.ArrayList;
 
 
 /**
@@ -16,15 +15,16 @@ import java.util.ArrayList;
  */
 public class Neuron {
     
-  private final ArrayList<Double> WagaFunkcji; //weight
+  private double WagaFunkcji[]; //weight
   private double UkosFunkcji; //bias
-  private final FunkcjaAktywacji Aktywacja; //funkcja aktywacji neuronu
+  private final  FunkcjaAktywacji Aktywacja; //funkcja aktywacji neuronu
   private double beta =1;
   private double WartośćWyjściaNeuronu;
   private double WartośćFunkcjiSumatora;
-  private ArrayList<Double> StaraWagaFunkcji;
+  private double StaraWagaFunkcji[];
   private double PochodnaBłęduNeuronuPoWyjściuNeuronu;
-   
+  
+  public int LiczbaWag;
   public double PochodnaBłęduNeuronuPoWyjściuNeuronu(){
       return PochodnaBłęduNeuronuPoWyjściuNeuronu;
   }
@@ -37,30 +37,30 @@ public class Neuron {
        return WartośćFunkcjiSumatora;
    }
    
-   public Neuron(ArrayList<Double> WagaFunkcji,double UkosFunkcji,FunkcjaAktywacji FunkcjaAktywacji){
+   public Neuron(double[] WagaFunkcji,double UkosFunkcji,FunkcjaAktywacji FunkcjaAktywacji){
+       this.LiczbaWag =  WagaFunkcji.length;
        this.UkosFunkcji=UkosFunkcji;
        this.WagaFunkcji=WagaFunkcji;
+       StaraWagaFunkcji = new double[WagaFunkcji.length];
        this.Aktywacja=FunkcjaAktywacji;
    }
    
    public Neuron(int LiczbaWag,double WartośćUkosu,FunkcjaAktywacji FunkcjaAktywacji){
-      this.WagaFunkcji = new ArrayList<>(LiczbaWag);
+      this.LiczbaWag =  LiczbaWag;
+      this.WagaFunkcji = new double[LiczbaWag];
+      StaraWagaFunkcji = new double[WagaFunkcji.length];
       this.UkosFunkcji = WartośćUkosu;
       this.Aktywacja=FunkcjaAktywacji;
    }
    
-   public Neuron(int WartośćWagi,FunkcjaAktywacji FunkcjaAktywacji){
-      this.WagaFunkcji = new ArrayList<>(WartośćWagi);
-      this.UkosFunkcji = 0;
+   public Neuron(int LiczbaNeuronów,FunkcjaAktywacji FunkcjaAktywacji){
+      this.WagaFunkcji = new double[LiczbaNeuronów];
+      StaraWagaFunkcji = new double[WagaFunkcji.length];
+      this.UkosFunkcji = -1;
       this.Aktywacja=FunkcjaAktywacji;
    }
    
-   public Neuron(FunkcjaAktywacji FunkcjaAktywacji){
-     this.WagaFunkcji = new ArrayList<>();
-     this.UkosFunkcji = 0;
-     this.Aktywacja=FunkcjaAktywacji;
-   }
-   
+
   public void ustawBete(double beta){
       this.beta = beta;
   }
@@ -71,9 +71,9 @@ public class Neuron {
   
   public String PobierzListęWag(){
       StringBuilder ListaWag = new StringBuilder();
-       int rozmiar = WagaFunkcji.size();
+       int rozmiar = WagaFunkcji.length;
       for(int waga = 0 ; waga<rozmiar;waga++){
-        ListaWag.append(WagaFunkcji.get(waga));
+        ListaWag.append(WagaFunkcji[waga]);
         
                if(waga==rozmiar-1)
                {
@@ -85,14 +85,14 @@ public class Neuron {
       return zwracanaWartośc;
   }
   
-  public double ObliczWyjście(ArrayList<Double> zmienne)
+  public double ObliczWyjście(double[] zmienne)
   {
       
       double wartośćfunkcji = 0;
-      int rozmiar = zmienne.size();
+      int rozmiar = zmienne.length;
       for(int i = 0 ; i<rozmiar;i++)
         {
-          wartośćfunkcji+=zmienne.get(i)*WagaFunkcji.get(i);
+          wartośćfunkcji+=zmienne[i]*WagaFunkcji[i];
         }
       wartośćfunkcji+=UkosFunkcji;
        
@@ -163,17 +163,18 @@ public class Neuron {
   } 
   
   
-  public void DouczWagi(double PochodnaBłęduTotalnegoPoWyjściuAktywacjiNeuronu,ArrayList<Double> PochodnaSumyWażonejNeuronówPoWadzeNeuronu,double tempoUczenia){
-    StaraWagaFunkcji = new ArrayList<>();
+  public void DouczWagi(double PochodnaBłęduTotalnegoPoWyjściuAktywacjiNeuronu,double[] PochodnaSumyWażonejNeuronówPoWadzeNeuronu,double tempoUczenia){
+    
     double PochodnaWyjściaAktywującegoPoSumieWażonejWartościNeuronu = ObliczPochodnąWyjściaAktywującegoPoSumieWażonejNeuronu(WartośćWyjściaNeuronu);
-    int rozmiar = WagaFunkcji.size();
+    int rozmiar = WagaFunkcji.length;
     PochodnaBłęduNeuronuPoWyjściuNeuronu = PochodnaBłęduTotalnegoPoWyjściuAktywacjiNeuronu*PochodnaWyjściaAktywującegoPoSumieWażonejWartościNeuronu;
     for(int Wagi = 0 ;Wagi <rozmiar;Wagi++ )
     {
        //double PochodnaSumyWażonejNeuronówPoWadzeNeuronu=WagaFunkcji.get(Wagi); 
-       double Gradient = PochodnaBłęduTotalnegoPoWyjściuAktywacjiNeuronu*PochodnaWyjściaAktywującegoPoSumieWażonejWartościNeuronu
-                         *PochodnaSumyWażonejNeuronówPoWadzeNeuronu.get(Wagi);
-       UaktualnijWage(Wagi,WagaFunkcji.get(Wagi)-tempoUczenia*Gradient);
+       double Gradient = PochodnaBłęduTotalnegoPoWyjściuAktywacjiNeuronu
+                         *PochodnaWyjściaAktywującegoPoSumieWażonejWartościNeuronu
+                         *PochodnaSumyWażonejNeuronówPoWadzeNeuronu[Wagi];
+       UaktualnijWage(Wagi,WagaFunkcji[Wagi]-tempoUczenia*Gradient);
     }
       
       
@@ -233,23 +234,32 @@ public class Neuron {
       return WartośćPochodnej;
   }
   
-  public void DodajWage(double wartosc){
-      WagaFunkcji.add(wartosc);
-  } 
+  public void WstawWagi(double[] a){
+      StaraWagaFunkcji = new double[a.length];
+      LiczbaWag = a.length;
+      WagaFunkcji=a;
+      
+  }
+  
+  public void DodajWage(int index ,double wartosc){
+      WagaFunkcji[index]=wartosc;
+  }
+  
+  
   public int PodajDługośćStarychWag(){
-      return StaraWagaFunkcji.size();
+      return StaraWagaFunkcji.length;
   }
   
   public double PodajWartośćWagi(int waga){
-      return StaraWagaFunkcji.get(waga);
+      return StaraWagaFunkcji[waga];
   }
   public double PobierzUkos(){
       return UkosFunkcji;
   }
        
    public void UaktualnijWage(int i, double wartosc){
-       StaraWagaFunkcji.add(WagaFunkcji.get(i));
-       WagaFunkcji.set(i, wartosc);
+       StaraWagaFunkcji[i]=WagaFunkcji[i];
+       WagaFunkcji[i] = wartosc;
    }
    
    public void UaktualnijUkos(double wartosc){

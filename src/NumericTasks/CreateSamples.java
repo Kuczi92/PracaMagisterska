@@ -76,7 +76,6 @@ public class CreateSamples {
                         String tmp = info.getText().substring(info.getText().indexOf("Haar_Training"));
                         zapis.print(" "+"-info "+tmp);
                        }
-
                    if(!("Wybierz obraz.".equals(img.getText())||"".equals(img.getText()))) 
                        {
                         zapis.print(" "+"-img "+"\""+img.getText()+"\"");
@@ -85,52 +84,40 @@ public class CreateSamples {
                        {
                         zapis.print(" "+"-bg "+bg.getText().substring(bg.getText().indexOf("Haar_Training")));
                        } 
-                   
-            
-               
               if(!("Stwórz plik vec.".equals(vec.getText())||"".equals(vec.getText()))) 
                        {
                         zapis.print(" "+"-vec "+"\""+vec.getText()+"\"");
                        } 
-               
               if(!("Wprowadź liczbę.".equals(num.getText())||"".equals(num.getText()))) 
                        {
                         zapis.print(" "+"-num "+num.getText());
                        } 
-              
               if(!("Wprowadź liczbę.".equals(w.getText())||"".equals(w.getText()))) 
                        {
                         zapis.print(" "+"-w "+w.getText());
                        }  
-              
               if(!("Wprowadź liczbę.".equals(h.getText())||"".equals(h.getText()))) 
                        {
                         zapis.print(" "+"-h "+h.getText());
                        }  
-              
               if(!("Zaznacz/odznacz opcję.".equals(show.getText())||"".equals(show.getText()))) 
                        {
-                        zapis.print(" "+"-show "+show.getText());
+                           if(show.getText().equals("TRUE")){
+                              zapis.print(" "+"-show ");  
+                           }
+                       
                        }
-              
               if(!("Wprowadź liczbę.".equals(maxidev.getText())||"".equals(maxidev.getText()))) 
                        {
                         zapis.print(" "+"-maxidev "+maxidev.getText());
                        }
               
-              
-              if(!("Zaznacz/odznacz opcję.".equals(PngOutput.getText())||"".equals(PngOutput.getText()))) 
+                        if(!("Zaznacz/odznacz opcję.".equals(PngOutput.getText())||"".equals(PngOutput.getText()))) 
                                  {
                                     if(PngOutput.getText().equals("TRUE")) 
                                         zapis.print(" "+"-pngoutput");
-                                 } 
+                                 }
               
-       if(!list){ 
-                        
-                        if(!("Zaznacz/odznacz opcję.".equals(randinv.getText())||"".equals(randinv.getText()))) 
-                                 {
-                                  zapis.print(" "+"-randinv "+randinv.getText());
-                                 } 
                         if(!("Wprowadź liczbę.".equals(bgcolor.getText())||"".equals(bgcolor.getText()))) 
                                  {
                                   zapis.print(" "+"-bgcolor "+bgcolor.getText());
@@ -139,9 +126,20 @@ public class CreateSamples {
                                  {
                                   zapis.print(" "+"-bgthresh "+bgthresh.getText());
                                  } 
+                        if(!("Zaznacz/odznacz opcję.".equals(randinv.getText())||"".equals(randinv.getText()))) 
+                                 {
+                                     if(randinv.getText().equals("TRUE")){
+                                       zapis.print(" "+"-randinv ");
+                                      }
+                                  
+                                 } 
+                        
                         if(!("Zaznacz/odznacz opcję.".equals(inv.getText())||"".equals(inv.getText()))) 
                                  {
-                                  zapis.print(" "+"-inv "+inv.getText());
+                                     if(inv.getText().equals("TRUE")){
+                                         zapis.print(" "+"-inv ");
+                                     }
+                                  
                                  }
                         if(!("Wprowadź liczbę.".equals(maxxangle.getText())||"".equals(maxxangle.getText()))) 
                                  {
@@ -156,9 +154,6 @@ public class CreateSamples {
                                   zapis.print(" "+"-maxzangle "+maxzangle.getText());
                                  }
                         
-                        
-              
-              }
               zapis.println();
               zapis.println("PAUSE");
               

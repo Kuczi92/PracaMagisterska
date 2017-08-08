@@ -1,0 +1,29 @@
+.styleGraph {
+    
+}
+
+.chart-series-line {    
+    -fx-stroke-width: 2px;
+}
+
+.series0.chart-series-line { -fx-stroke: #000080; }
+.series1.chart-series-line { -fx-stroke: #ffa500; }
+.series2.chart-series-line { -fx-stroke: #ff4500; }
+.series3.chart-series-line { -fx-stroke: #a52a2a; }
+.series4.chart-series-line { -fx-stroke: #deb887; }
+.series5.chart-series-line { -fx-stroke: #8a2be2; }
+.series6.chart-series-line { -fx-stroke: #008000; }
+.series7.chart-series-line { -fx-stroke: #0000ff; }
+.series8.chart-series-line { -fx-stroke: #7cfc00; }
+.series9.chart-series-line { -fx-stroke: #ffff00; }
+
+.series0.chart-line-symbol { -fx-background-color: #000080, white; }
+.series1.chart-line-symbol { -fx-background-color: #ffa500, white; }
+.series2.chart-line-symbol { -fx-background-color: #ff4500, white; }
+.series3.chart-line-symbol { -fx-background-color: #a52a2a, white; }
+.series4.chart-line-symbol { -fx-background-color: #deb887, white; }
+.series5.chart-line-symbol { -fx-background-color: #8a2be2, white; }
+.series6.chart-line-symbol { -fx-background-color: #008000, white; }
+.series7.chart-line-symbol { -fx-background-color: #0000ff, white; }
+.series8.chart-line-symbol { -fx-background-color: #7cfc00, white; }
+.series9.chart-line-symbol { -fx-background-color: #ffff00, white; }

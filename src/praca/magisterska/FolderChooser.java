@@ -48,7 +48,7 @@ public class FolderChooser extends Application{
                     fileChooser.setInitialDirectory(new File(InicialDirectory));
                 }
                 else{
-                    fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+                    fileChooser.setInitialDirectory(new File(System.getProperty("user.home")+"\\Pictures"));
                 }
                     
                 

@@ -102,7 +102,7 @@ public class TestPictures implements Runnable{
     }
     
     public int NumberOfPictures(){
-        return sizeOfFiles;
+        return Number.size();
     }
     
     @Override
@@ -118,11 +118,25 @@ public class TestPictures implements Runnable{
                     final int size = sizeOfFiles;
                     int i = 0;
                         for (String PathToImage : PathToImages) {
-                             String FileName =PathToImage.substring(PathToImage.lastIndexOf("\\")+1);
-                             String[] words = FileName.split("_");
-                             CorrectNumber.add(Integer.valueOf(words[0]));
-                             Number.add(ImageIO.read(new File(PathToImage)));
-
+                            
+                                String FileName =PathToImage.substring(PathToImage.lastIndexOf("\\")+1);
+                                String[] words = FileName.split("_");
+                                Picture pic = new Picture(ImageIO.read(new File(PathToImage)));
+                                pic.setImage(pic.Negative(pic.Image()));
+                                ArrayList<BufferedImage> pictures = pic.FindContorous(0, 1, 0, 40/100*pic.getImageHeight(), 100/100*pic.getImageHeight(), 100/100*pic.getImageWidth(), false, pic.Negative(pic.Image()), true, false);
+                                if(words[0].length()==pictures.size()){
+                                    Number.addAll(pictures);
+                                    for(int c =0 ;c< words[0].length() ; c++)
+                                    {
+                                     CorrectNumber.add(Character.getNumericValue(words[0].charAt(c)));
+                                    }
+                                }
+                                else{
+                                   System.out.println(FileName);
+                                }
+                                
+                            
+                             
                              i++;
                              final double procent = (double)i/(double)size;
                              Platform.runLater(() -> {

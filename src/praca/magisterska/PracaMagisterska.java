@@ -5,9 +5,13 @@
  */
 package praca.magisterska;
 
+import NewWidnows.Warning;
+import static java.lang.Thread.sleep;
 import javafx.scene.image.Image ;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,6 +23,7 @@ import org.opencv.core.Core;
  *
  * @author Quchi
  */
+@SuppressWarnings("ResultOfObjectAllocationIgnored")
 public class PracaMagisterska extends Application {
     
    public static void addLibraryPath(String pathToAdd) throws Exception {
@@ -42,7 +47,7 @@ public class PracaMagisterska extends Application {
 }    
     
     
-    
+   static boolean s= false;
     @Override
     public void start(Stage stage) throws Exception {
         Image i =  new Image("file:settings\\icontitle\\icon_title.png");
@@ -56,18 +61,43 @@ public class PracaMagisterska extends Application {
     
     /**
      * @param args the command line arguments
-     * @throws java.lang.Exception
+
      */
-    public static void main(String[] args) throws Exception {
-        if("amd64".equals(System.getProperty("os.arch"))){
-            addLibraryPath("lib\\x64");
-        }
-        else{
-            addLibraryPath("lib\\x86");
-        }
+    public static void main(String[] args) {
+
+       if(s){
+           launch(args);
+       }
         
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        launch(args);
     }
     
+    
+    
+    //ładowanie bibliotek openCV oraz w przypadku braku wyzycenie wyjątku
+    static
+    {
+                try
+                {
+                    if("amd64".equals(System.getProperty("os.arch"))){
+                        try {
+                            addLibraryPath("lib\\x64");
+                        } catch (Exception ex) {
+                            Logger.getLogger(PracaMagisterska.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    else{
+                        try {
+                            addLibraryPath("lib\\x86");
+                        } catch (Exception ex) {
+                            Logger.getLogger(PracaMagisterska.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                   System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+                   s = true;
+                }
+                catch(java.lang.UnsatisfiedLinkError e)
+                {  
+                   new Warning(false,"Brak pliku biblioteki opencv.").setVisible(true);
+                }
+            }
 }

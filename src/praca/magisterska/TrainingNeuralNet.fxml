@@ -16,7 +16,7 @@
       <Label layoutX="20.0" layoutY="77.0" text="Wartości błędów:" />
       <Label layoutX="20.0" layoutY="95.0" text="0: " />
       <Label fx:id="LabelError0" layoutX="38.0" layoutY="95.0" text="Error" />
-      <LineChart fx:id="ChartOfErrors" layoutX="1.0" layoutY="210.0" prefHeight="440.0" prefWidth="950.0">
+      <LineChart fx:id="ChartOfErrors" layoutX="1.0" layoutY="210.0" prefHeight="440.0" prefWidth="950.0" styleClass="chart-series-line" stylesheets="@../../CS_Styles/TrainingWindowStyles.css">
         <xAxis>
           <NumberAxis prefHeight="33.0" prefWidth="893.0" side="BOTTOM" tickLabelRotation="-2.0" fx:id="xAxis" />
         </xAxis>
@@ -45,5 +45,15 @@
       <Label layoutX="7.0" layoutY="193.0" text="Wykres błędów :" />
       <Label layoutX="153.0" layoutY="14.0" text="Liczba cykli: " />
       <Label fx:id="NumbersOfCycle" layoutX="227.0" layoutY="14.0" text="Label" />
+      <ScrollPane layoutX="537.0" layoutY="104.0" prefHeight="105.0" prefWidth="401.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="128.0" prefWidth="387.0">
+               <children>
+                  <ListView fx:id="ErrorLoadsPic" layoutY="-1.0" prefHeight="129.0" prefWidth="387.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+      <Label layoutX="537.0" layoutY="86.0" text="Nieprawidłowo załadowane obrazy:" />
    </children>
 </AnchorPane>

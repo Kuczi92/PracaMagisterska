@@ -94,8 +94,6 @@ public class ViewPicture{
        int KolorZielony[] = RGB.getGreenTable();
        @SuppressWarnings("MismatchedReadAndWriteOfArray")
        int KolorNiebieski[] = RGB.getBlueTable();
-       
-       
        @SuppressWarnings("MismatchedReadAndWriteOfArray")
        int WyjsciowyRGB[] = new int[RGB.getImageTotalPixels()];
         
@@ -112,8 +110,6 @@ public class ViewPicture{
                                       if(null != progowanie)  
                                         switch (progowanie) {
                                             case BRAK_PROGOWANIA:
-                                                
-                                                
                                                                     if((KolorCzerwony[x+width*y]+czerwien)*kontrast>255)
                                                                             {
                                                                                KolorCzerwony[x+width*y]=255;
@@ -127,7 +123,6 @@ public class ViewPicture{
                                                                                KolorCzerwony[x+width*y]=(int) ((KolorCzerwony[x+width*y]+czerwien)*kontrast);
                                                                             }
                                                 
-                                                
                                                                     if((KolorZielony[x+width*y]+zielen)*kontrast>255)
                                                                             {
                                                                                 KolorZielony[x+width*y]=255;
@@ -140,8 +135,6 @@ public class ViewPicture{
                                                                             {
                                                                                 KolorZielony[x+width*y]=(int) ((KolorZielony[x+width*y]+zielen)*kontrast);
                                                                             } 
-                                                                    
-                                                                    
                                                                     
                                                                     if((KolorNiebieski[x+width*y]+niebieski)*kontrast>255)
                                                                             {
@@ -175,8 +168,6 @@ public class ViewPicture{
                                                                             {
                                                                                KolorCzerwony[x+width*y]=(int) ((255+czerwien)*kontrast);
                                                                             }
-                                                                    
-                                                                    
                                                                     
                                                                     
                                                                     if(((255+zielen)*kontrast)>255)
@@ -313,7 +304,7 @@ public class ViewPicture{
                                                                     
                                                 }    
                                                 break;
-                                            case EFEKT_PRZYCIEMNAJĄCY:
+                                            case EFEKT_PRZYCIEMNIAJĄCY:
                                                 if((KolorCzerwony[x+width*y]+KolorZielony[x+width*y]+KolorNiebieski[x+width*y])/3 > wartoscprogujaca)
                                                 {
                                                     if(((KolorCzerwony[x+width*y]+czerwien)*kontrast)>255)

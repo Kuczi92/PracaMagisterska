@@ -21,12 +21,12 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Slider id="SliderJasnosc" fx:id="SliderJasnosc" layoutX="14.0" layoutY="15.0" max="255.0" min="-255.0" onMouseDragged="#changeValueSliderJasnosc" onMousePressed="#changeValueSliderJasnosc" onMouseReleased="#changeValueSliderJasnosc" prefHeight="14.0" prefWidth="385.0" />
-                        <Slider id="SliderKontrast" fx:id="SliderKontrast" layoutX="15.0" layoutY="33.0" max="7000.0" onMouseDragged="#changeValueSliderKontrast" onMousePressed="#changeValueSliderKontrast" onMouseReleased="#changeValueSliderKontrast" prefHeight="14.0" prefWidth="385.0" value="1000.0" />
-                        <Slider id="SliderWartoscProgowa" fx:id="SliderWartoscProgowa" layoutX="15.0" layoutY="50.0" max="255.0" onMouseDragged="#changeValueSliderWartoscProgowa" onMousePressed="#changeValueSliderWartoscProgowa" onMouseReleased="#changeValueSliderWartoscProgowa" prefHeight="14.0" prefWidth="385.0" />
-                        <Label id="LabelSlderValueJasnosc" fx:id="LabelSlderValueJasnosc" layoutX="413.0" layoutY="13.0" text="0,00" />
-                        <Label id="LabelSliderValueKontrast" fx:id="LabelSliderValueKontrast" layoutX="411.0" layoutY="32.0" text="1,00" />
-                        <Label id="LabelSliderValueWartoscProgowa" fx:id="LabelSliderValueWartoscProgowa" layoutX="411.0" layoutY="49.0" text="0,00" />
+                        <Slider id="SliderJasnosc" fx:id="SliderJasnosc" layoutX="14.0" layoutY="15.0" max="255.0" min="-255.0" onMouseDragged="#changeValueSliderJasnosc" onMousePressed="#changeValueSliderJasnosc" onMouseReleased="#changeValueSliderJasnosc" prefHeight="14.0" prefWidth="434.0" />
+                        <Slider id="SliderKontrast" fx:id="SliderKontrast" layoutX="15.0" layoutY="33.0" max="20000.0" onMouseDragged="#changeValueSliderKontrast" onMousePressed="#changeValueSliderKontrast" onMouseReleased="#changeValueSliderKontrast" prefHeight="14.0" prefWidth="434.0" value="1000.0" />
+                        <Slider id="SliderWartoscProgowa" fx:id="SliderWartoscProgowa" layoutX="15.0" layoutY="50.0" max="255.0" onMouseDragged="#changeValueSliderWartoscProgowa" onMousePressed="#changeValueSliderWartoscProgowa" onMouseReleased="#changeValueSliderWartoscProgowa" prefHeight="14.0" prefWidth="434.0" />
+                        <Label id="LabelSlderValueJasnosc" fx:id="LabelSlderValueJasnosc" layoutX="452.0" layoutY="14.0" text="0,00" />
+                        <Label id="LabelSliderValueKontrast" fx:id="LabelSliderValueKontrast" layoutX="451.0" layoutY="32.0" text="1,00" />
+                        <Label id="LabelSliderValueWartoscProgowa" fx:id="LabelSliderValueWartoscProgowa" layoutX="452.0" layoutY="49.0" text="0,00" />
                         <Label layoutX="501.0" layoutY="14.0" text="Jasność" />
                         <Label layoutX="501.0" layoutY="32.0" text="Kontrast" />
                         <Label layoutX="501.0" layoutY="49.0" text="Wartość progowa" />
@@ -42,8 +42,8 @@
                          </ComboBox>
                         <Button id="ButtonZwrocDomyslneUstawienie" layoutX="269.0" layoutY="261.0" mnemonicParsing="false" onMouseClicked="#defaultValues" text="Zwróć domyślne ustawienie" />
                         <Button layoutX="15.0" layoutY="261.0" mnemonicParsing="false" onAction="#SaveNumbersDetectionSettings" text="Zapisz Ustawienia" />
-                        <Slider fx:id="SliderRozmycie" layoutX="14.0" layoutY="66.0" onMouseDragged="#changeValueSliderRozmycie" onMousePressed="#changeValueSliderRozmycie" onMouseReleased="#changeValueSliderRozmycie" prefHeight="14.0" prefWidth="385.0" />
-                        <Label id="LabelSliderValueRozmycie" fx:id="LabelValueSliderRozmycie" layoutX="411.0" layoutY="64.0" text="0,00" />
+                        <Slider fx:id="SliderRozmycie" layoutX="14.0" layoutY="66.0" onMouseDragged="#changeValueSliderRozmycie" onMousePressed="#changeValueSliderRozmycie" onMouseReleased="#changeValueSliderRozmycie" prefHeight="14.0" prefWidth="434.0" />
+                        <Label id="LabelSliderValueRozmycie" fx:id="LabelValueSliderRozmycie" layoutX="452.0" layoutY="64.0" text="0,00" />
                         <Label layoutX="501.0" layoutY="64.0" text="Rozmycie" />
                         <CheckBox fx:id="CheckBoxUseKrawedz" layoutX="15.0" layoutY="114.0" mnemonicParsing="false" onMouseClicked="#changeValuesOfPicture" text="Uzyj detekcji krawędzi " />
                         <Slider fx:id="SliderKrawedz" layoutX="15.0" layoutY="219.0" max="255.0" onMouseDragged="#changeValueSliderKrawedz" onMousePressed="#changeValueSliderKrawedz" onMouseReleased="#changeValueSliderKrawedz" prefHeight="14.0" prefWidth="385.0" />

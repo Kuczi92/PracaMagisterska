@@ -6,6 +6,8 @@
 package NeuralNetPackage;
 
 import NumericTasks.Picture;
+import static NumericTasks.TypeOfThreshold.PROGOWANIE_ZWYKŁE;
+import NumericTasks.ViewPicture;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -40,34 +42,32 @@ public class Numbers {
     public int sizeX;
     public int sizeY;
     
-    private ArrayList<Double> CalculatedValues;
+    double[] CalculatedValues;
     
     //List of Adress with numbers to training
-    ArrayList<ArrayList<Double>> Number0;
-    ArrayList<ArrayList<Double>> Number1;
-    ArrayList<ArrayList<Double>> Number2;
-    ArrayList<ArrayList<Double>> Number3; 
-    ArrayList<ArrayList<Double>> Number4;
-    ArrayList<ArrayList<Double>> Number5;
-    ArrayList<ArrayList<Double>> Number6; 
-    ArrayList<ArrayList<Double>> Number7; 
-    ArrayList<ArrayList<Double>> Number8;
-    ArrayList<ArrayList<Double>> Number9;
+    double[][] Number0;
+    double[][] Number1;
+    double[][] Number2;
+    double[][] Number3; 
+    double[][] Number4;
+    double[][] Number5;
+    double[][] Number6; 
+    double[][] Number7; 
+    double[][] Number8;
+    double[][] Number9;
+    
+  public ArrayList<String> ErrorLoadsFiles = new ArrayList<>();
     
     SiećNeuronowa NeuralNetRecognizeNumbers;
    public Numbers(String Path,int sizeX,int sizeY) throws FileNotFoundException{
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.PathToNeuralNet = Path;
-        
         NeuralNetRecognizeNumbers = new SiećNeuronowa(PathToNeuralNet);
-
     }
    
     public Numbers(String Path) throws FileNotFoundException{
-        
         this.PathToNeuralNet = Path;
-        
         NeuralNetRecognizeNumbers = new SiećNeuronowa(PathToNeuralNet);
         this.sizeX = NeuralNetRecognizeNumbers.x;
         this.sizeY = NeuralNetRecognizeNumbers.y;
@@ -83,20 +83,20 @@ public class Numbers {
     }
 
     
-    public ArrayList<Double> CalculatedValuesArray(){
+    public double[] CalculatedValuesArray(){
        return CalculatedValues;
     }
     public int RecognizeNumber(Picture Picture,int threshold){
       Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
       CalculatedValues = NeuralNetRecognizeNumbers.ObliczWartości(Picture.convertTo2DWithoutUsingGetRGB(threshold));
-      int size=CalculatedValues.size();
+      int size=CalculatedValues.length;
       int recognizedNumber=0;
       double max = 0;
       for(int i = 0 ; i< size;i++)
       {
-          if(max<CalculatedValues.get(i))
+          if(max<CalculatedValues[i])
           {
-              max = CalculatedValues.get(i);
+              max = CalculatedValues[i];
               recognizedNumber = i;
           }
           
@@ -114,20 +114,16 @@ public class Numbers {
             Label JLabel4,Label JLabel5,Label JLabel6,Label JLabel7,Label JLabel8,
             Label JLabel9,Label AktualnyProcent,LineChart<Number,Number> ChartOfErrors) throws FileNotFoundException, InterruptedException{
         
-        ArrayList<ArrayList<Double>> OutNumbers=   new ArrayList<>();
-        
+        double[][] OutNumbers =   new double[10][10];
         for(int num = 0 ;num<10 ;num++){
-            OutNumbers.add(new ArrayList<>());
             for(int currentnum = 0 ; currentnum <10;currentnum ++){
                 if(currentnum==num){
-                    OutNumbers.get(num).add(1.0);
+                    OutNumbers[num][currentnum] = 1.0;
                 }
                 else{
-                    OutNumbers.get(num).add(0.0);
+                    OutNumbers[num][currentnum] = 0.0;
                 }
-                
-            }
-            
+            }  
         }
        
         for(int i = 0 ; i<LearningCount;i++){
@@ -139,7 +135,7 @@ public class Numbers {
            switch(Number){
                     case 0:     
                     
-                    ErrorsNeuralNets[0]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number0.get(whichNumberToTrain.nextInt(Number0.size())), OutNumbers.get(Number), powerOfLearn);
+                    ErrorsNeuralNets[0]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number0[whichNumberToTrain.nextInt(Number0.length)], OutNumbers[Number], powerOfLearn);
                     Platform.runLater(() -> {
                     JLabel0.setText(""+ErrorsNeuralNets[0]*100);
                     });
@@ -147,7 +143,7 @@ public class Numbers {
                     
                     case 1:     
                     
-                    ErrorsNeuralNets[1]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number1.get(whichNumberToTrain.nextInt(Number1.size())),OutNumbers.get(Number), powerOfLearn);
+                    ErrorsNeuralNets[1]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number1[whichNumberToTrain.nextInt(Number1.length)],OutNumbers[Number], powerOfLearn);
                     Platform.runLater(() -> {
                     JLabel1.setText(""+ErrorsNeuralNets[1]*100);
                     });
@@ -155,7 +151,7 @@ public class Numbers {
                     
                     case 2:     
                     
-                    ErrorsNeuralNets[2]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number2.get(whichNumberToTrain.nextInt(Number2.size())), OutNumbers.get(Number), powerOfLearn);
+                    ErrorsNeuralNets[2]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number2[whichNumberToTrain.nextInt(Number2.length)], OutNumbers[Number], powerOfLearn);
                     Platform.runLater(() -> {
                     JLabel2.setText(""+ErrorsNeuralNets[2]*100);
                     });
@@ -163,7 +159,7 @@ public class Numbers {
                     
                     case 3:     
                     
-                    ErrorsNeuralNets[3]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number3.get(whichNumberToTrain.nextInt(Number3.size())), OutNumbers.get(Number), powerOfLearn);
+                    ErrorsNeuralNets[3]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number3[whichNumberToTrain.nextInt(Number3.length)], OutNumbers[Number], powerOfLearn);
                     Platform.runLater(() -> {
                     JLabel3.setText(""+ErrorsNeuralNets[3]*100);
                     });
@@ -171,47 +167,42 @@ public class Numbers {
                     
                     case 4:     
                     
-                    ErrorsNeuralNets[4]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number4.get(whichNumberToTrain.nextInt(Number4.size())),OutNumbers.get(Number), powerOfLearn);
+                    ErrorsNeuralNets[4]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number4[whichNumberToTrain.nextInt(Number4.length)],OutNumbers[Number], powerOfLearn);
                     Platform.runLater(() -> {
                     JLabel4.setText(""+ErrorsNeuralNets[4]*100);
                     });
                     break;
                     
-                    case 5:     
-                    
-                    ErrorsNeuralNets[5]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number5.get(whichNumberToTrain.nextInt(Number5.size())),OutNumbers.get(Number), powerOfLearn);
+                    case 5:    
+                    ErrorsNeuralNets[5]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number5[whichNumberToTrain.nextInt(Number5.length)],OutNumbers[Number], powerOfLearn);
                     Platform.runLater(() -> {
                     JLabel5.setText(""+ErrorsNeuralNets[5]*100);
                     });
                     break;
                     
-                    case 6:     
-                    
-                    ErrorsNeuralNets[6]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number6.get(whichNumberToTrain.nextInt(Number6.size())), OutNumbers.get(Number), powerOfLearn);
+                    case 6:    
+                    ErrorsNeuralNets[6]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number6[whichNumberToTrain.nextInt(Number6.length)], OutNumbers[Number], powerOfLearn);
                     Platform.runLater(() -> {
                     JLabel6.setText(""+ErrorsNeuralNets[6]*100);
                     });
                     break;
                     
-                    case 7:     
-                    
-                    ErrorsNeuralNets[7]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number7.get(whichNumberToTrain.nextInt(Number7.size())),OutNumbers.get(Number), powerOfLearn);
+                    case 7:   
+                    ErrorsNeuralNets[7]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number7[whichNumberToTrain.nextInt(Number7.length)],OutNumbers[Number], powerOfLearn);
                     Platform.runLater(() -> {
                     JLabel7.setText(""+ErrorsNeuralNets[7]*100);
                     });
                     break;
                     
-                    case 8:     
-                    
-                    ErrorsNeuralNets[8]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number8.get(whichNumberToTrain.nextInt(Number8.size())), OutNumbers.get(Number), powerOfLearn);
+                    case 8:
+                    ErrorsNeuralNets[8]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number8[whichNumberToTrain.nextInt(Number8.length)], OutNumbers[Number], powerOfLearn);
                     Platform.runLater(() -> {
                     JLabel8.setText(""+ErrorsNeuralNets[8]*100);
                     });
                     break;
                     
-                    case 9:     
-                    
-                    ErrorsNeuralNets[9]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number9.get(whichNumberToTrain.nextInt(Number9.size())), OutNumbers.get(Number), powerOfLearn);
+                    case 9:  
+                    ErrorsNeuralNets[9]  =  NeuralNetRecognizeNumbers.TrenujSieć(Number9[whichNumberToTrain.nextInt(Number9.length)], OutNumbers[Number], powerOfLearn);
                     Platform.runLater(() -> {
                     JLabel9.setText(""+ErrorsNeuralNets[9]*100);
                     });
@@ -283,7 +274,7 @@ public class Numbers {
          ProgressBar.setProgress(1);
          });
     }
-    public void loadNumbersToTrainNeuralNet(String PathToTrainSet){
+    public void loadNumbersToTrainNeuralNet(String PathToTrainSet,int threshold){
         
         
                     
@@ -291,16 +282,16 @@ public class Numbers {
             ArrayList<String> ListOfNumbers  = ListaPlikówWFolderze(PathToTrainSet);
             int numberOfFiles =  ListOfNumbers.size();
             
-                    ArrayList<ArrayList<Double>> Number0Array = new ArrayList<>();
-                    ArrayList<ArrayList<Double>> Number1Array = new ArrayList<>();
-                    ArrayList<ArrayList<Double>> Number2Array = new ArrayList<>();
-                    ArrayList<ArrayList<Double>> Number3Array = new ArrayList<>();
-                    ArrayList<ArrayList<Double>> Number4Array = new ArrayList<>();
-                    ArrayList<ArrayList<Double>> Number5Array = new ArrayList<>();
-                    ArrayList<ArrayList<Double>> Number6Array = new ArrayList<>();
-                    ArrayList<ArrayList<Double>> Number7Array = new ArrayList<>();
-                    ArrayList<ArrayList<Double>> Number8Array = new ArrayList<>();
-                    ArrayList<ArrayList<Double>> Number9Array = new ArrayList<>(); 
+                    ArrayList<double[]> Number0Array = new ArrayList<>();
+                    ArrayList<double[]> Number1Array = new ArrayList<>();
+                    ArrayList<double[]> Number2Array = new ArrayList<>();
+                    ArrayList<double[]> Number3Array = new ArrayList<>();
+                    ArrayList<double[]> Number4Array = new ArrayList<>();
+                    ArrayList<double[]> Number5Array = new ArrayList<>();
+                    ArrayList<double[]> Number6Array = new ArrayList<>();
+                    ArrayList<double[]> Number7Array = new ArrayList<>();
+                    ArrayList<double[]> Number8Array = new ArrayList<>();
+                    ArrayList<double[]> Number9Array = new ArrayList<>(); 
                     
                     
             for(int i = 0 ; i < numberOfFiles;i++){
@@ -315,25 +306,31 @@ public class Numbers {
                 if("NumerkiZoom".equals(split[1].substring(0, split[1].indexOf(".")))){
                     Zoom = true;
                 }
-                Picture Picture = new Picture(ListOfNumbers.get(i));
                 
+                
+                ViewPicture Pic = new ViewPicture(ListOfNumbers.get(i));
+                //zmiana progowania mod jasnosci kontrastu kolorów
+                int[] pixels = Pic.ModyfikujKoloryWKanaleRGB(-13,-13,-13,20,PROGOWANIE_ZWYKŁE,127);
+                Picture Picture = new Picture(pixels,Pic.pobierzX(),Pic.pobierzY());
+        
+        
+                //Picture Picture = new Picture(ListOfNumbers.get(i));
                 Picture.setImage(Picture.Negative(Picture.Image()));
                 ArrayList<BufferedImage> DetectedNumbers = Picture.FindContorous(0, 1, 0, 40/100*Picture.getImageHeight(), 100/100*Picture.getImageHeight(), 100/100*Picture.getImageWidth(), true, Picture.Negative(Picture.Image()), false,Zoom);
                
                 
-                int threshold = 127;
-                for(int currentNum = 0 ; currentNum<DetectedNumbers.size(); currentNum++ ){
-                int NumberOnPicture;
+                
+                for(int currentNum = 0 ; currentNum<DetectedNumbers.size(); currentNum++ )
+                
+                {
+                  int NumberOnPicture;
                
                       NumberOnPicture = Integer.valueOf(String.valueOf(split[0].charAt(currentNum))); 
                       Picture.setImage(DetectedNumbers.get(currentNum));
                 
-               
-                    
-               
-                
-                
-                switch (NumberOnPicture){
+               if(DetectedNumbers.size()==split[0].length()){
+                   
+                   switch (NumberOnPicture){
                     
                     case 0:
                     Picture.ZmieńRozmiarObrazu(sizeX, sizeY);
@@ -386,19 +383,29 @@ public class Numbers {
                     break;
                     
                 }
-   
+                   
+                   
+               }
+                else{
+                    ErrorLoadsFiles.add(FileName);
+                    break;
+                }
+                    
+                 }
             }
-            }
-            this.Number0 = Number0Array;
-            this.Number1 = Number1Array;
-            this.Number2 = Number2Array;
-            this.Number3 = Number3Array;
-            this.Number4 = Number4Array;
-            this.Number5 = Number5Array;
-            this.Number6 = Number6Array;
-            this.Number7 = Number7Array;
-            this.Number8 = Number8Array;
-            this.Number9 = Number9Array;
+            
+            
+            
+            this.Number0 = CastToArray(Number0Array);
+            this.Number1 = CastToArray(Number1Array);
+            this.Number2 = CastToArray(Number2Array);
+            this.Number3 = CastToArray(Number3Array);
+            this.Number4 = CastToArray(Number4Array);
+            this.Number5 = CastToArray(Number5Array);
+            this.Number6 = CastToArray(Number6Array);
+            this.Number7 = CastToArray(Number7Array);
+            this.Number8 = CastToArray(Number8Array);
+            this.Number9 = CastToArray(Number9Array);
             
      
         }
@@ -413,6 +420,17 @@ public class Numbers {
         
         
     }
+    
+    private double[][] CastToArray(ArrayList<double[]> input ){
+       double[][] Output= new double[input.size()][sizeX*sizeY];
+       int size = input.size();
+       for(int i = 0 ; i < size;i++){
+           Output[i] = input.get(i);
+       }
+       return Output;
+    }
+    
+    
     
      private ArrayList<String> ListaPlikówWFolderze(String Ściezka) throws IOException{
         ArrayList<String> ListaPlików = new ArrayList<>();

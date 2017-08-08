@@ -57,7 +57,17 @@ public class LoadSettings extends Settings {
                        ValuesFromSliders.add(Double.valueOf(sentence[1]));
                        break;
                    case "L":
-                       ValuesFromLabels.add(sentence[1]);
+                       if(sentence.length>2){
+                           StringBuilder build = new StringBuilder(sentence[1]);
+                           for(int i = 1 ;i<sentence.length;i++){
+                              build.append("_");
+                              build.append(sentence[i]);
+                           }
+                       }
+                       else{
+                           ValuesFromLabels.add(sentence[1]);
+                       }
+                       
                        break;
                    case "C":
                        ValuesFromCheckBox.add(Boolean.valueOf(sentence[1]));
@@ -99,7 +109,20 @@ public class LoadSettings extends Settings {
                        currentLineS++;
                        break;
                    case "L":
-                       LabelsTosave[currentLineL].setText(sentence[1]);
+                       
+                       if(sentence.length>2){
+                           StringBuilder build = new StringBuilder(sentence[1]);
+                           for(int i = 2 ;i<sentence.length;i++){
+                              build.append("_");
+                              build.append(sentence[i]);
+                           }
+                           String temp = new String (build);
+                           LabelsTosave[currentLineL].setText(temp);
+                       }
+                       else{
+                          LabelsTosave[currentLineL].setText(sentence[1]);
+                       }
+                       
                        currentLineL++;
                        break;
                    case "C":
@@ -113,8 +136,6 @@ public class LoadSettings extends Settings {
                    default:
                        break;
                }
-           
-           
            }
            in.close();
        } catch (FileNotFoundException ex) {

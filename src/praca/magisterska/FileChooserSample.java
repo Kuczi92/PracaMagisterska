@@ -22,7 +22,7 @@ public final class FileChooserSample extends Application {
    private String pobranaścieszka;
     private final Desktop desktop = Desktop.getDesktop();
     String Sciezka;
-
+    String InicialDirectory;
     FileChooserSample(String pobranaścieszka) {
         if(pobranaścieszka==null){
             this.pobranaścieszka = " ";
@@ -30,7 +30,20 @@ public final class FileChooserSample extends Application {
         else{
             this.pobranaścieszka = pobranaścieszka;
         }
+       
     }
+    
+    FileChooserSample(String pobranaścieszka, String InicialDirectory) {
+        if(pobranaścieszka==null){
+            this.pobranaścieszka = " ";
+        }
+        else{
+            this.pobranaścieszka = pobranaścieszka;
+        }
+        
+        this.InicialDirectory=InicialDirectory;
+    }
+    
     
     public String getPobranaŚciezka(){
         return pobranaścieszka;
@@ -65,9 +78,12 @@ public final class FileChooserSample extends Application {
             
             else
             {
-                fileChooser.setInitialDirectory(                
-                        new File(System.getProperty("user.home"))
-                );
+                if(null!=InicialDirectory){
+                    fileChooser.setInitialDirectory(new File(InicialDirectory));
+                }
+                else{
+                    fileChooser.setInitialDirectory(new File(System.getProperty("user.home")+"\\Pictures"));
+                }
             }
             
                             

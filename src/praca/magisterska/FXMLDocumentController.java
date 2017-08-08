@@ -69,12 +69,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import static NumericTasks.TypeOfThreshold.EFEKT_ROZJAŚNIAJĄCY;
-import static NumericTasks.TypeOfThreshold.EFEKT_PRZYCIEMNAJĄCY;
 import static NumericTasks.TypeOfThreshold.BRAK_PROGOWANIA;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.control.TableColumn;
 import static NumericTasks.TypeOfThreshold.PROGOWANIE_ZWYKŁE;
+import static NumericTasks.TypeOfThreshold.EFEKT_PRZYCIEMNIAJĄCY;
 
 /**
  *
@@ -244,16 +244,21 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public void KlassifLoadFileSelectedAreas(){
             Stage stage = new Stage();
-            FileChooserFile FileChooserFile = new FileChooserFile(KlassifChooseFilesSelectedAreas.getText(),true,"txt","ListaObrazówiObiektów");
+            FileChooserFile FileChooserFile = new FileChooserFile(KlassifChooseFilesSelectedAreas.getText(),true,"txt","ListaObrazówiObiektów","Haar_Training\\Info");
             FileChooserFile.start(stage);
             KlassifChooseFilesSelectedAreas.setText(FileChooserFile.Sciezka);
-            
     }
     
     @FXML 
     public void KlassifSaveSelectedAreasFiles(){
         try {
-            new WriteToFile(KlassifChooseFilesSelectedAreas.getText(),LoadedImage).Wrtite();
+            if(KlasifReadOnlyPathImages.isSelected()){
+                 new WriteToFile(KlassifChooseFilesSelectedAreas.getText(),PathToImages).Wrtite();
+            }
+            else{
+                 new WriteToFile(KlassifChooseFilesSelectedAreas.getText(),LoadedImage).Wrtite();
+            }
+           
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -541,7 +546,7 @@ public class FXMLDocumentController implements Initializable {
             break;
             
             case 3:
-            TypeOfThresholdValue = TypeOfThreshold.EFEKT_PRZYCIEMNAJĄCY;   
+            TypeOfThresholdValue = TypeOfThreshold.EFEKT_PRZYCIEMNIAJĄCY;   
             changeValuesOfPicture();
             break;
         }
@@ -804,32 +809,21 @@ public class FXMLDocumentController implements Initializable {
                                 KlasifProgressbarLoadImages.setVisible(false);
                         });
                     }
-            
-            
-            
-            
-            
                     else
                     {
                         new Warning(false,"Wprowadź liczbę całkowitą !").setVisible(true);
                     } 
        
-       
        }).start();
-       
-       
-       
-       
-       
+  
     }
     
     @FXML
     public void KlasidChooseFolderOut(){
         Stage stage = new Stage();
-        FolderChooser FolderChooser = new FolderChooser(klassifFolderOutSave.getText());
+        FolderChooser FolderChooser = new FolderChooser(klassifFolderOutSave.getText(),"Haar_Training\\Samples");
         FolderChooser.start(stage);
         klassifFolderOutSave.setText(FolderChooser.getPobranaŚciezka());
-        
     }
     
     @FXML
@@ -865,7 +859,6 @@ public class FXMLDocumentController implements Initializable {
      
      LabelXCord.setText(" "+format("%.2f",x1)+" "+format("%.2f",MouseReleaseX));
      LabelYCord.setText(" "+format("%.2f",y1)+" "+format("%.2f",MouseReleaseY));
-     
     }
     
     @FXML 
@@ -1002,6 +995,7 @@ public class FXMLDocumentController implements Initializable {
      
 
     }
+    @FXML CheckBox KlasifReadOnlyPathImages;
     
     @FXML
     public void KlasifLoadImages() {
@@ -1019,19 +1013,23 @@ public class FXMLDocumentController implements Initializable {
                           LoadedImage.clear();
                           int size =  PathToImages.size();
                           for(int i = 0 ;i<size;i++)
-                            {   
-                              try 
-                              {
-                                BufferedImage Input = ImageIO.read(new File(PathToImages.get(i)));
+                            {  
                                 
-                                Picture pic = new Picture();
-                                pic.setPicture(Input.getWidth(), Input.getHeight(), Integer.valueOf(KlasifWidth.getText()), Integer.valueOf(KlasifHeight.getText()));
-                                LoadedImage.add(new TrainingPictures(
-                                        new Picture().setPicture(Input, (int)KlasifImageView.getWidth(), (int) KlasifImageView.getHeight()),
-                                        PathToImages.get(i), (int) pic.ProcentXWzględemOryginału, (int) pic.ProcentYWzględemOryginału));
-                              } catch (IOException ex) {
-                                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                              }
+                                if(!KlasifReadOnlyPathImages.isSelected()){
+                                    try 
+                                        {
+                                          BufferedImage Input = ImageIO.read(new File(PathToImages.get(i)));
+
+                                          Picture pic = new Picture();
+                                          pic.setPicture(Input.getWidth(), Input.getHeight(), Integer.valueOf(KlasifWidth.getText()), Integer.valueOf(KlasifHeight.getText()));
+                                          LoadedImage.add(new TrainingPictures(
+                                                  new Picture().setPicture(Input, (int)KlasifImageView.getWidth(), (int) KlasifImageView.getHeight()),
+                                                  PathToImages.get(i), (int) pic.ProcentXWzględemOryginału, (int) pic.ProcentYWzględemOryginału));
+                                        } catch (IOException ex) {
+                                           Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                }
+                                        
                              
                               final double percent = (double)i/size;
                               
@@ -1068,7 +1066,7 @@ public class FXMLDocumentController implements Initializable {
                               });  
                     }
               
-                    else if(KlasifChakcboxOriginal.isSelected()){
+                    else if(KlasifChakcboxOriginal.isSelected()||KlasifReadOnlyPathImages.isSelected()){
                         
                         Platform.runLater(() -> {  
                                 KlasifLabelPercent.setVisible(true);
@@ -1080,50 +1078,53 @@ public class FXMLDocumentController implements Initializable {
                           LoadedImage.clear();
                           int size =  PathToImages.size();
                           for(int i = 0 ;i<size;i++)
-                            {   
-                              try {
-                                    BufferedImage Input = ImageIO.read(new File(PathToImages.get(i)));   
-                                    LoadedImage.add(new TrainingPictures(new Picture().setPicture(Input, (int)KlasifImageView.getWidth(),(int)KlasifImageView.getHeight()),PathToImages.get(i),Input.getWidth(),Input.getHeight()));
-                                   } 
-                              catch (IOException ex) 
-                              {
-                                 Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                            { 
+                                
+                              if(!KlasifReadOnlyPathImages.isSelected()){  
+                                    try {
+                                          BufferedImage Input = ImageIO.read(new File(PathToImages.get(i)));   
+                                          LoadedImage.add(new TrainingPictures(new Picture().setPicture(Input, (int)KlasifImageView.getWidth(),(int)KlasifImageView.getHeight()),PathToImages.get(i),Input.getWidth(),Input.getHeight()));
+                                         } 
+                                    catch (IOException ex) 
+                                    {
+                                       Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
                               }
-                             
                               final double percent = (double)i/size;
-                              
                               Platform.runLater(() -> {
                               KlasifProgressbarLoadImages.setProgress(percent);
                               KlasifLabelPercent.setText(format("%.2f",percent*100.0)+" %");
                               });
-                             
                             }
                          
-                              Platform.runLater(() -> {
+                             Platform.runLater(() -> {
                               KlasifProgressbarLoadImages.setProgress(1);
                               KlasifLabelPercent.setText(format("%.2f",1*100.0)+" %");
-                              });  
+                             });  
                           
                           
-                            Platform.runLater(() -> { 
+                            Platform.runLater(() -> {
+                                if(!KlasifReadOnlyPathImages.isSelected()){
                                     Image image = SwingFXUtils.toFXImage(LoadedImage.get(CurrentKlasifImage).GetImage(), null);
                                     gc.clearRect(0, 0,gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
                                     gc.drawImage(image, 0, 0);
                                     DrawSetOfMarkedRect(LoadedImage.get(CurrentKlasifImage));
                                     PathToCurrentImage.setText("Obraz nr: "+(CurrentKlasifImage+1)+" spośród: "+LoadedImage.size()+" "+PathToImages.get(CurrentKlasifImage));
                                     
+                                }
+                                    
                             });
                         
                             Platform.runLater(() -> {  
-                            KlasifLabelPercent.setVisible(false);
-                            KlasifLabelLoadPic.setVisible(false);
-                            KlasifProgressbarLoadImages.setVisible(false);
+                             KlasifLabelPercent.setVisible(false);
+                             KlasifLabelLoadPic.setVisible(false);
+                             KlasifProgressbarLoadImages.setVisible(false);
                             });
                         
-                             Platform.runLater(() -> {
-                              KlasifProgressbarLoadImages.setProgress(0);
-                              KlasifLabelPercent.setText(format("%.2f",0*100.0)+" %");
-                              });  
+                            Platform.runLater(() -> {
+                             KlasifProgressbarLoadImages.setProgress(0);
+                             KlasifLabelPercent.setText(format("%.2f",0*100.0)+" %");
+                            });  
                     }
                     else
                     {
@@ -1205,9 +1206,7 @@ public class FXMLDocumentController implements Initializable {
         StagePic.show();
         
         
-//         Platform.runLater(() -> {
-// 
-//         });
+
     }    
     
     @FXML
@@ -1273,7 +1272,7 @@ public class FXMLDocumentController implements Initializable {
             XYChart.Data p =   new XYChart.Data();
            p = (XYChart.Data) series1.getData().get(i);
            p.setXValue(NUMBERS[i]);
-           p.setYValue(NumbersNeuralNet.CalculatedValuesArray().get(i));
+           p.setYValue(NumbersNeuralNet.CalculatedValuesArray()[i]);
        }
     }
     
@@ -1363,6 +1362,11 @@ public class FXMLDocumentController implements Initializable {
          }
     }
     
+    @FXML Slider SliderThresholdDetectLearning;
+    @FXML Label LabelThresholdDetectLearning;
+    @FXML public void ChangeValueSliderThreshold(){
+        LabelThresholdDetectLearning.setText(format("%.2f",SliderThresholdDetectLearning.getValue()));
+    }
     
     @FXML
     public void confirmNewNeuralNet(){
@@ -1384,7 +1388,9 @@ public class FXMLDocumentController implements Initializable {
     String PathToNewNeuralNet = PathToNeuralNet.getText();
     
     GeneratedNewNeuralNet GeneratedNewNeuralNet = new GeneratedNewNeuralNet(NumberOfInput,numberOfNeuronsforEachLayer.length,numberOfNeuronsforEachLayer); 
-    NumbersNeuralNet = new Numbers(new SiećNeuronowa(GeneratedNewNeuralNet.ListaWagPoszególnychNeuronów,GeneratedNewNeuralNet.ListaUkosówPoszególnychNeuronów,FunkcjaAktywacji.SIGMOIDALNA_UNIPOLARNA)
+    NumbersNeuralNet = new Numbers(
+            new SiećNeuronowa(GeneratedNewNeuralNet.ListaWagPoszególnychNeuronów,
+            GeneratedNewNeuralNet.ListaUkosówPoszególnychNeuronów,FunkcjaAktywacji.SIGMOIDALNA_UNIPOLARNA)
             ,Integer.valueOf(NormalizeWidthX.getText())
             ,Integer.valueOf(NormalizeHeightY.getText()));
  
@@ -1400,9 +1406,10 @@ public class FXMLDocumentController implements Initializable {
                                     Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
 
-
+                              
                                 TrainingNeuralNetController = loader.getController();
-                                TrainingNeuralNetController.SetVariables(NumbersNeuralNet, PathToTrainSet, NumberOfLearningIteration, PathToNewNeuralNet, NumberOfLayers);
+                                //załatw tu inna zmienna zamiast NumbersOfLayers musi być prawidłowy prog
+                                TrainingNeuralNetController.SetVariables(NumbersNeuralNet, PathToTrainSet, NumberOfLearningIteration, PathToNewNeuralNet, (int) SliderThresholdDetectLearning.getValue());
                                 
                                 Scene scene = new Scene(root);
                                 Image i =  new Image("file:settings\\icontitle\\icon_title.png");
@@ -1542,7 +1549,7 @@ public class FXMLDocumentController implements Initializable {
             break;
             
             case 3:
-            PreprocTypeOfThreshold = EFEKT_PRZYCIEMNAJĄCY;   
+            PreprocTypeOfThreshold = EFEKT_PRZYCIEMNIAJĄCY;   
             PreProcchangeValuesOfPicture();
             break;
         }
@@ -1654,6 +1661,94 @@ public class FXMLDocumentController implements Initializable {
     //Fragment opdowiedzialny za zakładkę Create samples 
     
     //Fragment odpowiedzialny za zakładkę załadowanie odpowiednich fragmentów do pliku vec 
+    @FXML Label CSmaxzangle;
+    @FXML TextField CSmaxzangleInput;
+     public void CSEntermaxzangle(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          SCImaxzangle.setText(CSmaxzangleInput.getText());
+          CSmaxzangle.setText(CSmaxzangleInput.getText());
+          CSmaxzangleInput.clear();
+      }
+      
+    }
+    
+    @FXML Label CSmaxyangle;
+    @FXML TextField CSmaxyangleInput;
+     public void CSEntermaxyangle(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          SCImaxyangle.setText(CSmaxyangleInput.getText());
+          CSmaxyangle.setText(CSmaxyangleInput.getText());
+          CSmaxyangleInput.clear();
+      }
+      
+    } 
+     
+    @FXML Label CSmaxxangle;
+    @FXML TextField CSmaxxangleInput;
+     public void CSEntermaxxangle(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          SCImaxxangle.setText(CSmaxxangleInput.getText());
+          CSmaxxangle.setText(CSmaxxangleInput.getText());
+          CSmaxxangleInput.clear();
+      }
+      
+    } 
+     
+    @FXML
+    public Label CSinv;
+    @FXML
+    public CheckBox CSinvSet;
+    @FXML
+    public void CSSetInv(){
+        if(CSinvSet.isSelected()){
+            CSinv.setText("TRUE");
+            SCIinv.setText("TRUE");
+        }
+        else{
+            CSinv.setText("FALSE");
+            SCIinv.setText("FALSE");
+        }
+    } 
+     
+     
+    @FXML
+    public Label CSrandinv;
+    @FXML
+    public CheckBox CSrandinvSet;
+    @FXML
+    public void CSRandSetInv(){
+        if(CSrandinvSet.isSelected()){
+            CSrandinv.setText("TRUE");
+            SCIrandinv.setText("TRUE");
+        }
+        else{
+            CSrandinv.setText("FALSE");
+            SCIrandinv.setText("FALSE");
+        }
+    }
+    
+   @FXML public Label CSbgthresh;
+   @FXML public TextField CSbgthreshInput; 
+    public void CSEnterbgthresh(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          SCIbgthresh.setText(CSbgthreshInput.getText());
+          CSbgthresh.setText(CSbgthreshInput.getText());
+          CSbgthreshInput.clear();
+      }
+      
+    }
+    
+    
+   @FXML public Label CSbgcolor;
+   @FXML public TextField CSbgcolorInput; 
+    public void CSEnterbgcolor(KeyEvent e){
+      if(e.getCode()== KeyCode.ENTER){
+          SCIbgcolor.setText(CSbgcolorInput.getText());
+          CSbgcolor.setText(CSbgcolorInput.getText());
+          CSbgcolorInput.clear();
+      }
+      
+    }
     @FXML public Tab CSloadfromImages;
     
     @FXML 
@@ -1791,6 +1886,7 @@ public class FXMLDocumentController implements Initializable {
      public void SCIEnterbgcolor(KeyEvent e){
       if(e.getCode()== KeyCode.ENTER){
           SCIbgcolor.setText(SCIbgcolorInput.getText());
+          CSbgcolor.setText(SCIbgcolorInput.getText());
           SCIbgcolorInput.clear();
       }
       
@@ -1801,6 +1897,7 @@ public class FXMLDocumentController implements Initializable {
      public void SCIEnterbgthresh(KeyEvent e){
       if(e.getCode()== KeyCode.ENTER){
           SCIbgthresh.setText(SCIbgthreshInput.getText());
+          CSbgthresh.setText(SCIbgthreshInput.getText());
           SCIbgthreshInput.clear();
       }
       
@@ -1821,6 +1918,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML TextField SCImaxxangleInput;
      public void SCIEntermaxxangle(KeyEvent e){
       if(e.getCode()== KeyCode.ENTER){
+          CSmaxxangle.setText(SCImaxxangleInput.getText());
           SCImaxxangle.setText(SCImaxxangleInput.getText());
           SCImaxxangleInput.clear();
       }
@@ -1831,20 +1929,20 @@ public class FXMLDocumentController implements Initializable {
     @FXML TextField SCImaxyangleInput;
      public void SCIEntermaxyangle(KeyEvent e){
       if(e.getCode()== KeyCode.ENTER){
+          CSmaxyangle.setText(SCImaxyangleInput.getText());
           SCImaxyangle.setText(SCImaxyangleInput.getText());
           SCImaxyangleInput.clear();
       }
-      
     } 
     
     @FXML Label SCImaxzangle;
     @FXML TextField SCImaxzangleInput;
      public void SCIEntermaxzangle(KeyEvent e){
       if(e.getCode()== KeyCode.ENTER){
+          CSmaxzangle.setText(SCImaxzangleInput.getText());
           SCImaxzangle.setText(SCImaxzangleInput.getText());
           SCImaxzangleInput.clear();
       }
-      
     }  
      
     @FXML Label SCIw;
@@ -1855,7 +1953,6 @@ public class FXMLDocumentController implements Initializable {
           CSw.setText(SCIwInput.getText());
           SCIwInput.clear();
       }
-      
     } 
     
     @FXML Label SCIh;
@@ -1876,9 +1973,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public void SCISetInv(){
         if(SCIinvSet.isSelected()){
+            CSinv.setText("TRUE");
             SCIinv.setText("TRUE");
         }
         else{
+            CSinv.setText("FALSE");
             SCIinv.setText("FALSE");
         }
     }
@@ -1904,9 +2003,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public void SCIRandSetInv(){
         if(SCIrandinvSet.isSelected()){
+            CSrandinv.setText("TRUE");
             SCIrandinv.setText("TRUE");
         }
         else{
+            CSrandinv.setText("FALSE");
             SCIrandinv.setText("FALSE");
         }
     } 
@@ -2290,9 +2391,18 @@ public class FXMLDocumentController implements Initializable {
     @FXML ImageView AutoImage;
     @FXML TableView AutoRecognizedNumbers;
     @FXML public void AutoRecognize(){
-        try {
+        try {  
+            
+            BufferedImage InputImage;
+            if(PreprocUseResizeImage.isSelected()){
+              InputImage = new Picture().setPicture(ImageIO.read(new File(AutoChoosenPicFile.getText())), Integer.valueOf(PreprocResolutionX.getText()), Integer.valueOf(PreprocResolutionY.getText()));
+            }
+            else{
+              InputImage =   ImageIO.read(new File(AutoChoosenPicFile.getText()));
+            }
+            
             RunnersDetection RunnersDetection = new RunnersDetection(type,
-                    new Picture().setPicture(ImageIO.read(new File(AutoChoosenPicFile.getText())), Integer.valueOf(PreprocResolutionX.getText()), Integer.valueOf(PreprocResolutionY.getText())),
+                    InputImage,
                     Integer.valueOf(PreprocResolutionX.getText()),
                     Integer.valueOf(PreprocResolutionY.getText()),
                     (int) (SliderRozmiarMaxX.getValue()),(int)(SliderRozmiarMaxY.getValue()),
@@ -2484,7 +2594,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML public void AutoChoosePreprocSettings(){
         AutoPreprocSettings.getText();
         Stage stage = new Stage();
-        FileChooserFile FileChooserFile = new FileChooserFile(AutoPreprocSettings.getText(),false,"conf","","DetectionSettings");
+        FileChooserFile FileChooserFile = new FileChooserFile(AutoPreprocSettings.getText(),false,"conf","","DetectionSettings\\PreProcDetectionSettings");
         FileChooserFile.start(stage);
         AutoPreprocSettings.setText(FileChooserFile.Sciezka);
         LoadSettings LoadSettings =  new LoadSettings(AutoPreprocSettings.getText());
@@ -2512,7 +2622,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML public void AutoChooseDetectNumbersSettings(){
         AutoDetectNumbersSettings.getText();
         Stage stage = new Stage();
-        FileChooserFile FileChooserFile = new FileChooserFile(AutoDetectNumbersSettings.getText(),false,"conf","","DetectionSettings");
+        FileChooserFile FileChooserFile = new FileChooserFile(AutoDetectNumbersSettings.getText(),false,"conf","","DetectionSettings\\NumericDetectionSettings");
         FileChooserFile.start(stage);
         AutoDetectNumbersSettings.setText(FileChooserFile.Sciezka);
         LoadSettings LoadSettings =  new LoadSettings(AutoDetectNumbersSettings.getText());
@@ -2549,7 +2659,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML public void GlobalSaveSettings(){
         String Path ="New Path";
         Stage stage = new Stage();
-        FileChooserFile FileChooserFile = new FileChooserFile(Path,true,"conf","Ustawienie preproc");
+        FileChooserFile FileChooserFile = new FileChooserFile(Path,true,"conf","Ustawienie preproc","DetectionSettings\\PreProcDetectionSettings");
         FileChooserFile.start(stage);
         Path = FileChooserFile.Sciezka;
         SaveSettings SaveSettings =  new SaveSettings(Path);
@@ -2572,7 +2682,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML public void GloalLoadSettings(){
         String Path ="New Path";
         Stage stage = new Stage();
-        FileChooserFile FileChooserFile = new FileChooserFile(Path,false,"conf");
+        FileChooserFile FileChooserFile = new FileChooserFile(Path,false,"conf","","DetectionSettings\\PreProcDetectionSettings");
         FileChooserFile.start(stage);
         Path = FileChooserFile.Sciezka;
         LoadSettings LoadSettings =  new LoadSettings(Path);

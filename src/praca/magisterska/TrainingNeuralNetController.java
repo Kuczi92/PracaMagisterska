@@ -15,6 +15,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 
 /**
@@ -62,6 +63,10 @@ public class TrainingNeuralNetController implements Initializable {
     ProgressBar ProgressBar;
     @FXML 
     Label AktualnyProcent;
+    
+    // Referencja do list błędnie załaowanych obrazów
+    @FXML
+    ListView ErrorLoadsPic;
     //Referencja do Wykresu
     @FXML
     LineChart<Number,Number> ChartOfErrors;
@@ -80,7 +85,8 @@ public class TrainingNeuralNetController implements Initializable {
        this.PathToTrainSet=PathToTrainSet;
        this.Numbers = Numbers; 
        Training = new TrainNeuralNet(Numbers,PathToTrainSet,CountLearn,NewPathNeuralNet,Treshold,ProgressBar,NumbersOfCycle,
-       LabelError0,LabelError1,LabelError2,LabelError3,LabelError4,LabelError5,LabelError6,LabelError7,LabelError8,LabelError9,AktualnyProcent,ChartOfErrors);
+       LabelError0,LabelError1,LabelError2,LabelError3,LabelError4,LabelError5,LabelError6,LabelError7,LabelError8,LabelError9,AktualnyProcent,ChartOfErrors,ErrorLoadsPic);
+       
     }
     
 
@@ -141,7 +147,8 @@ public class TrainingNeuralNetController implements Initializable {
      XYChart.Series series9 = new XYChart.Series();
         series9.setName("9");
         series9.getData().add(new XYChart.Data(0, 100));
-          
+      
+       
      ChartOfErrors.getData().addAll(series0, series1, series2,series3,series4,series5,series6,series7,series8,series9);
      ChartOfErrors.setCreateSymbols(false);
     
